@@ -3,9 +3,9 @@
 import { ErrorState } from "@/components/error-state";
 import { LoadingState } from "@/components/loading-state";
 import {
-    eventTypeOptions,
-    inquiryIntentOptions,
-    serviceStyles,
+  eventTypeOptions,
+  inquiryIntentOptions,
+  serviceStyles,
 } from "@/data/inquiry";
 import { useState } from "react";
 
@@ -38,16 +38,16 @@ const initialState: FormState = {
 };
 
 const inputClass =
-  "w-full rounded-[1rem] border border-[color:var(--color-line)] bg-[rgba(255,255,255,0.9)] px-4 py-[0.95rem] text-[color:var(--color-text)] outline-none transition-[border-color,transform,box-shadow] duration-[160ms] ease-[ease] focus:border-[color:var(--color-accent-soft)] focus:shadow-[0_0_0_4px_rgba(117,105,93,0.12)]";
+  "w-full rounded-[1rem] border border-line bg-[rgba(255,255,255,0.9)] px-4 py-[0.95rem] text-text outline-none transition-[border-color,transform,box-shadow] duration-[160ms] ease-[ease] focus:border-accent-soft focus:shadow-[0_0_0_4px_rgba(117,105,93,0.12)]";
 
 const labelClass =
-  "text-[0.82rem] font-bold tracking-[0.08em] uppercase text-[color:var(--color-accent-soft)]";
+  "text-[0.82rem] font-bold tracking-[0.08em] uppercase text-accent-soft";
 
 const btnPrimary =
-  "inline-flex items-center justify-center rounded-full px-5 py-[0.88rem] border border-transparent bg-[color:var(--color-accent)] text-white [box-shadow:0_20px_60px_rgba(49,40,33,0.08)] transition-[transform,background-color,border-color,color,box-shadow] duration-[180ms] ease-[ease] cursor-pointer hover:-translate-y-px hover:bg-[#1f1813] focus-visible:-translate-y-px focus-visible:bg-[#1f1813]";
+  "inline-flex items-center justify-center rounded-full px-5 py-[0.88rem] border border-transparent bg-accent text-white [box-shadow:0_20px_60px_rgba(49,40,33,0.08)] transition-[transform,background-color,border-color,color,box-shadow] duration-[180ms] ease-[ease] cursor-pointer hover:-translate-y-px hover:bg-[#1f1813] focus-visible:-translate-y-px focus-visible:bg-[#1f1813]";
 
 const btnSecondary =
-  "inline-flex items-center justify-center rounded-full px-5 py-[0.88rem] border border-[color:var(--color-line-strong)] bg-transparent text-[color:var(--color-text)] transition-[transform,background-color,border-color,color,box-shadow] duration-[180ms] ease-[ease] cursor-pointer hover:-translate-y-px hover:bg-[rgba(255,255,255,0.55)] focus-visible:-translate-y-px focus-visible:bg-[rgba(255,255,255,0.55)]";
+  "inline-flex items-center justify-center rounded-full px-5 py-[0.88rem] border border-line-strong bg-transparent text-text transition-[transform,background-color,border-color,color,box-shadow] duration-[180ms] ease-[ease] cursor-pointer hover:-translate-y-px hover:bg-[rgba(255,255,255,0.55)] focus-visible:-translate-y-px focus-visible:bg-[rgba(255,255,255,0.55)]";
 
 export function InquiryForm() {
   const [form, setForm] = useState<FormState>(initialState);
@@ -99,24 +99,24 @@ export function InquiryForm() {
   if (status === "success") {
     return (
       <div className="grid gap-[0.9rem] rounded-[1.3rem] border border-[rgba(33,74,53,0.25)] bg-[rgba(255,255,255,0.72)] p-[1.2rem] [box-shadow:0_20px_60px_rgba(49,40,33,0.08)]">
-        <p className="m-0 text-[color:var(--color-accent-soft)] uppercase tracking-[0.16em] text-[0.75rem] font-bold">
+        <p className="m-0 text-accent-soft uppercase tracking-[0.16em] text-[0.75rem] font-bold">
           Inquiry received
         </p>
         <h2 className="m-0 text-[1.2rem]">
           Thank you, {form.fullName.split(" ")[0] || "there"}.
         </h2>
-        <p className="text-[color:var(--color-text-soft)] leading-[1.7]">
+        <p className="text-text-soft leading-[1.7]">
           This front-end build stores no backend data yet, but the form is fully
           structured and ready to connect when you are. Below is the summary of
           what the guest submitted.
         </p>
-        <div className="text-[0.82rem] font-bold tracking-[0.08em] uppercase text-[color:var(--color-accent-soft)]">
+        <div className="text-[0.82rem] font-bold tracking-[0.08em] uppercase text-accent-soft">
           Submission summary
         </div>
         <ul className="m-0 p-0 list-none grid gap-[0.7rem]">
           <li className="grid gap-[0.35rem]">
             <strong>Service style</strong>
-            <span className="text-[color:var(--color-text-soft)]">
+            <span className="text-text-soft">
               {
                 serviceStyles.find((item) => item.slug === form.serviceStyle)
                   ?.title
@@ -125,19 +125,15 @@ export function InquiryForm() {
           </li>
           <li className="grid gap-[0.35rem]">
             <strong>Guest count</strong>
-            <span className="text-[color:var(--color-text-soft)]">
-              {form.guestCount} guests
-            </span>
+            <span className="text-text-soft">{form.guestCount} guests</span>
           </li>
           <li className="grid gap-[0.35rem]">
             <strong>Event date</strong>
-            <span className="text-[color:var(--color-text-soft)]">
-              {form.eventDate}
-            </span>
+            <span className="text-text-soft">{form.eventDate}</span>
           </li>
           <li className="grid gap-[0.35rem]">
             <strong>Primary goals</strong>
-            <span className="text-[color:var(--color-text-soft)]">
+            <span className="text-text-soft">
               {form.intents
                 .map(
                   (intent) =>
@@ -177,7 +173,7 @@ export function InquiryForm() {
   }
 
   return (
-    <div className="rounded-[1.5rem] p-[1.2rem] border border-[color:var(--color-line)] bg-[rgba(255,255,255,0.72)] [box-shadow:0_20px_60px_rgba(49,40,33,0.08)]">
+    <div className="rounded-3xl p-[1.2rem] border border-line bg-[rgba(255,255,255,0.72)] [box-shadow:0_20px_60px_rgba(49,40,33,0.08)]">
       <form className="grid gap-[0.95rem]" onSubmit={handleSubmit}>
         <div className="grid gap-[0.95rem] md:grid-cols-2">
           <div className="grid gap-[0.42rem]">
@@ -309,14 +305,14 @@ export function InquiryForm() {
         </div>
 
         <div className="grid gap-[0.42rem]">
-          <span className="text-[0.82rem] font-bold tracking-[0.08em] uppercase text-[color:var(--color-accent-soft)]">
+          <span className="text-[0.82rem] font-bold tracking-[0.08em] uppercase text-accent-soft">
             What do you need help with?
           </span>
           <div className="grid gap-[0.7rem] md:grid-cols-2">
             {inquiryIntentOptions.map((option) => (
               <label
                 key={option.value}
-                className="flex gap-[0.7rem] items-start px-4 py-[0.9rem] rounded-[1rem] border border-[color:var(--color-line)] bg-[rgba(255,255,255,0.62)] cursor-pointer"
+                className="flex gap-[0.7rem] items-start px-4 py-[0.9rem] rounded-2xl border border-line bg-[rgba(255,255,255,0.62)] cursor-pointer"
               >
                 <input
                   type="checkbox"
@@ -343,7 +339,7 @@ export function InquiryForm() {
           />
         </div>
 
-        <p className="text-[color:var(--color-text-soft)] leading-[1.7]">
+        <p className="text-text-soft leading-[1.7]">
           This static version is optimized for speed and is ready for backend or
           email integration later.
         </p>

@@ -1,11 +1,11 @@
-import Link from "next/link";
 import {
-  businessInfo,
-  inquiryActions,
-  pricingCategories,
-  serviceStyles,
-  timelineSteps,
+    businessInfo,
+    inquiryActions,
+    pricingCategories,
+    serviceStyles,
+    timelineSteps,
 } from "@/data/inquiry";
+import Link from "next/link";
 
 type FadeInProps = {
   children: React.ReactNode;
@@ -26,21 +26,48 @@ export function FadeIn({ children, className, delay = 0 }: FadeInProps) {
 
 export function SiteHeader() {
   return (
-    <header className="site-header">
-      <div className="shell site-header-inner">
+    <header className="sticky top-0 z-50 backdrop-blur-[18px] bg-[rgba(245,241,234,0.84)] border-b border-[rgba(182,171,156,0.45)]">
+      <div className="w-[min(calc(100%-1.5rem),76rem)] md:w-[min(calc(100%-3rem),76rem)] mx-auto flex items-center justify-between gap-4 py-4">
         <Link
           href="/"
-          className="brand-lockup"
+          className="grid gap-[0.2rem]"
           aria-label="Lexi's Kitchen home"
         >
-          <strong>Lexi&apos;s Kitchen</strong>
-          <span>Premium event catering</span>
+          <strong className="text-[0.88rem] tracking-[0.14em] uppercase">
+            Lexi&apos;s Kitchen
+          </strong>
+          <span className="text-[color:var(--color-text-soft)] text-[0.85rem]">
+            Premium event catering
+          </span>
         </Link>
-        <nav className="site-nav" aria-label="Primary navigation">
-          <Link href="/#services">Services</Link>
-          <Link href="/pricing">Pricing</Link>
-          <Link href="/menu">Menu</Link>
-          <Link href={businessInfo.calendlyLink}>Food tasting</Link>
+        <nav
+          className="hidden md:flex items-center gap-[1.2rem]"
+          aria-label="Primary navigation"
+        >
+          <Link
+            href="/#services"
+            className="text-[color:var(--color-text-soft)] transition-colors duration-[180ms] ease-[ease] hover:text-[color:var(--color-text)] focus-visible:text-[color:var(--color-text)]"
+          >
+            Services
+          </Link>
+          <Link
+            href="/pricing"
+            className="text-[color:var(--color-text-soft)] transition-colors duration-[180ms] ease-[ease] hover:text-[color:var(--color-text)] focus-visible:text-[color:var(--color-text)]"
+          >
+            Pricing
+          </Link>
+          <Link
+            href="/menu"
+            className="text-[color:var(--color-text-soft)] transition-colors duration-[180ms] ease-[ease] hover:text-[color:var(--color-text)] focus-visible:text-[color:var(--color-text)]"
+          >
+            Menu
+          </Link>
+          <Link
+            href={businessInfo.calendlyLink}
+            className="text-[color:var(--color-text-soft)] transition-colors duration-[180ms] ease-[ease] hover:text-[color:var(--color-text)] focus-visible:text-[color:var(--color-text)]"
+          >
+            Food tasting
+          </Link>
         </nav>
       </div>
     </header>
@@ -49,12 +76,16 @@ export function SiteHeader() {
 
 export function CtaGroup() {
   return (
-    <div className="button-row">
+    <div className="flex flex-wrap gap-3">
       {inquiryActions.map((action) => (
         <Link
           key={action.label}
           href={action.href}
-          className={`button ${action.variant === "primary" ? "button-primary" : "button-secondary"}`}
+          className={
+            action.variant === "primary"
+              ? "inline-flex items-center justify-center rounded-full px-5 py-[0.88rem] border border-transparent bg-[color:var(--color-accent)] text-white [box-shadow:0_20px_60px_rgba(49,40,33,0.08)] transition-[transform,background-color,border-color,color,box-shadow] duration-[180ms] ease-[ease] cursor-pointer hover:-translate-y-px hover:bg-[#1f1813] focus-visible:-translate-y-px focus-visible:bg-[#1f1813]"
+              : "inline-flex items-center justify-center rounded-full px-5 py-[0.88rem] border border-[color:var(--color-line-strong)] bg-transparent text-[color:var(--color-text)] transition-[transform,background-color,border-color,color,box-shadow] duration-[180ms] ease-[ease] cursor-pointer hover:-translate-y-px hover:bg-[rgba(255,255,255,0.55)] focus-visible:-translate-y-px focus-visible:bg-[rgba(255,255,255,0.55)]"
+          }
           target={action.external ? "_blank" : undefined}
           rel={action.external ? "noreferrer" : undefined}
         >
@@ -74,10 +105,16 @@ export function InquiryHighlights() {
   ];
 
   return (
-    <div className="highlight-grid">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {items.map((item, index) => (
-        <FadeIn key={item} className="content-card" delay={0.18 + index * 0.05}>
-          <p className="eyebrow">Guest action</p>
+        <FadeIn
+          key={item}
+          className="rounded-[1.45rem] p-[1.2rem] border border-[color:var(--color-line)] bg-[rgba(255,255,255,0.72)] [box-shadow:0_20px_60px_rgba(49,40,33,0.08)]"
+          delay={0.18 + index * 0.05}
+        >
+          <p className="m-0 text-[color:var(--color-accent-soft)] uppercase tracking-[0.16em] text-[0.75rem] font-bold">
+            Guest action
+          </p>
           <strong>{item}</strong>
         </FadeIn>
       ))}
@@ -91,20 +128,30 @@ type ServiceStyleCardProps = {
 
 export function ServiceCollection({ items }: ServiceStyleCardProps) {
   return (
-    <div className="service-grid">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {items.map((item, index) => (
-        <FadeIn key={item.slug} className="service-card" delay={index * 0.08}>
-          <div className="service-card-header">
-            <span className="info-kicker">{item.label}</span>
-            <h3>{item.title}</h3>
-            <p className="section-copy">{item.description}</p>
+        <FadeIn
+          key={item.slug}
+          className="grid gap-4 rounded-[1.45rem] p-[1.2rem] border border-[color:var(--color-line)] bg-[rgba(255,255,255,0.72)] [box-shadow:0_20px_60px_rgba(49,40,33,0.08)]"
+          delay={index * 0.08}
+        >
+          <div className="grid gap-[0.7rem]">
+            <span className="inline-flex self-start rounded-full px-[0.55rem] py-[0.3rem] border border-[color:var(--color-line)] text-[color:var(--color-text-soft)] text-[0.75rem]">
+              {item.label}
+            </span>
+            <h3 className="m-0 text-[1.2rem]">{item.title}</h3>
+            <p className="text-[color:var(--color-text-soft)] leading-[1.7]">
+              {item.description}
+            </p>
           </div>
-          <ul className="detail-list">
+          <ul className="m-0 p-0 list-none grid gap-[0.7rem]">
             {item.highlights.map((highlight) => (
-              <li key={highlight}>{highlight}</li>
+              <li key={highlight} className="grid gap-[0.35rem]">
+                {highlight}
+              </li>
             ))}
           </ul>
-          <div className="service-meta">{item.meta}</div>
+          <div className="text-[color:var(--color-text-soft)]">{item.meta}</div>
         </FadeIn>
       ))}
     </div>
@@ -113,17 +160,24 @@ export function ServiceCollection({ items }: ServiceStyleCardProps) {
 
 export function PricingSnapshot() {
   return (
-    <div className="highlight-grid">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {pricingCategories.slice(0, 4).map((category, index) => (
         <FadeIn
           key={category.slug}
-          className="content-card"
+          className="rounded-[1.45rem] p-[1.2rem] border border-[color:var(--color-line)] bg-[rgba(255,255,255,0.72)] [box-shadow:0_20px_60px_rgba(49,40,33,0.08)]"
           delay={index * 0.07}
         >
-          <p className="eyebrow">{category.label}</p>
+          <p className="m-0 text-[color:var(--color-accent-soft)] uppercase tracking-[0.16em] text-[0.75rem] font-bold">
+            {category.label}
+          </p>
           <strong>{category.title}</strong>
-          <p className="section-copy">{category.description}</p>
-          <Link className="button button-secondary" href="/pricing">
+          <p className="text-[color:var(--color-text-soft)] leading-[1.7]">
+            {category.description}
+          </p>
+          <Link
+            className="inline-flex items-center justify-center rounded-full px-5 py-[0.88rem] border border-[color:var(--color-line-strong)] bg-transparent text-[color:var(--color-text)] transition-[transform,background-color,border-color,color,box-shadow] duration-[180ms] ease-[ease] cursor-pointer hover:-translate-y-px hover:bg-[rgba(255,255,255,0.55)] focus-visible:-translate-y-px focus-visible:bg-[rgba(255,255,255,0.55)]"
+            href="/pricing"
+          >
             Review {category.label.toLowerCase()}
           </Link>
         </FadeIn>
@@ -134,19 +188,29 @@ export function PricingSnapshot() {
 
 export function WhatsAppMenuCard() {
   return (
-    <FadeIn className="content-card" delay={0.18}>
-      <p className="eyebrow">Menu access</p>
-      <h3>Keep the full menu handoff on WhatsApp</h3>
-      <p className="section-copy">
+    <FadeIn
+      className="rounded-[1.45rem] p-[1.2rem] border border-[color:var(--color-line)] bg-[rgba(255,255,255,0.72)] [box-shadow:0_20px_60px_rgba(49,40,33,0.08)]"
+      delay={0.18}
+    >
+      <p className="m-0 text-[color:var(--color-accent-soft)] uppercase tracking-[0.16em] text-[0.75rem] font-bold">
+        Menu access
+      </p>
+      <h3 className="m-0 text-[1.2rem]">
+        Keep the full menu handoff on WhatsApp
+      </h3>
+      <p className="text-[color:var(--color-text-soft)] leading-[1.7]">
         Guests can preview categories here, then request the complete menu
         directly through WhatsApp just like your current process.
       </p>
-      <div className="button-row">
-        <Link className="button button-primary" href="/menu">
+      <div className="flex flex-wrap gap-3">
+        <Link
+          className="inline-flex items-center justify-center rounded-full px-5 py-[0.88rem] border border-transparent bg-[color:var(--color-accent)] text-white [box-shadow:0_20px_60px_rgba(49,40,33,0.08)] transition-[transform,background-color,border-color,color,box-shadow] duration-[180ms] ease-[ease] cursor-pointer hover:-translate-y-px hover:bg-[#1f1813] focus-visible:-translate-y-px focus-visible:bg-[#1f1813]"
+          href="/menu"
+        >
           Preview menu categories
         </Link>
         <Link
-          className="button button-secondary"
+          className="inline-flex items-center justify-center rounded-full px-5 py-[0.88rem] border border-[color:var(--color-line-strong)] bg-transparent text-[color:var(--color-text)] transition-[transform,background-color,border-color,color,box-shadow] duration-[180ms] ease-[ease] cursor-pointer hover:-translate-y-px hover:bg-[rgba(255,255,255,0.55)] focus-visible:-translate-y-px focus-visible:bg-[rgba(255,255,255,0.55)]"
           href={businessInfo.whatsAppLink}
         >
           Open WhatsApp
@@ -158,13 +222,21 @@ export function WhatsAppMenuCard() {
 
 export function InquiryProcess() {
   return (
-    <div className="process-grid">
+    <div className="grid gap-4 content-start md:grid-cols-2">
       {timelineSteps.map((step, index) => (
-        <FadeIn key={step.title} className="process-card" delay={index * 0.08}>
-          <div className="process-card-inner">
-            <p className="eyebrow">Step {index + 1}</p>
-            <h3>{step.title}</h3>
-            <p className="section-copy">{step.description}</p>
+        <FadeIn
+          key={step.title}
+          className="relative overflow-hidden rounded-[1.45rem] p-[1.2rem] border border-[color:var(--color-line)] bg-[rgba(255,255,255,0.72)] [box-shadow:0_20px_60px_rgba(49,40,33,0.08)] before:content-[''] before:absolute before:left-0 before:top-[1.2rem] before:bottom-[1.2rem] before:w-[3px] before:bg-[color:var(--color-surface-muted)]"
+          delay={index * 0.08}
+        >
+          <div className="pl-4 grid gap-[0.5rem]">
+            <p className="m-0 text-[color:var(--color-accent-soft)] uppercase tracking-[0.16em] text-[0.75rem] font-bold">
+              Step {index + 1}
+            </p>
+            <h3 className="m-0 text-[1.2rem]">{step.title}</h3>
+            <p className="text-[color:var(--color-text-soft)] leading-[1.7]">
+              {step.description}
+            </p>
           </div>
         </FadeIn>
       ))}
@@ -174,21 +246,43 @@ export function InquiryProcess() {
 
 export function SiteFooter() {
   return (
-    <footer className="site-footer">
-      <div className="shell">
-        <div className="footer-card">
+    <footer className="pb-8">
+      <div className="w-[min(calc(100%-1.5rem),76rem)] md:w-[min(calc(100%-3rem),76rem)] mx-auto">
+        <div className="grid gap-[0.7rem] rounded-[1.75rem] p-[1.3rem] border border-[color:var(--color-line)] bg-[rgba(255,255,255,0.72)] [box-shadow:0_20px_60px_rgba(49,40,33,0.08)]">
           <div>
-            <p className="eyebrow">Lexi&apos;s Kitchen</p>
-            <p className="footer-copy">
+            <p className="m-0 text-[color:var(--color-accent-soft)] uppercase tracking-[0.16em] text-[0.75rem] font-bold">
+              Lexi&apos;s Kitchen
+            </p>
+            <p className="text-[color:var(--color-text-soft)] leading-[1.7]">
               Structured static data, mobile-first layouts, and a polished
               inquiry flow designed for speed, clarity, and future scaling.
             </p>
           </div>
-          <div className="footer-links">
-            <Link href="/">Inquiry</Link>
-            <Link href="/pricing">Pricing</Link>
-            <Link href="/menu">Menu</Link>
-            <Link href={businessInfo.calendlyLink}>Book food tasting</Link>
+          <div className="flex flex-wrap gap-[0.9rem]">
+            <Link
+              href="/"
+              className="text-[color:var(--color-text-soft)] hover:text-[color:var(--color-text)] focus-visible:text-[color:var(--color-text)]"
+            >
+              Inquiry
+            </Link>
+            <Link
+              href="/pricing"
+              className="text-[color:var(--color-text-soft)] hover:text-[color:var(--color-text)] focus-visible:text-[color:var(--color-text)]"
+            >
+              Pricing
+            </Link>
+            <Link
+              href="/menu"
+              className="text-[color:var(--color-text-soft)] hover:text-[color:var(--color-text)] focus-visible:text-[color:var(--color-text)]"
+            >
+              Menu
+            </Link>
+            <Link
+              href={businessInfo.calendlyLink}
+              className="text-[color:var(--color-text-soft)] hover:text-[color:var(--color-text)] focus-visible:text-[color:var(--color-text)]"
+            >
+              Book food tasting
+            </Link>
           </div>
         </div>
       </div>

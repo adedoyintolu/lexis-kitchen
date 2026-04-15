@@ -11,10 +11,10 @@ export default function Error({
   unstable_retry: () => void;
 }) {
   return (
-    <div className="page-shell">
+    <div className="min-h-screen">
       <SiteHeader />
-      <main className="section-block">
-        <div className="shell">
+      <main className="py-[4.5rem]">
+        <div className="w-[min(calc(100%-1.5rem),76rem)] md:w-[min(calc(100%-3rem),76rem)] mx-auto">
           <ErrorState
             title="Something interrupted the inquiry flow"
             description="The page could not finish rendering. You can retry the request or return to the home page."

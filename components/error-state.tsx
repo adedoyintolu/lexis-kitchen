@@ -16,22 +16,29 @@ export function ErrorState({
   onRetry,
 }: ErrorStateProps) {
   return (
-    <div className="state-card state-card-error">
-      <p className="eyebrow">Error state</p>
-      <h2>{title}</h2>
-      <p className="form-note">{description}</p>
-      {detail ? <p className="form-note">{detail}</p> : null}
-      <div className="state-actions">
+    <div className="grid gap-[0.9rem] rounded-[1.3rem] border border-[rgba(127,47,47,0.25)] bg-[rgba(255,255,255,0.72)] p-[1.2rem] [box-shadow:0_20px_60px_rgba(49,40,33,0.08)]">
+      <p className="m-0 text-[color:var(--color-accent-soft)] uppercase tracking-[0.16em] text-[0.75rem] font-bold">
+        Error state
+      </p>
+      <h2 className="m-0 text-[1.2rem]">{title}</h2>
+      <p className="text-[color:var(--color-text-soft)] leading-[1.7]">{description}</p>
+      {detail ? (
+        <p className="text-[color:var(--color-text-soft)] leading-[1.7]">{detail}</p>
+      ) : null}
+      <div className="flex flex-wrap gap-[0.7rem]">
         {onRetry ? (
           <button
-            className="button button-primary"
+            className="inline-flex items-center justify-center rounded-full px-5 py-[0.88rem] border border-transparent bg-[color:var(--color-accent)] text-white [box-shadow:0_20px_60px_rgba(49,40,33,0.08)] transition-[transform,background-color,border-color,color,box-shadow] duration-[180ms] ease-[ease] cursor-pointer hover:-translate-y-px hover:bg-[#1f1813] focus-visible:-translate-y-px focus-visible:bg-[#1f1813]"
             type="button"
             onClick={onRetry}
           >
             Try again
           </button>
         ) : null}
-        <Link className="button button-secondary" href="/">
+        <Link
+          className="inline-flex items-center justify-center rounded-full px-5 py-[0.88rem] border border-[color:var(--color-line-strong)] bg-transparent text-[color:var(--color-text)] transition-[transform,background-color,border-color,color,box-shadow] duration-[180ms] ease-[ease] cursor-pointer hover:-translate-y-px hover:bg-[rgba(255,255,255,0.55)] focus-visible:-translate-y-px focus-visible:bg-[rgba(255,255,255,0.55)]"
+          href="/"
+        >
           Return home
         </Link>
       </div>

@@ -1,22 +1,30 @@
+// import inquiryImage from "@/assets/home-sections/inquiry.jpg";
+import menuImage from "@/assets/home-sections/menu.jpg";
+import pricingImage from "@/assets/home-sections/pricing.jpg";
+import tastingImage from "@/assets/home-sections/tasting.jpg";
 import { routes } from "@/routes";
 import { NavItem } from "@/types";
 
 export const mainNav: NavItem[] = [
+  // {
+  //   title: "Event inquiry",
+  //   href: routes.inquiry,
+  //   background: inquiryImage,
+  // },
   {
-    title: "Event Inquiry",
-    href: routes.inquiry,
-  },
-  {
-    title: "Book Food Tasting",
+    title: "Book food tasting",
     href: "https://calendly.com/lexis-kitchen/food-tasting",
     isExternal: true,
+    background: tastingImage,
   },
   {
-    title: "View Pricing",
+    title: "View pricing",
     href: routes.pricing,
+    background: pricingImage,
   },
   {
-    title: "View Menu",
+    title: "View menu",
     href: routes.menu,
+    background: menuImage,
   },
 ];

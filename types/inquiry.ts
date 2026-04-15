@@ -18,7 +18,6 @@ export type PricingItem = {
   name: string;
   largePackPrice?: number;
   smallPackPrice?: number;
-  note?: string;
 };
 
 export type PricingCategory = {

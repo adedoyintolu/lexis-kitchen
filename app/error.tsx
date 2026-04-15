@@ -1,7 +1,6 @@
 "use client";
 
-import { ErrorState } from "@/components/error-state";
-import { SiteHeader } from "@/components/site-sections";
+import { ErrorState } from "@/components/layout/error-state";
 
 export default function Error({
   error,
@@ -12,7 +11,6 @@ export default function Error({
 }) {
   return (
     <div className="min-h-screen">
-      <SiteHeader />
       <main className="py-[4.5rem]">
         <div className="w-[min(calc(100%-1.5rem),76rem)] md:w-[min(calc(100%-3rem),76rem)] mx-auto">
           <ErrorState

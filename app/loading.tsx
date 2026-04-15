@@ -1,11 +1,9 @@
-import { LoadingState } from "@/components/loading-state";
-import { SiteHeader } from "@/components/site-sections";
+import { LoadingState } from "@/components/layout/loading-state";
 
 export default function Loading() {
   return (
     <div className="min-h-screen">
-      <SiteHeader />
-      <main className="py-[4.5rem]">
+      <main className="py-18">
         <div className="w-[min(calc(100%-1.5rem),76rem)] md:w-[min(calc(100%-3rem),76rem)] mx-auto">
           <LoadingState
             title="Loading the inquiry experience"

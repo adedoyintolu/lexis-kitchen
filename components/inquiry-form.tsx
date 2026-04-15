@@ -1,7 +1,7 @@
 "use client";
 
-import { ErrorState } from "@/components/error-state";
-import { LoadingState } from "@/components/loading-state";
+import { ErrorState } from "@/components/layout/error-state";
+import { LoadingState } from "@/components/layout/loading-state";
 import {
   eventTypeOptions,
   inquiryIntentOptions,
@@ -45,9 +45,6 @@ const labelClass =
 
 const btnPrimary =
   "inline-flex items-center justify-center rounded-full px-5 py-[0.88rem] border border-transparent bg-accent text-white [box-shadow:0_20px_60px_rgba(49,40,33,0.08)] transition-[transform,background-color,border-color,color,box-shadow] duration-[180ms] ease-[ease] cursor-pointer hover:-translate-y-px hover:bg-[#1f1813] focus-visible:-translate-y-px focus-visible:bg-[#1f1813]";
-
-const btnSecondary =
-  "inline-flex items-center justify-center rounded-full px-5 py-[0.88rem] border border-line-strong bg-transparent text-text transition-[transform,background-color,border-color,color,box-shadow] duration-[180ms] ease-[ease] cursor-pointer hover:-translate-y-px hover:bg-[rgba(255,255,255,0.55)] focus-visible:-translate-y-px focus-visible:bg-[rgba(255,255,255,0.55)]";
 
 export function InquiryForm() {
   const [form, setForm] = useState<FormState>(initialState);
@@ -332,7 +329,7 @@ export function InquiryForm() {
           </label>
           <textarea
             id="notes"
-            className={`${inputClass} min-h-[8rem] resize-y`}
+            className={`${inputClass} min-h-32 resize-y`}
             value={form.notes}
             onChange={(event) => updateField("notes", event.target.value)}
             placeholder="Share any preferred dishes, service timing, or important details."

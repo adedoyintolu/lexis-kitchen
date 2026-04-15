@@ -1,3 +1,4 @@
+import Navbar from "@/components/layout/navbar";
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import "./globals.css";
@@ -50,8 +51,12 @@ export default function RootLayout({
       lang="en"
       className={`${bodyFont.variable} ${displayFont.variable}`}
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
     >
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        <Navbar />
+        <main>{children}</main>
+      </body>
     </html>
   );
 }

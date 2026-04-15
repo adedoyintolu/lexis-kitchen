@@ -1,65 +1,71 @@
+import { FadeIn } from "@/components/common/fade-in";
+import { SectionHeading } from "@/components/layout/section-heading";
+import { homepageSeo } from "@/data/inquiry";
+import { mainNav } from "@/data/main-nav";
+import { buildMetadata } from "@/lib/metadata";
+import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+export const metadata: Metadata = buildMetadata({
+  title: homepageSeo.title,
+  description: homepageSeo.description,
+  path: "/",
+});
+
+export default function HomePage() {
   return (
-    <div className='flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black'>
-      <main className='flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start'>
-        <Image
-          className='dark:invert'
-          src='/next.svg'
-          alt='Next.js logo'
-          width={100}
-          height={20}
-          priority
-        />
-        <div className='flex flex-col items-center gap-6 text-center sm:items-start sm:text-left'>
-          <h1 className='max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50'>
-            Golden's Test
-          </h1>
-          <p className='max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400'>
-            Looking for a starting point or more instructions? Head over to{' '}
+    <div className="w-[min(calc(100%-1.5rem),76rem)] md:w-[min(calc(100%-3rem),76rem)] mx-auto py-10">
+      <SectionHeading
+        eyebrow="Inquiry"
+        title="Select an option below to get started"
+        description="Whether you want to book a food tasting, explore our menu, or review our pricing, we have you covered. Click on any of the options below to learn more and take the next step towards an unforgettable catering experience with Lexi's Kitchen."
+      />
+
+      <FadeIn className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        {mainNav.map((nav) =>
+          nav.isExternal ? (
             <a
-              href='https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-              className='font-medium text-zinc-950 dark:text-zinc-50'
+              href={nav.href}
+              key={nav.title}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full rounded-2xl h-150 relative"
             >
-              Templates
-            </a>{' '}
-            or the{' '}
-            <a
-              href='https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-              className='font-medium text-zinc-950 dark:text-zinc-50'
+              <Image
+                src={nav.background}
+                alt={nav.title}
+                className="w-full h-full object-cover rounded-2xl"
+                layout="fill"
+                placeholder="blur"
+              />
+              <div className="absolute top-130 bottom-0 left-0 right-0 flex items-center justify-center bg-danger rounded-b-2xl">
+                <span className="font-bold font-display text-4xl text-center text-white">
+                  {nav.title}
+                </span>
+              </div>
+            </a>
+          ) : (
+            <Link
+              href={nav.href}
+              key={nav.title}
+              className="w-full rounded-2xl h-150 relative"
             >
-              Learning
-            </a>{' '}
-            center.
-          </p>
-        </div>
-        <div className='flex flex-col gap-4 text-base font-medium sm:flex-row'>
-          <a
-            className='flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]'
-            href='https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            <Image
-              className='dark:invert'
-              src='/vercel.svg'
-              alt='Vercel logomark'
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className='flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]'
-            href='https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+              <Image
+                src={nav.background}
+                alt={nav.title}
+                className="w-full h-full object-cover rounded-2xl"
+                placeholder="blur"
+              />
+              <div className="absolute top-130 bottom-0 left-0 right-0 flex items-center justify-center bg-danger rounded-b-2xl">
+                <span className="font-bold font-display text-4xl text-center text-white">
+                  {nav.title}
+                </span>
+              </div>
+            </Link>
+          ),
+        )}
+      </FadeIn>
     </div>
   );
 }

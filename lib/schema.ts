@@ -8,7 +8,7 @@ export function buildInquiryJsonLd() {
     areaServed: businessInfo.shortAddress,
     telephone: businessInfo.phone,
     email: businessInfo.email,
-    url: "https://lexiskitchen.example.com",
+    url: "https://inquiry.lexkitchen.com",
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "Catering offerings",

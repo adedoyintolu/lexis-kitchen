@@ -14,7 +14,7 @@ const displayFont = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lexiskitchen.example.com"),
+  metadataBase: new URL("https://inquiry.lexkitchen.com"),
   title: {
     default: "Lexi's Kitchen | Event Catering Inquiry",
     template: "%s | Lexi's Kitchen",

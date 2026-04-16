@@ -1,4 +1,10 @@
-import { InquiryAction, ServiceStyle } from "@/types/inquiry";
+import type {
+  InquiryAction,
+  InquirySelectionBucket,
+  InquiryServiceOption,
+  InquiryFormValues,
+  ServiceStyle,
+} from "@/types/inquiry";
 
 export const businessInfo = {
   name: "Lexi's Kitchen",
@@ -110,6 +116,195 @@ export const serviceStyles: ServiceStyle[] = [
     meta: "Best for clients handling logistics independently.",
   },
 ];
+
+export const inquiryServiceOptions: InquiryServiceOption[] = [
+  {
+    slug: "nibbles-only",
+    title: "Nibbles Only",
+    description:
+      "A lighter event service built around passed or beautifully set nibbles.",
+    summary:
+      "Food spend minimum applies. Setup or passed service begins from $1,001.",
+    badge: "From $1,001",
+    baseMinimumFoodSpend: 1001,
+    basePricingLabel: "Food spend minimum from $1,001",
+    leadNote:
+      "Select the nibbles you want and we will apply the minimum food spend if the estimate falls below it.",
+    variants: [
+      {
+        slug: "setup",
+        title: "Setup",
+        description: "Food is delivered and set up for service.",
+        priceLabel: "Quoted from menu selections",
+        pricingSummary: "Setup fee applies and is finalized after review.",
+      },
+      {
+        slug: "passed",
+        title: "Passed",
+        description:
+          "Waitstaff pass the selected nibbles throughout the event.",
+        priceLabel: "Quoted from menu selections",
+        pricingSummary: "Staffing adjustments are finalized after review.",
+      },
+    ],
+  },
+  {
+    slug: "full-service",
+    title: "Full Service",
+    description:
+      "Choose between formal buffet or plated dinner service for more structured events.",
+    summary:
+      "Formal buffet starts at $35 per guest. Plated dinner starts at $55 per guest.",
+    badge: "Per guest",
+    basePricingLabel: "Starts at $35 per guest",
+    leadNote:
+      "Base package includes 4 nibbles, 2 non-premium mains, 2 proteins, and 2 sides.",
+    variants: [
+      {
+        slug: "formal-buffet",
+        title: "Formal Buffet",
+        description: "A polished buffet presentation for larger guest counts.",
+        priceLabel: "$35 per guest",
+        basePerGuest: 35,
+        minimumGuests: 30,
+        pricingSummary: "Base package uses a minimum of 30 guests.",
+      },
+      {
+        slug: "plated-dinner",
+        title: "Plated Dinner",
+        description: "A more formal plated service with a lower guest minimum.",
+        priceLabel: "$55 per guest",
+        basePerGuest: 55,
+        minimumGuests: 20,
+        pricingSummary: "Base package uses a minimum of 20 guests.",
+      },
+    ],
+  },
+  {
+    slug: "buffet-setup-only",
+    title: "Buffet Setup Only",
+    description: "Setup only with no staff service during the event.",
+    summary:
+      "Pricing follows the buffet package structure with a setup fee applied separately.",
+    badge: "$35 / guest",
+    minimumGuests: 30,
+    basePerGuest: 35,
+    basePricingLabel: "$35 per guest",
+    leadNote:
+      "Includes 4 nibbles, 2 non-premium mains, 2 proteins, and 2 sides. Minimum 30 guests.",
+  },
+  {
+    slug: "abula-on-the-spot",
+    title: "Abula on the Spot",
+    description:
+      "A focused live service built around amala, gbegiri, ewedu, and assorted meat stew.",
+    summary: "$30 per guest with a minimum of 40 and maximum of 80 guests.",
+    badge: "$30 / guest",
+    minimumGuests: 40,
+    maximumGuests: 80,
+    basePerGuest: 30,
+    basePricingLabel: "$30 per guest",
+    leadNote:
+      "Includes amala, gbegiri, ewedu, and assorted meat stew as a fixed offering.",
+  },
+  {
+    slug: "pickup",
+    title: "Pickup",
+    description:
+      "Choose your menu by pan and collect it with no setup or service charge.",
+    summary: "Pickup ordering is available Fridays through Sundays only.",
+    badge: "Pan pricing",
+    basePricingLabel: "Priced per large pan",
+    leadNote:
+      "Pickup orders are calculated from selected large-pan quantities only.",
+    availabilityNote: "Pickup is available Fridays through Sundays.",
+  },
+];
+
+export const inquirySelectionBuckets: InquirySelectionBucket[] = [
+  {
+    key: "nibbles",
+    title: "Nibbles",
+    description:
+      "Choose the nibbles that define the welcome and cocktail experience.",
+    categorySlug: "nibbles",
+    pricingModel: "per-guest",
+    includedCount: 4,
+    helperText:
+      "Base package includes 4 nibble selections. Extra nibble selections are charged per guest.",
+  },
+  {
+    key: "regularMains",
+    title: "Main dishes",
+    description: "Select non-premium mains included in the base package.",
+    categorySlug: "mains-regular",
+    pricingModel: "per-pan",
+    includedCount: 2,
+    helperText:
+      "Base package includes 2 regular mains. Additional mains are charged using large-pan pricing.",
+  },
+  {
+    key: "premiumMains",
+    title: "Premium mains",
+    description:
+      "Optional premium upgrades for clients who want more elevated mains.",
+    categorySlug: "mains-premium",
+    pricingModel: "per-pan",
+    optional: true,
+    helperText:
+      "Premium mains are always treated as add-ons and charged using large-pan pricing.",
+  },
+  {
+    key: "proteins",
+    title: "Proteins",
+    description: "Choose the proteins for the event spread.",
+    categorySlug: "proteins",
+    pricingModel: "per-guest",
+    includedCount: 2,
+    helperText:
+      "Base package includes 2 protein selections. Extra proteins are charged per guest.",
+  },
+  {
+    key: "sides",
+    title: "Sides",
+    description: "Finish the menu with supporting sides and event staples.",
+    categorySlug: "others",
+    pricingModel: "per-guest",
+    includedCount: 2,
+    helperText:
+      "Base package includes 2 sides. Extra side selections are charged per guest.",
+  },
+];
+
+export const pickupCategoryOrder = [
+  "mains-regular",
+  "mains-premium",
+  "pasta",
+  "soups",
+  "stews",
+  "proteins",
+  "others",
+] as const;
+
+export const inquiryInitialValues: InquiryFormValues = {
+  fullName: "",
+  email: "",
+  phone: "",
+  eventType: "",
+  eventDate: "",
+  guestCount: "",
+  venue: "",
+  city: "",
+  serviceStyle: "",
+  serviceVariant: "",
+  selectedNibbles: [],
+  selectedRegularMains: [],
+  selectedPremiumMains: [],
+  selectedProteins: [],
+  selectedSides: [],
+  pickupQuantities: {},
+  notes: "",
+};
 
 export const timelineSteps = [
   {

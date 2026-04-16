@@ -18,6 +18,15 @@
   --color-danger: #7f2f2f;
 }
 
+:root {
+  --font-body:
+    "Avenir Next", Avenir, "Segoe UI", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  --font-display:
+    "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Baskerville,
+    Georgia, serif;
+}
+
 *,
 *::before,
 *::after {

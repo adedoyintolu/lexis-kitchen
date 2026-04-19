@@ -17,12 +17,10 @@ const Navbar = () => {
             <Image
               src={Logo}
               alt="Lexi's Kitchen logo"
-              width={32}
-              height={32}
+              width={50}
+              height={50}
+              className="w-12.5 h-12.5 object-contain"
             />
-            <strong className="text-[0.88rem] tracking-[0.14em] uppercase">
-              Lexi&apos;s Kitchen
-            </strong>
           </div>
         </Link>
         <nav

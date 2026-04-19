@@ -7,7 +7,6 @@ import {
   basePackagesTable,
   importantThingsToKnow,
   pricingDefinitions,
-  pricingHighlights,
   pricingPageIntro,
   servicePricingDetails,
   whyWeUseMinimums,
@@ -22,17 +21,17 @@ export const metadata: Metadata = buildMetadata({
   path: "/pricing",
 });
 
-function formatPrice(value?: number) {
-  if (!value) {
-    return "N/A";
-  }
+// function formatPrice(value?: number) {
+//   if (!value) {
+//     return "N/A";
+//   }
 
-  return value.toLocaleString("en-US", {
-    currency: "USD",
-    style: "currency",
-    minimumFractionDigits: value % 1 === 0 ? 0 : 2,
-  });
-}
+//   return value.toLocaleString("en-US", {
+//     currency: "USD",
+//     style: "currency",
+//     minimumFractionDigits: value % 1 === 0 ? 0 : 2,
+//   });
+// }
 
 export default function PricingPage() {
   return (
@@ -44,7 +43,7 @@ export default function PricingPage() {
             title={pricingPageIntro.title}
             description={pricingPageIntro.description}
           />
-          <FadeIn className="rounded-[1.5rem] border border-line bg-white p-5 shadow-[0_20px_60px_rgba(49,40,33,0.08)] md:p-7">
+          <FadeIn className="rounded-3xl border border-line bg-white p-5 shadow-[0_20px_60px_rgba(49,40,33,0.08)] md:p-7">
             <p className="m-0 max-w-3xl text-sm leading-7 text-text-soft md:text-base">
               {pricingPageIntro.supportingText}
             </p>
@@ -56,7 +55,7 @@ export default function PricingPage() {
           </FadeIn>
         </section>
 
-        <section className="mb-12 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {/* <section className="mb-12 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {pricingHighlights.map((highlight, index) => (
             <FadeIn
               key={highlight.label}
@@ -74,7 +73,7 @@ export default function PricingPage() {
               </p>
             </FadeIn>
           ))}
-        </section>
+        </section> */}
 
         <section className="mb-12">
           <SectionHeading
@@ -103,7 +102,7 @@ export default function PricingPage() {
           </div>
         </section>
 
-        <section className="mb-12 grid gap-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <section className="mb-12 grid gap-4">
           <FadeIn className="rounded-3xl border border-line bg-white p-5 shadow-[0_20px_60px_rgba(49,40,33,0.08)] md:p-7">
             <p className="m-0 text-[0.72rem] font-bold uppercase tracking-[0.16em] text-accent-soft">
               What a base package means
@@ -111,7 +110,7 @@ export default function PricingPage() {
             <p className="m-0 mt-4 text-base font-semibold">
               {basePackageMeaning.intro}
             </p>
-            <ul className="m-0 mt-4 grid gap-2 pl-5 text-sm leading-7 text-text-soft">
+            <ul className="m-0 mt-4 grid gap-2 pl-5 text-sm leading-7 text-text-soft list-disc">
               {basePackageMeaning.bullets.map((bullet) => (
                 <li key={bullet}>{bullet}</li>
               ))}
@@ -121,7 +120,7 @@ export default function PricingPage() {
             </p>
           </FadeIn>
 
-          <FadeIn className="rounded-[1.5rem] border border-line bg-surface p-5 md:p-7">
+          {/* <FadeIn className="rounded-3xl border border-line bg-surface p-5 md:p-7">
             <p className="m-0 text-[0.72rem] font-bold uppercase tracking-[0.16em] text-accent-soft">
               Planning note
             </p>
@@ -134,7 +133,7 @@ export default function PricingPage() {
               can grow with add-ons, but it should not be reduced below the
               included structure.
             </p>
-          </FadeIn>
+          </FadeIn> */}
         </section>
 
         <section className="mb-12">
@@ -246,7 +245,7 @@ export default function PricingPage() {
           <SectionHeading
             eyebrow="Detailed breakdown"
             title="Service and pricing breakdown"
-            description="The live pricing page uses expandable service explanations. Here, each service style opens into the same kind of practical detail while staying cleaner and more editorial."
+            description=""
           />
           <div className="grid gap-4">
             {servicePricingDetails.map((detail, index) => (
@@ -377,9 +376,8 @@ export default function PricingPage() {
               Why we use minimums
             </p>
             <p className="m-0 mt-4 text-sm leading-7 text-text-soft">
-              Minimums help us produce consistently, protect quality, and plan
-              staffing and operations properly before final proposals are
-              issued.
+              Minimums help us provide accurate estimates before final
+              proposals.
             </p>
             <ul className="m-0 mt-4 grid gap-2 pl-5 text-sm leading-7 text-text-soft list-disc">
               {whyWeUseMinimums.map((item) => (
@@ -387,8 +385,36 @@ export default function PricingPage() {
               ))}
             </ul>
             <p className="m-0 mt-5 text-sm leading-7 text-text-soft">
-              Questions can be directed to {businessInfo.email} while you review
-              pricing or prepare an inquiry.
+              If you have any questions: contact us via <br />
+              Email:{" "}
+              <a
+                href={`mailto: ${businessInfo.email}`}
+                className="text-blue-800!"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {businessInfo.email}
+              </a>
+              <br />
+              Instagram:{" "}
+              <a
+                href="https://www.instagram.com/lexxiskitchen"
+                className="text-blue-800!"
+                target="_blank"
+                rel="noreferrer"
+              >
+                @lexxiskitchen
+              </a>
+              <br />
+              Visit our website:{" "}
+              <a
+                href="https://lexkitchen.com/"
+                className="text-blue-800!"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Lexis Kitchen Website
+              </a>
             </p>
           </FadeIn>
         </section>

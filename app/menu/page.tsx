@@ -1,8 +1,11 @@
+import Button from "@/components/common/button";
 import { FadeIn } from "@/components/common/fade-in";
 import { SectionHeading } from "@/components/layout/section-heading";
-import { pricingCategories } from "@/data/pricing";
+import { menuCategory } from "@/data/menu";
 import { buildMetadata } from "@/lib/metadata";
+import { routes } from "@/routes";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = buildMetadata({
   title: "Menu",
@@ -22,7 +25,7 @@ export default function MenuPage() {
         />
 
         <div className="grid gap-4 md:grid-cols-2">
-          {pricingCategories.map((collection, index) => (
+          {menuCategory.map((collection, index) => (
             <FadeIn
               key={collection.slug}
               className="rounded-[1.45rem] p-[1.2rem] border border-line bg-[rgba(255,255,255,0.72)] [box-shadow:0_20px_60px_rgba(49,40,33,0.08)]"
@@ -43,7 +46,7 @@ export default function MenuPage() {
                 {collection.items.map((item) => (
                   <li
                     key={item.name}
-                    className="flex items-center justify-between gap-3 font-bold p-3 capitalize rounded-lg border border-line bg-[rgba(255,255,255,0.72)] [box-shadow:0_10px_30px_rgba(49,40,33,0.06)]"
+                    className="flex items-center justify-between gap-3 font-medium p-3 capitalize rounded-lg border border-line bg-[rgba(255,255,255,0.72)] [box-shadow:0_10px_30px_rgba(49,40,33,0.06)]"
                   >
                     <span>{item.name}</span>
                   </li>
@@ -52,6 +55,11 @@ export default function MenuPage() {
             </FadeIn>
           ))}
         </div>
+        <Link href={routes.inquiry}>
+          <Button variant="primary" className="w-full! mt-10">
+            Start Event Inquiry
+          </Button>
+        </Link>
       </div>
     </div>
   );

@@ -33,15 +33,15 @@ export const pricingHighlights = [
 export const pricingDefinitions = [
   {
     title: "Food Spend",
-    body: "Food spend refers to the cost of food items only. It does not include service charges, setup fees, staffing, or taxes. Every service style has a minimum food spend requirement, which must be met before an inquiry can move forward.",
+    body: "Food spend refers to the cost of food items only. It does not include service charges, setup fees, staffing, or taxes. Every service style has a minimum food spend requirement, which must be met in order to proceed with an inquiry. Selecting additional items beyond what is included in a base package will increase your food spend.",
   },
   {
     title: "Setup Fee",
-    body: "A setup fee applies to service styles that require on-site equipment or display. This can include chafing dishes, display equipment, and event setup logistics. Setup fees are separate from food spend.",
+    body: "A setup fee applies to service styles that require on-site equipment, or display. This includes items such as chafing dishes, display equipment, and event setup logistics. Setup fees are separate from food spend and are shown clearly in your estimate when applicable.",
   },
   {
     title: "Service Charge",
-    body: "A service charge covers operational costs related to on-site execution, coordination, display support, and base staffing structure where applicable. It is not included in food spend.",
+    body: "A service charge covers operational costs related to service execution, associated on-site equipment, or display setup required, coordination, and base staffing support.  This charge is calculated as a percentage of your food spend and applies only to service styles that include on-site service.",
   },
 ];
 
@@ -57,50 +57,34 @@ export const basePackageMeaning = {
 
 export const basePackagesTable = [
   {
-    serviceStyle: "Formal Buffet",
+    serviceStyle: "Buffet (Setup Only)",
     foodSpendMinimum: "$1,050",
     guestRequirement: "30 guests",
     packageIncludes: "4 nibbles, 2 mains/carbs, 2 proteins, 2 sides",
     setupFee: "Yes",
-    serviceCharge: "No",
+    serviceCharge: "Yes",
   },
   {
     serviceStyle: "Plated Dinner",
     foodSpendMinimum: "$1,100",
     guestRequirement: "20 guests",
     packageIncludes: "4 nibbles, 2 mains/carbs, 2 proteins, 2 sides",
-    setupFee: "No",
+    setupFee: "Yes",
     serviceCharge: "Yes",
   },
   {
-    serviceStyle: "Buffet (Setup Only)",
-    foodSpendMinimum: "$1,050",
-    guestRequirement: "30 guests",
-    packageIncludes: "4 nibbles, 2 mains/carbs, 2 proteins, 2 sides",
-    setupFee: "Yes",
-    serviceCharge: "No",
-  },
-  {
     serviceStyle: "Nibbles Only",
-    foodSpendMinimum: "Varies by service option",
-    guestRequirement: "No fixed guest minimum",
-    packageIncludes: "Minimum of 4 nibble selections",
+    foodSpendMinimum: "Varies: Setup, Passed, Pickup",
+    guestRequirement: "No guest minimum",
+    packageIncludes: "Minimum of 4 nibbles",
     setupFee: "Depends on option selected",
-    serviceCharge: "Depends on option selected",
-  },
-  {
-    serviceStyle: "Abula on the Spot",
-    foodSpendMinimum: "$30 per guest",
-    guestRequirement: "40-80 guests",
-    packageIncludes: "Amala, gbegiri, ewedu, assorted meat stew",
-    setupFee: "No",
-    serviceCharge: "Service review may apply",
+    serviceCharge: "Yes",
   },
   {
     serviceStyle: "Pickup",
-    foodSpendMinimum: "Menu dependent",
+    foodSpendMinimum: "Lower minimum",
     guestRequirement: "None",
-    packageIncludes: "Chosen a la carte by pan or item",
+    packageIncludes: "Menu dependent",
     setupFee: "No",
     serviceCharge: "No",
   },
@@ -114,68 +98,42 @@ export const servicePricingDetails = [
     sections: [
       {
         title: "What’s included in the base package",
-        body: "4 nibbles, 2 mains/carbs that are not premium, 2 proteins, and 2 sides.",
+        body: "4 nibbles, 2 mains/carbs, 2 proteins, and 2 sides. You may add more items at any time. Additional menu items are priced individually per pan",
       },
       {
-        title: "Formal buffet pricing",
+        title: "Buffet Service",
+        body: "Buffet service with professional setup. Equipment included. No waitstaff service",
+      },
+      {
+        title: "Pricing",
         body: "Starts at $35 per guest. Base package 30 guests. Minimum food spend: $1,050.",
       },
       {
         title: "Plated dinner pricing",
-        body: "Starts at $55 per guest. Base package 20 guests. Minimum food spend: $1,100.",
+        body: "Formal plated service that starts at $55 per guest in a coordinated dining experience. Base package 20 guests. Minimum food spend: $1,100. 1 Professional waitstaff included (this may increase depending on your guest count or menu selections and will be determined by our team to be added to your invoice.). Additional menu selections beyond the base package will increase the food spend. Service charge and staffing fees apply.",
       },
       {
         title: "Add-on rules",
-        body: "Extra mains are charged using large-pan pricing. Extra nibbles, proteins, and sides are charged as item price multiplied by guest count.",
+        body: "Additional menu selections beyond the base package will increase the food spend. A setup fee applies. Service charge and staffing fees do not apply.",
       },
     ],
   },
   {
     title: "Nibbles Only",
     summary:
-      "Nibbles service is ideal for cocktail hours, receptions, and lighter event formats built around bite-sized selections.",
+      "Nibbles service is ideal for cocktail hours, receptions, and casual events.",
     sections: [
       {
         title: "Minimum selection",
-        body: "At least 4 nibble variations should be selected for a working estimate.",
+        body: "At least 4 nibble variations",
       },
       {
         title: "Pricing structure",
-        body: "Nibble pricing ranges are represented per item in the menu pricing section below. No fixed guest minimum is enforced here, but a minimum food spend applies.",
+        body: "Nibbles range between $3-$5 per item. No guest minimum, but a minimum food spend applies.",
       },
       {
         title: "Service options",
-        body: "Setup, waitstaff passed, or pickup. Setup and passed options may include setup fees and service charges. Pickup does not include setup or service charges.",
-      },
-    ],
-  },
-  {
-    title: "Buffet (Setup Only)",
-    summary:
-      "Buffet setup only follows the same package structure as formal buffet, but without service staff on site.",
-    sections: [
-      {
-        title: "Pricing",
-        body: "Priced the same as buffet style at $35 per guest with a 30-guest base package and $1,050 food spend minimum.",
-      },
-      {
-        title: "Operational note",
-        body: "Setup fee applies. Service charge is not included because staff are not part of this format.",
-      },
-    ],
-  },
-  {
-    title: "Abula on the Spot",
-    summary:
-      "A focused live-service format for clients who want a signature traditional offering on site.",
-    sections: [
-      {
-        title: "What’s included",
-        body: "Abula comes with amala, gbegiri, ewedu, and assorted meat stew.",
-      },
-      {
-        title: "Pricing",
-        body: "$30 per guest with a minimum of 40 guests and a maximum of 80 guests.",
+        body: "Setup, waitstaff passed, or pickup. Each service option has its own minimum food spend. Setup and passed options may include setup fees and service charges. Pickup does not include setup or service charges.",
       },
     ],
   },
@@ -186,11 +144,11 @@ export const servicePricingDetails = [
     sections: [
       {
         title: "Key details",
-        body: "No setup or service charges. Clients choose menu items a la carte. Pickup currently runs Fridays through Sundays.",
+        body: "All menus available. No setup or service charges. Lower minimum food spend compared to setup services.",
       },
       {
-        title: "Minimums",
-        body: "Menu requirements still apply based on what is selected, but pickup avoids service-related charges.",
+        title: "Minimum requirements",
+        body: "Minimum food spend and menu requirements still apply and must be met before submission.",
       },
     ],
   },
@@ -209,12 +167,7 @@ export const additionalChargesMatrix = [
   },
   {
     chargeType: "Staffing Costs",
-    appliesWhen: "Passed, plated, or live-service events",
-    includedInFoodSpend: "No",
-  },
-  {
-    chargeType: "Taxes",
-    appliesWhen: "All applicable services",
+    appliesWhen: "Plated, Passed",
     includedInFoodSpend: "No",
   },
 ];

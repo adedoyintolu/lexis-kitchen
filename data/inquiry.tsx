@@ -1,8 +1,10 @@
+import { PricingBreakdown } from "@/components/layout/pricing-breakdown";
 import type {
+  InformationStepField,
   InquiryAction,
+  InquiryFormValues,
   InquirySelectionBucket,
   InquiryServiceOption,
-  InquiryFormValues,
   ServiceStyle,
 } from "@/types/inquiry";
 
@@ -343,3 +345,92 @@ export const eventTypeOptions = [
   { value: "private-dinner", label: "Private dinner" },
   { value: "other", label: "Other event" },
 ] as const;
+
+export const informationStepFields: InformationStepField[] = [
+  {
+    title: "Managing your Budget",
+    content: (
+      <>
+        <span>
+          Planning your event budget is an important part of the process. Our
+          inquiry system is designed to give you clear guidance while allowing
+          flexibility to customize your menu.
+        </span>
+        <p className="my-2">To generate an accurate estimate, we’ll ask for:</p>
+        <ul className="list-disc list-inside">
+          <li>Event date and location</li>
+          <li>Estimated guest count</li>
+          <li>Service style selection</li>
+          <li>Menu selections</li>
+        </ul>
+        <p className="mt-2">
+          You’ll see estimated totals update as you build your menu.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: "How our pricing works",
+    content: (
+      <>
+        <p>
+          We use a per-guest pricing model for most services. Each service style
+          includes a base package that covers a curated selection of menu items.
+          You’re welcome to customize beyond the base package at any time.
+        </p>
+        <p className="mt-2">
+          Your estimate updates automatically as selections are added.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: "Service and Pricing Breakdown",
+    content: <PricingBreakdown />,
+  },
+  {
+    title: "Additional Charges & Notes",
+    content: (
+      <>
+        <p className="mb-2">
+          Depending on your selections, your estimate may include:
+        </p>
+
+        <ul className="list-disc list-inside">
+          <li>Service charge</li>
+          <li>Staffing fees</li>
+          <li>Setup or equipment fees</li>
+          <li>Applicable taxes</li>
+        </ul>
+        <p className="mt-2">
+          All estimated costs are shown clearly before you submit your inquiry.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: "What happens next",
+    content: (
+      <>
+        <div className="mb-4 rounded-[1.45rem] border border-line bg-white p-5 shadow-[0_20px_60px_rgba(49,40,33,0.08)] text-sm leading-7 text-text-soft">
+          If you get stuck, need clarification or help understanding the menu
+          and pricing, you can click on the Details button at the top right of
+          your screen at anytime. You will be able to return exactly where you
+          left off and continue your inquiry.
+        </div>
+        <b>What Happens After You Submit</b>
+        <p className="my-2">Once your inquiry is submitted:</p>
+        <ul className="list-disc list-inside">
+          <li>A team member reviews your selections</li>
+          <li>We may reach out with follow-up questions</li>
+          <li>
+            You’ll receive a detailed proposal if your event is a good fit
+          </li>
+        </ul>
+        <p className="mt-2">
+          Submitting an inquiry does not obligate you to book.
+        </p>
+      </>
+    ),
+  },
+];

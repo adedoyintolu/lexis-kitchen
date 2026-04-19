@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export type InquiryAction = {
   label: string;
   href: string;
@@ -119,4 +121,9 @@ export type InquiryEstimate = {
   minimumApplied: boolean;
   lineItems: InquiryEstimateLineItem[];
   assumptions: string[];
+};
+
+export type InformationStepField = {
+  title: string;
+  content: ReactNode;
 };

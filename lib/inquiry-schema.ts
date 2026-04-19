@@ -1,5 +1,5 @@
-import * as Yup from "yup";
 import type { InquiryFormValues } from "@/types/inquiry";
+import * as Yup from "yup";
 
 const PACKAGE_STYLES = ["full-service", "buffet-setup-only"];
 
@@ -167,6 +167,7 @@ export const inquiryValidationSchema = Yup.object({
 });
 
 export const inquiryStepFields = [
+  [],
   [
     "eventType",
     "eventDate",

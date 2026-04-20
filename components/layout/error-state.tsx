@@ -18,11 +18,13 @@ export function ErrorState({
   return (
     <div className="grid gap-[0.9rem] rounded-[1.3rem] border border-[rgba(127,47,47,0.25)] bg-[rgba(255,255,255,0.72)] p-[1.2rem] [box-shadow:0_20px_60px_rgba(49,40,33,0.08)]">
       <p className="m-0 text-accent-soft uppercase tracking-[0.16em] text-[0.75rem] font-bold">
-        Error state
+        Error
       </p>
       <h2 className="m-0 text-[1.2rem]">{title}</h2>
-      <p className="text-text-soft leading-[1.7]">{description}</p>
-      {detail ? <p className="text-text-soft leading-[1.7]">{detail}</p> : null}
+      <div className="text-text-soft leading-[1.7]">{description}</div>
+      {detail ? (
+        <div className="text-text-soft leading-[1.7]">{detail}</div>
+      ) : null}
       <div className="flex flex-wrap gap-[0.7rem]">
         {onRetry ? (
           <button

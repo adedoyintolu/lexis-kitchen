@@ -21,50 +21,50 @@ export default function HomePage() {
         title="Select an option below to get started"
         description="Whether you want to book a food tasting, explore our menu, or review our pricing, we have you covered. Click on any of the options below to learn more and take the next step towards an unforgettable catering experience with Lexi's Kitchen."
       />
+      <FadeIn className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
+        {mainNav.map((nav) => {
+          const imageProps = {
+            src: nav.background,
+            alt: nav.title,
+            fill: true,
+            className: "w-full h-full object-cover",
+            placeholder: "blur" as const,
+          };
 
-      <FadeIn className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        {mainNav.map((nav) =>
-          nav.isExternal ? (
+          const overlay = (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/60 hover:bg-black/40 transition-colors">
+              <span className="font-bold text-xl md:text-3xl text-center text-white">
+                {nav.title}
+              </span>
+            </div>
+          );
+
+          const content = (
+            <>
+              <Image {...imageProps} />
+              {overlay}
+            </>
+          );
+
+          const className =
+            "relative w-full h-48 md:h-48 3xl:h-66 flex rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow";
+
+          return nav.isExternal ? (
             <a
               href={nav.href}
               key={nav.title}
               target="_blank"
               rel="noreferrer"
-              className="w-full rounded-2xl h-150 relative"
+              className={className}
             >
-              <Image
-                src={nav.background}
-                alt={nav.title}
-                className="w-full h-full object-cover rounded-2xl"
-                layout="fill"
-                placeholder="blur"
-              />
-              <div className="absolute top-130 bottom-0 left-0 right-0 flex items-center justify-center bg-danger rounded-b-2xl">
-                <span className="font-bold font-display text-4xl text-center text-white">
-                  {nav.title}
-                </span>
-              </div>
+              {content}
             </a>
           ) : (
-            <Link
-              href={nav.href}
-              key={nav.title}
-              className="w-full rounded-2xl h-150 relative"
-            >
-              <Image
-                src={nav.background}
-                alt={nav.title}
-                className="w-full h-full object-cover rounded-2xl"
-                placeholder="blur"
-              />
-              <div className="absolute top-130 bottom-0 left-0 right-0 flex items-center justify-center bg-danger rounded-b-2xl">
-                <span className="font-bold font-display text-4xl text-center text-white">
-                  {nav.title}
-                </span>
-              </div>
+            <Link href={nav.href} key={nav.title} className={className}>
+              {content}
             </Link>
-          ),
-        )}
+          );
+        })}
       </FadeIn>
     </div>
   );

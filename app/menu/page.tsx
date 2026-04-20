@@ -38,9 +38,9 @@ export default function MenuPage() {
                 <h2 className="m-0 font-display text-[clamp(1.6rem,4vw,2.2rem)] leading-[0.95] tracking-[-0.03em]">
                   {collection.title}
                 </h2>
-                <p className="text-text-soft leading-[1.7]">
+                <div className="text-text-soft leading-[1.7]">
                   {collection.description}
-                </p>
+                </div>
               </div>
               <ul className="m-0 p-0 list-none grid gap-[0.7rem] md:grid-cols-2 grid-cols-1">
                 {collection.items.map((item) => (

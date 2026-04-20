@@ -13,7 +13,6 @@ import {
 import type { InquiryFormValues } from "@/types/inquiry";
 import { useFormik } from "formik";
 import { useState } from "react";
-import { StepBadge } from "./step-badge";
 import BuildMenuStep from "./steps/build-menu-step";
 import ContactDetailsStep from "./steps/contact-details-step";
 import EventDetailsStep from "./steps/event-details-step";
@@ -126,7 +125,7 @@ export function InquiryForm() {
 
   if (submissionState === "success") {
     return (
-      <div className="grid gap-4 rounded-[1.5rem] border border-success/20 bg-white p-6 shadow-[0_20px_60px_rgba(49,40,33,0.08)]">
+      <div className="grid gap-4 rounded-3xl border border-success/20 bg-white p-6 shadow-[0_20px_60px_rgba(49,40,33,0.08)]">
         <p className="m-0 text-xs font-bold uppercase tracking-[0.16em] text-accent-soft">
           Inquiry sent
         </p>
@@ -177,7 +176,7 @@ export function InquiryForm() {
       }
     >
       <div className="grid gap-6">
-        <div className="rounded-[1.5rem] border border-line bg-white p-5 shadow-[0_20px_60px_rgba(49,40,33,0.08)]">
+        <div className="rounded-3xl border border-line bg-white p-5 shadow-[0_20px_60px_rgba(49,40,33,0.08)]">
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="m-0 text-xs font-bold uppercase tracking-[0.16em] text-accent-soft">
@@ -186,6 +185,9 @@ export function InquiryForm() {
               <p className="m-0 mt-2 text-sm text-text-soft">
                 Step {currentStep + 1} of {stepLabels.length}:{" "}
                 {stepLabels[currentStep].title}
+              </p>
+              <p className="m-0 mt-1 text-xs text-text-soft">
+                {stepLabels[currentStep].description}
               </p>
             </div>
             <span className="rounded-full bg-surface-muted px-3 py-1 text-xs font-semibold text-text-soft">
@@ -198,19 +200,6 @@ export function InquiryForm() {
               style={{ width: `${progressPercentage}%` }}
             />
           </div>
-        </div>
-
-        <div className="grid gap-3 md:grid-cols-3">
-          {stepLabels.map((step, index) => (
-            <StepBadge
-              key={step.key}
-              index={index}
-              title={step.title}
-              description={step.description}
-              active={index === currentStep}
-              complete={index < currentStep}
-            />
-          ))}
         </div>
 
         <form onSubmit={formik.handleSubmit} className="grid gap-6">

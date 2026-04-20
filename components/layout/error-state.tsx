@@ -21,8 +21,10 @@ export function ErrorState({
         Error state
       </p>
       <h2 className="m-0 text-[1.2rem]">{title}</h2>
-      <p className="text-text-soft leading-[1.7]">{description}</p>
-      {detail ? <p className="text-text-soft leading-[1.7]">{detail}</p> : null}
+      <div className="text-text-soft leading-[1.7]">{description}</div>
+      {detail ? (
+        <div className="text-text-soft leading-[1.7]">{detail}</div>
+      ) : null}
       <div className="flex flex-wrap gap-[0.7rem]">
         {onRetry ? (
           <button

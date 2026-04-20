@@ -1,9 +1,10 @@
+import Button from "@/components/common/button";
 import { informationStepFields } from "@/data/inquiry";
-import React from "react";
-import { SectionHeading } from "../../section-heading";
+import { useState } from "react";
 import { SectionCard } from "../section-card";
 
 const InformationStep = () => {
+  const [selectedStep, setSelectedStep] = useState(0);
   return (
     <div className="fade-in" style={{ ["--delay" as string]: "0s" }}>
       <SectionCard
@@ -12,17 +13,18 @@ const InformationStep = () => {
       >
         <div className="flex items-center gap-3 flex-wrap">
           {informationStepFields.map((field, index) => (
-            <React.Fragment key={index}>
-              <SectionHeading
-                eyebrow={field.title}
-                description={field.content}
-                title=""
-              />
-              {index < informationStepFields.length - 1 ? (
-                <div className="bg-line h-[0.1px] w-full mb-6" />
-              ) : null}
-            </React.Fragment>
+            <Button
+              key={index}
+              className="h-10 px-3! py-2! font-medium"
+              variant={index === selectedStep ? "primary" : "secondary"}
+              onClick={() => setSelectedStep(index)}
+            >
+              {field.title}
+            </Button>
           ))}
+        </div>
+        <div className="p-5 rounded-lg border border-line bg-white mt-5 text-text-soft">
+          {informationStepFields[selectedStep].content}
         </div>
       </SectionCard>
     </div>

@@ -17,9 +17,9 @@ const Navbar = () => {
             <Image
               src={Logo}
               alt="Lexi's Kitchen logo"
-              width={50}
-              height={50}
-              className="w-12.5 h-12.5 object-contain"
+              width={60}
+              height={60}
+              className="w-15 h-15 object-contain"
             />
           </div>
         </Link>

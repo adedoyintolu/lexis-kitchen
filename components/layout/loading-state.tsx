@@ -10,7 +10,7 @@ export function LoadingState({ title, description }: LoadingStateProps) {
         Loading state
       </p>
       <h2 className="m-0 text-[1.2rem]">{title}</h2>
-      <p className="text-text-soft leading-[1.7]">{description}</p>
+      <div className="text-text-soft leading-[1.7]">{description}</div>
       <div className="loading-pulse" />
       <div className="loading-pulse" />
       <div className="loading-pulse" />

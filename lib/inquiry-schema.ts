@@ -1,7 +1,7 @@
 import type { InquiryFormValues } from "@/types/inquiry";
 import * as Yup from "yup";
 
-const PACKAGE_STYLES = ["full-service", "buffet-setup-only"];
+const PACKAGE_STYLES = ["plated-dinner", "buffet-setup-only"];
 
 function isWeekendDate(value?: string) {
   if (!value) {
@@ -34,7 +34,49 @@ export const inquiryValidationSchema = Yup.object({
 
         return isWeekendDate(value);
       },
+    )
+    // Test for past dates
+    .test(
+      "not-in-past",
+      "Event date cannot be in the past.",
+      function validateNotInPast(value) {
+        if (!value) {
+          return false;
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const eventDate = new Date(`${value}T12:00:00`);
+
+        return eventDate >= today;
+      },
     ),
+  startTime: Yup.string().required("Please enter the event start time."),
+  endTime: Yup.string()
+    .required("Please enter the event end time.")
+    .test(
+      "end-after-start",
+      "End time must be after start time.",
+      function validateEndTime(value) {
+        const { startTime } = this.parent;
+        if (!value || !startTime) {
+          return false;
+        }
+
+        return value > startTime;
+      },
+    ),
+  address: Yup.string().trim().required("Please enter the street address."),
+  state: Yup.string().trim().required("Please enter the state."),
+  budget: Yup.number()
+    .transform((value, originalValue) =>
+      originalValue === "" ? undefined : value,
+    )
+    .required("Please enter a budget.")
+    .min(0, "Budget cannot be negative.")
+    .typeError("Please enter a valid number for the budget.")
+    .min(1100, "The minimum budget for our services is $1,100."),
   guestCount: Yup.number()
     .transform((value, originalValue) =>
       originalValue === "" ? undefined : value,
@@ -43,35 +85,51 @@ export const inquiryValidationSchema = Yup.object({
     .min(1, "Guest count must be at least 1.")
     .test(
       "guest-count-by-service",
-      "Guest count does not match this service style.",
+      "", // We leave the default message empty because we generate it dynamically below
       function (value) {
-        if (!value) {
-          return false;
-        }
+        const { serviceStyle } = this.parent;
+        if (!value) return false;
 
-        const { serviceStyle, serviceVariant } = this.parent;
-
-        if (
-          serviceStyle === "full-service" &&
-          serviceVariant === "formal-buffet"
-        ) {
-          return value >= 30;
-        }
-
-        if (
-          serviceStyle === "full-service" &&
-          serviceVariant === "plated-dinner"
-        ) {
-          return value >= 20;
-        }
-
+        // Buffet Setup Only (Min 30)
         if (serviceStyle === "buffet-setup-only") {
-          return value >= 30;
+          return (
+            value >= 30 ||
+            this.createError({
+              message: "Buffet Setup requires at least 30 guests.",
+            })
+          );
         }
 
-        if (serviceStyle === "abula-on-the-spot") {
-          return value >= 40 && value <= 80;
+        // Plated Dinner (20 - 200)
+        if (serviceStyle === "plated-dinner") {
+          return (
+            value >= 20 ||
+            this.createError({
+              message: "Plated Dinner requires at least 20 guests.",
+            })
+          );
         }
+
+        // No validation for max for now
+        // // Nibbles Only (Max 500)
+        // if (serviceStyle === "nibbles-only") {
+        //   return (
+        //     value <= 500 ||
+        //     this.createError({
+        //       message: "Nibbles Only is limited to 500 guests.",
+        //     })
+        //   );
+        // }
+
+        // // Pickup (Max 1000)
+        // if (serviceStyle === "pickup") {
+        //   return (
+        //     value <= 1000 ||
+        //     this.createError({
+        //       message: "Pickup service is limited to 1000 guests.",
+        //     })
+        //   );
+        // }
 
         return true;
       },
@@ -99,16 +157,30 @@ export const inquiryValidationSchema = Yup.object({
     .defined(),
   selectedNibbles: Yup.array(Yup.string()).test(
     "nibbles-required",
-    "Select at least the required nibble choices for this service.",
+    "", // Default message ignored
     function validateNibbles(value) {
       const style = this.parent.serviceStyle;
+      const count = value?.length ?? 0;
 
+      // 1. Nibbles Only (Min 1)
       if (style === "nibbles-only") {
-        return (value?.length ?? 0) >= 1;
+        return (
+          count >= 1 ||
+          this.createError({
+            message: "Please select at least 1 nibble choice.",
+          })
+        );
       }
 
+      // 2. Package Styles (Min 4)
       if (PACKAGE_STYLES.includes(style)) {
-        return (value?.length ?? 0) >= 4;
+        return (
+          count >= 4 ||
+          this.createError({
+            message:
+              "This package includes 4 nibble choices. Please select 4 or more.",
+          })
+        );
       }
 
       return true;
@@ -151,19 +223,55 @@ export const inquiryValidationSchema = Yup.object({
   pickupQuantities: Yup.object()
     .test(
       "pickup-required",
-      "Add at least one pickup item and quantity.",
+      "", // Default message ignored
       function validate(value) {
         if (this.parent.serviceStyle !== "pickup") {
           return true;
         }
 
-        return Object.values(value ?? {}).some(
-          (quantity) => Number(quantity) > 0,
+        const quantities = Object.values(value ?? {});
+        const totalItems = quantities.reduce<number>(
+          (sum, q) => sum + Number(q || 0),
+          0,
         );
+
+        // 1. Check if they selected anything at all
+        if (totalItems === 0) {
+          return this.createError({
+            message: "Please add at least one item to your pickup order.",
+          });
+        }
+
+        // 2. Check if the total meets the minimum of 10
+        if (totalItems < 10) {
+          return this.createError({
+            message: `You have ${totalItems} items selected. A minimum of 10 items is required for pickup.`,
+          });
+        }
+
+        return true;
       },
     )
     .required(),
   notes: Yup.string().trim().default("").defined(),
+  stairsDetails: Yup.string()
+    .trim()
+    .when("hasStairs", {
+      is: "yes",
+      then: (schema) =>
+        schema.required("Please provide details about the obstacles."),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+  parkingRestrictions: Yup.string()
+    .trim()
+    .when("hasParkingRestrictions", {
+      is: "yes",
+      then: (schema) =>
+        schema.required(
+          "Please provide details about the parking restrictions.",
+        ),
+      otherwise: (schema) => schema.notRequired(),
+    }),
 });
 
 export const inquiryStepFields = [
@@ -176,6 +284,16 @@ export const inquiryStepFields = [
     "city",
     "serviceStyle",
     "serviceVariant",
+    "startTime",
+    "endTime",
+    "budget",
+    "hasStairs",
+    "stairsDetails",
+    "hasParkingRestrictions",
+    "parkingRestrictions",
+    "address",
+    "state",
+    "venueInstructions",
   ],
   [
     "selectedNibbles",
@@ -195,8 +313,12 @@ export function getInitialInquiryValues(): InquiryFormValues {
     phone: "",
     eventType: "",
     eventDate: "",
+    startTime: "",
+    endTime: "",
     guestCount: "",
     venue: "",
+    address: "",
+    state: "",
     city: "",
     serviceStyle: "",
     serviceVariant: "",
@@ -207,5 +329,10 @@ export function getInitialInquiryValues(): InquiryFormValues {
     selectedSides: [],
     pickupQuantities: {},
     notes: "",
+    budget: "",
+    hasStairs: "no",
+    stairsDetails: "",
+    hasParkingRestrictions: "no",
+    parkingRestrictions: "",
   };
 }

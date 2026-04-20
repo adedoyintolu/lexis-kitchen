@@ -1,4 +1,5 @@
 import { PricingBreakdown } from "@/components/layout/pricing-breakdown";
+import { getInitialInquiryValues } from "@/lib/inquiry-schema";
 import type {
   InformationStepField,
   InquiryAction,
@@ -121,6 +122,35 @@ export const serviceStyles: ServiceStyle[] = [
 
 export const inquiryServiceOptions: InquiryServiceOption[] = [
   {
+    slug: "buffet-setup-only",
+    title: "Buffet (Setup Only)",
+    description: "Setup only with no staff service during the event.",
+    summary:
+      "Pricing follows the buffet package structure with a setup fee applied separately.",
+    badge: "$35 / guest",
+    minimumGuests: 30,
+    basePerGuest: 35,
+    basePricingLabel: "$35 per guest",
+    leadNote:
+      "Includes 4 nibbles, 2 non-premium mains, 2 proteins, and 2 sides. Minimum 30 guests.",
+  },
+
+  {
+    slug: "plated-dinner",
+    title: "Plated Dinner",
+    description:
+      "A formal dinner service with a structured guest minimum and a set menu.",
+    summary:
+      "Plated dinner starts at $55 per guest with a minimum of 20 guests.",
+    badge: "$55 / guest",
+    minimumGuests: 20,
+    maximumGuests: 200,
+    basePerGuest: 55,
+    basePricingLabel: "$55 per guest",
+    leadNote:
+      "Includes 4 nibbles, 2 non-premium mains, 2 proteins, and 2 sides. Minimum 20 guests.",
+  },
+  {
     slug: "nibbles-only",
     title: "Nibbles Only",
     description:
@@ -150,65 +180,7 @@ export const inquiryServiceOptions: InquiryServiceOption[] = [
       },
     ],
   },
-  {
-    slug: "full-service",
-    title: "Full Service",
-    description:
-      "Choose between formal buffet or plated dinner service for more structured events.",
-    summary:
-      "Formal buffet starts at $35 per guest. Plated dinner starts at $55 per guest.",
-    badge: "Per guest",
-    basePricingLabel: "Starts at $35 per guest",
-    leadNote:
-      "Base package includes 4 nibbles, 2 non-premium mains, 2 proteins, and 2 sides.",
-    variants: [
-      {
-        slug: "formal-buffet",
-        title: "Formal Buffet",
-        description: "A polished buffet presentation for larger guest counts.",
-        priceLabel: "$35 per guest",
-        basePerGuest: 35,
-        minimumGuests: 30,
-        pricingSummary: "Base package uses a minimum of 30 guests.",
-      },
-      {
-        slug: "plated-dinner",
-        title: "Plated Dinner",
-        description: "A more formal plated service with a lower guest minimum.",
-        priceLabel: "$55 per guest",
-        basePerGuest: 55,
-        minimumGuests: 20,
-        pricingSummary: "Base package uses a minimum of 20 guests.",
-      },
-    ],
-  },
-  {
-    slug: "buffet-setup-only",
-    title: "Buffet Setup Only",
-    description: "Setup only with no staff service during the event.",
-    summary:
-      "Pricing follows the buffet package structure with a setup fee applied separately.",
-    badge: "$35 / guest",
-    minimumGuests: 30,
-    basePerGuest: 35,
-    basePricingLabel: "$35 per guest",
-    leadNote:
-      "Includes 4 nibbles, 2 non-premium mains, 2 proteins, and 2 sides. Minimum 30 guests.",
-  },
-  {
-    slug: "abula-on-the-spot",
-    title: "Abula on the Spot",
-    description:
-      "A focused live service built around amala, gbegiri, ewedu, and assorted meat stew.",
-    summary: "$30 per guest with a minimum of 40 and maximum of 80 guests.",
-    badge: "$30 / guest",
-    minimumGuests: 40,
-    maximumGuests: 80,
-    basePerGuest: 30,
-    basePricingLabel: "$30 per guest",
-    leadNote:
-      "Includes amala, gbegiri, ewedu, and assorted meat stew as a fixed offering.",
-  },
+
   {
     slug: "pickup",
     title: "Pickup",
@@ -288,25 +260,8 @@ export const pickupCategoryOrder = [
   "others",
 ] as const;
 
-export const inquiryInitialValues: InquiryFormValues = {
-  fullName: "",
-  email: "",
-  phone: "",
-  eventType: "",
-  eventDate: "",
-  guestCount: "",
-  venue: "",
-  city: "",
-  serviceStyle: "",
-  serviceVariant: "",
-  selectedNibbles: [],
-  selectedRegularMains: [],
-  selectedPremiumMains: [],
-  selectedProteins: [],
-  selectedSides: [],
-  pickupQuantities: {},
-  notes: "",
-};
+export const inquiryInitialValues: InquiryFormValues =
+  getInitialInquiryValues();
 
 export const timelineSteps = [
   {

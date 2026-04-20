@@ -70,7 +70,7 @@ export function MultiSelectGrid({
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="m-0 font-semibold">{item.name}</p>
+                  <p className="m-0 font-semibold capitalize">{item.name}</p>
                   <p
                     className={classNames(
                       "m-0 mt-2 text-sm",
@@ -84,7 +84,7 @@ export function MultiSelectGrid({
                 </div>
                 <span
                   className={classNames(
-                    "mt-0.5 flex h-6 w-6 items-center justify-center rounded-full border text-xs",
+                    "mt-0.5 flex h-6 w-6 items-center justify-center rounded-full border text-sm font-semibold",
                     isSelected
                       ? "border-white text-white"
                       : "border-line text-text-soft",
@@ -97,7 +97,7 @@ export function MultiSelectGrid({
           );
         })}
       </div>
-      <FieldError error={error} />
+      <FieldError error={error} variant="bold" />
     </div>
   );
 }

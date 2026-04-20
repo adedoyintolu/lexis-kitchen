@@ -30,7 +30,7 @@ export function PickupCategoryBlock({
               className="rounded-[1.15rem] border border-line bg-white p-4 md:flex md:items-center md:justify-between"
             >
               <div className="mb-4 md:mb-0">
-                <p className="m-0 font-semibold">{item.name}</p>
+                <p className="m-0 font-semibold capitalize">{item.name}</p>
                 <p className="m-0 mt-2 text-sm text-text-soft">
                   {formatCurrency(item.largePackPrice ?? 0)} per large pan
                 </p>
@@ -39,6 +39,7 @@ export function PickupCategoryBlock({
                 <QuantityButton
                   ariaLabel={`Decrease ${item.name}`}
                   onClick={() => onChange(key, Math.max(quantity - 1, 0))}
+                  disabled={quantity === 0}
                 >
                   -
                 </QuantityButton>

@@ -1,3 +1,4 @@
+import { formatCurrency } from "@/lib/inquiry-estimate";
 import { InquiryFormValues, InquiryServiceOption } from "@/types/inquiry";
 import { FormikProps, getIn } from "formik";
 import { ReviewList } from "../review-list";
@@ -19,7 +20,7 @@ const ContactDetailsStep = ({
     <div className="fade-in" style={{ ["--delay" as string]: "0s" }}>
       <SectionCard
         title="Contact details and final review"
-        description="Add the client contact details, any important notes, and then send the inquiry to the configured inbox."
+        description="Add your contact details and any final notes for the team. Review your selections on the right, then submit your inquiry to receive a custom proposal within 1-2 business days."
       >
         <div className="grid gap-5">
           <div className="rounded-[1.25rem] border border-line bg-surface p-4">
@@ -30,13 +31,16 @@ const ContactDetailsStep = ({
               <ReviewList
                 title="Service choice"
                 items={[
-                  selectedVariant?.title ||
-                    selectedService?.title ||
-                    "Not selected",
-                  formik.values.guestCount
-                    ? `${formik.values.guestCount} guests`
-                    : "Guest count not set",
-                  formik.values.eventDate || "Event date not set",
+                  `Service Style: ${selectedVariant?.title || selectedService?.title || "Not selected"}`,
+                  `Guest Count: ${formik.values.guestCount ? `${formik.values.guestCount} guests` : "Not set"}`,
+                  `Event Date: ${formik.values.eventDate || "Not set"}`,
+                  `Start Time: ${formik.values.startTime || "Not set"}`,
+                  `End Time: ${formik.values.endTime || "Not set"}`,
+                  `Venue: ${formik.values.venue || "Not set"}`,
+                  `Address: ${formik.values.address || "Not set"}`,
+                  `State: ${formik.values.state || "Not set"}`,
+                  `City: ${formik.values.city || "Not set"}`,
+                  `Budget: ${formik.values.budget ? formatCurrency(formik.values.budget) : "Not set"}`,
                 ]}
               />
               <ReviewList
@@ -120,25 +124,6 @@ const ContactDetailsStep = ({
               {...formik.getFieldProps("notes")}
               placeholder="Share timing, preferences, allergies, premium requests, or anything the team should know."
             />
-          </div>
-
-          <div className="rounded-[1.25rem] border border-line bg-surface p-4">
-            <p className="m-0 text-xs uppercase tracking-[0.16em] text-accent-soft">
-              Before you send
-            </p>
-            <ul className="m-0 mt-3 list-none p-0 grid gap-2">
-              <li className="text-text-soft">
-                The estimate uses large-pan pricing only, per your instruction.
-              </li>
-              <li className="text-text-soft">
-                Any setup, staffing, tax, or rental adjustments remain part of
-                manual review.
-              </li>
-              <li className="text-text-soft">
-                The email payload includes the full inquiry details plus the
-                live estimate summary.
-              </li>
-            </ul>
           </div>
         </div>
       </SectionCard>

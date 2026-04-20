@@ -29,7 +29,7 @@ const BuildMenuStep = ({
     formik.setFieldValue(field, nextSelections);
   };
 
-  const isPackageStyle = ["full-service", "buffet-setup-only"].includes(
+  const isPackageStyle = ["buffet-setup-only", "plated-dinner"].includes(
     formik.values.serviceStyle,
   );
 
@@ -125,22 +125,8 @@ const BuildMenuStep = ({
                     ? getIn(formik.errors, "pickupQuantities")
                     : undefined
                 }
+                variant="bold"
               />
-            </div>
-          ) : null}
-
-          {formik.values.serviceStyle === "abula-on-the-spot" ? (
-            <div className="rounded-[1.35rem] border border-line bg-surface p-5">
-              <p className="m-0 text-lg font-semibold">Included menu</p>
-              <ul className="m-0 mt-4 list-none p-0 grid gap-2">
-                {["Amala", "Gbegiri", "Ewedu", "Assorted meat stew"].map(
-                  (item) => (
-                    <li key={item} className="text-text-soft">
-                      {item}
-                    </li>
-                  ),
-                )}
-              </ul>
             </div>
           ) : null}
         </div>

@@ -95,6 +95,8 @@ export type InquiryFormValues = {
   phone: string;
   eventType: string;
   eventDate: string;
+  startTime: string;
+  endTime: string;
   guestCount: number | "";
   venue: string;
   city: string;
@@ -107,6 +109,14 @@ export type InquiryFormValues = {
   selectedSides: string[];
   pickupQuantities: Record<string, number>;
   notes: string;
+  address: string;
+  state: string;
+  venueInstructions?: string;
+  budget: number | "";
+  hasStairs: "yes" | "no";
+  stairsDetails?: string;
+  hasParkingRestrictions: "yes" | "no";
+  parkingRestrictions?: string;
 };
 
 export type InquiryEstimateLineItem = {

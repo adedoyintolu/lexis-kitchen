@@ -12,7 +12,7 @@ import type {
   PricingItem,
 } from "@/types/inquiry";
 
-const PACKAGE_STYLES = new Set(["full-service", "buffet-setup-only"]);
+const PACKAGE_STYLES = new Set(["plated-dinner", "buffet-setup-only"]);
 
 function getPriceMap() {
   return new Map(
@@ -304,10 +304,6 @@ export function buildInquiryEstimate(
     return buildPackageEstimate(values);
   }
 
-  if (values.serviceStyle === "abula-on-the-spot") {
-    return buildAbulaEstimate(values);
-  }
-
   if (values.serviceStyle === "pickup") {
     return buildPickupEstimate(values);
   }
@@ -335,4 +331,10 @@ export function getPickupCategories() {
 
 export function getPackageBuckets() {
   return inquirySelectionBuckets;
+}
+
+export function getTodaysDate() {
+  const today = new Date().toISOString().split("T")[0];
+
+  return today;
 }

@@ -6,12 +6,24 @@ export function classNames(
   return values.filter(Boolean).join(" ");
 }
 
-export function FieldError({ error }: { error?: string }) {
+export function FieldError({
+  error,
+  variant = "inline",
+}: {
+  error?: string;
+  variant?: "bold" | "inline";
+}) {
   if (!error) {
     return null;
   }
 
-  return <p className="text-sm text-danger mt-2">{error}</p>;
+  if (variant === "inline") {
+    return <p className="text-sm text-danger mt-1">{error}</p>;
+  }
+
+  return (
+    <p className="text-sm text-white bg-danger p-2 mt-2 rounded-md">{error}</p>
+  );
 }
 
 export const stepLabels = [

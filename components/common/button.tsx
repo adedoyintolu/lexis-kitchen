@@ -1,4 +1,4 @@
-import { HTMLProps, ReactNode } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 
 type Props = {
   variant?: "primary" | "secondary";
@@ -11,9 +11,10 @@ const Button = ({
   className,
   type = "button",
   ...rest
-}: Props & HTMLProps<HTMLButtonElement>) => {
+}: Props & ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <button
+      type={type}
       disabled={rest.disabled}
       className={
         className +

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import Button from "@/components/common/button";
@@ -12,13 +13,14 @@ import {
 } from "@/lib/inquiry-schema";
 import type { InquiryFormValues } from "@/types/inquiry";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ValidationError } from "yup";
 import BuildMenuStep from "./steps/build-menu-step";
 import ContactDetailsStep from "./steps/contact-details-step";
 import EventDetailsStep from "./steps/event-details-step";
 import InformationStep from "./steps/information-step";
 import { SummaryCard } from "./summary-card";
-import { getStepErrorCount, stepLabels } from "./utils";
+import { stepLabels } from "./utils";
 
 export function InquiryForm() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -80,20 +82,102 @@ export function InquiryForm() {
 
   const progressPercentage = ((currentStep + 1) / stepLabels.length) * 100;
 
+  useEffect(() => {
+    if (currentStep !== 2) {
+      return;
+    }
+
+    const menuStepFields = inquiryStepFields[2] as readonly string[];
+    const nextTouched = { ...(formik.touched as Record<string, unknown>) };
+
+    menuStepFields.forEach((field) => {
+      nextTouched[field] = true;
+    });
+
+    formik.setTouched(nextTouched as typeof formik.touched, false);
+  }, [currentStep]);
+
+  useEffect(() => {
+    if (currentStep !== 3) {
+      return;
+    }
+
+    const contactStepFields = inquiryStepFields[3] as readonly string[];
+    const nextTouched = { ...(formik.touched as Record<string, unknown>) };
+
+    contactStepFields.forEach((field) => {
+      delete nextTouched[field];
+    });
+
+    formik.setTouched(nextTouched as typeof formik.touched, false);
+  }, [currentStep]);
+
+  const validateCurrentStep = async () => {
+    const fields = inquiryStepFields[currentStep] as readonly string[];
+
+    try {
+      await inquiryValidationSchema.validate(formik.values, {
+        abortEarly: false,
+      });
+
+      const nextErrors = { ...(formik.errors as Record<string, unknown>) };
+
+      fields.forEach((field) => {
+        delete nextErrors[field];
+      });
+
+      formik.setErrors(nextErrors as typeof formik.errors);
+      return false;
+    } catch (error) {
+      if (!(error instanceof ValidationError)) {
+        return true;
+      }
+
+      const stepErrors: Record<string, string> = {};
+      const validationErrors = error.inner.length ? error.inner : [error];
+
+      validationErrors.forEach((validationError) => {
+        if (validationError.path && fields.includes(validationError.path)) {
+          stepErrors[validationError.path] = validationError.message;
+        }
+      });
+
+      const nextErrors = { ...(formik.errors as Record<string, unknown>) };
+
+      fields.forEach((field) => {
+        delete nextErrors[field];
+      });
+
+      formik.setErrors({
+        ...nextErrors,
+        ...stepErrors,
+      } as typeof formik.errors);
+
+      return Object.keys(stepErrors).length > 0;
+    }
+  };
+
+  const touchCurrentStepFields = () => {
+    const fields = inquiryStepFields[currentStep] as readonly string[];
+    const nextTouched = { ...(formik.touched as Record<string, unknown>) };
+
+    fields.forEach((field) => {
+      nextTouched[field] = true;
+    });
+
+    formik.setTouched(nextTouched as typeof formik.touched, false);
+  };
+
   const handleNextStep = async () => {
     if (currentStep === 0) {
       // Skip validation for the first step since it's just informational
       setCurrentStep(1);
       return;
     }
-    const errors = await formik.validateForm();
-    const fields = inquiryStepFields[currentStep];
+    touchCurrentStepFields();
+    const hasStepErrors = await validateCurrentStep();
 
-    fields.forEach((field) => {
-      formik.setFieldTouched(field, true, false);
-    });
-
-    if (getStepErrorCount(errors, fields) > 0) {
+    if (hasStepErrors) {
       return;
     }
 
@@ -104,14 +188,31 @@ export function InquiryForm() {
     setCurrentStep((step) => Math.max(step - 1, 0));
   };
 
-  const disabledButton = () => {
+  const hasCurrentStepErrors = () => {
     if (currentStep === 0) {
       return false;
     }
-    const errors = formik.errors;
-    const fields = inquiryStepFields[currentStep];
 
-    return getStepErrorCount(errors, fields) > 0;
+    const fields = inquiryStepFields[currentStep] as readonly string[];
+
+    try {
+      inquiryValidationSchema.validateSync(formik.values, {
+        abortEarly: false,
+      });
+      return false;
+    } catch (error) {
+      if (!(error instanceof ValidationError)) {
+        return true;
+      }
+
+      const validationErrors = error.inner.length ? error.inner : [error];
+
+      return validationErrors.some(
+        (validationError) =>
+          Boolean(validationError.path) &&
+          fields.includes(validationError.path as string),
+      );
+    }
   };
 
   if (submissionState === "loading") {
@@ -133,16 +234,11 @@ export function InquiryForm() {
           Your inquiry is on its way.
         </h2>
         <p className="m-0 text-text-soft leading-7">
-          {submissionMessage} We have kept the estimate logic in the app so the
-          client gets both the inquiry details and your current pricing
-          snapshot.
+          We will review the details and get back to you within 1-2 business
+          days. In the meantime, feel free to start another inquiry or explore
+          our menu and services further.
         </p>
-        <div className="rounded-[1.2rem] border border-line bg-surface p-4">
-          <p className="m-0 text-sm text-text-soft">
-            If you are testing with Mailtrap, check the configured inbox for the
-            full HTML and text versions of the submission.
-          </p>
-        </div>
+
         <div className="flex flex-wrap gap-3">
           <button
             type="button"
@@ -233,7 +329,7 @@ export function InquiryForm() {
               <Button
                 type="button"
                 onClick={handleNextStep}
-                disabled={disabledButton()}
+                disabled={hasCurrentStepErrors()}
                 variant="primary"
               >
                 {currentStep === 0
@@ -244,7 +340,7 @@ export function InquiryForm() {
               <Button
                 variant="primary"
                 type="submit"
-                disabled={formik.isSubmitting}
+                disabled={formik.isSubmitting || hasCurrentStepErrors()}
               >
                 Send inquiry
               </Button>

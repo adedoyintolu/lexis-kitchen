@@ -159,6 +159,7 @@ export const inquiryServiceOptions: InquiryServiceOption[] = [
       "Food spend minimum applies. Setup or passed service begins from $1,001.",
     badge: "From $1,001",
     baseMinimumFoodSpend: 1001,
+    basePerGuest: 1001,
     basePricingLabel: "Food spend minimum from $1,001",
     leadNote:
       "Select the nibbles you want and we will apply the minimum food spend if the estimate falls below it.",

@@ -1,5 +1,5 @@
 import { eventTypeOptions, inquiryServiceOptions } from "@/data/inquiry";
-import { getTodaysDate } from "@/lib/inquiry-estimate";
+import { formatCurrency, getTodaysDate } from "@/lib/inquiry-estimate";
 import { InquiryFormValues, InquiryServiceOption } from "@/types/inquiry";
 import type { FormikProps } from "formik";
 import { getIn } from "formik";
@@ -294,8 +294,10 @@ const EventDetailsStep = ({
               />
               <p className="mt-1 text-xs text-text-soft">
                 Food spend minimum:{" "}
-                {selectedService?.baseMinimumFoodSpend || "$1,100"}. Your budget
-                must meet or exceed this amount.
+                {formatCurrency(
+                  selectedService?.baseMinimumFoodSpend || 1100,
+                ) || "$1,100"}
+                . Your budget must meet or exceed this amount.
               </p>
               <FieldError
                 error={

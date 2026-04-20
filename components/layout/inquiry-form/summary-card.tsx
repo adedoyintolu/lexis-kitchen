@@ -1,11 +1,10 @@
 import { inquiryServiceOptions } from "@/data/inquiry";
 import { buildInquiryEstimate, formatCurrency } from "@/lib/inquiry-estimate";
 import { InquiryFormValues } from "@/types/inquiry";
-import { useMemo } from "react";
 import { SummaryRow } from "./summary-row";
 
 export function SummaryCard({ values }: { values: InquiryFormValues }) {
-  const estimate = useMemo(() => buildInquiryEstimate(values), [values]);
+  const estimate = buildInquiryEstimate(values);
   const selectedService = inquiryServiceOptions.find(
     (option) => option.slug === values.serviceStyle,
   );
@@ -64,7 +63,15 @@ export function SummaryCard({ values }: { values: InquiryFormValues }) {
           value={values.guestCount ? `${values.guestCount} guests` : "Not set"}
         />
         <SummaryRow label="Event date" value={values.eventDate || "Not set"} />
+        <SummaryRow
+          label="Time"
+          value={values.startTime + " - " + values.endTime || "Not set"}
+        />
         <SummaryRow label="Venue" value={values.venue || "Not set"} />
+        <SummaryRow
+          label="Budget"
+          value={formatCurrency(values.budget || 0) || "Not set"}
+        />
       </div>
 
       <div className="border-b border-white/10 px-5 py-5">

@@ -84,20 +84,17 @@ function sumExtraSelections(
 
 function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
   const guestCount = Number(values.guestCount || 0);
-  const variant =
-    values.serviceStyle === "buffet-setup-only"
-      ? {
-          title: "Buffet setup only",
-          basePerGuest: 35,
-          minimumGuests: 30,
-        }
-      : getServiceVariant(values.serviceStyle, values.serviceVariant);
-
-  const effectiveGuests = Math.max(
-    guestCount,
-    variant?.minimumGuests ?? guestCount,
+  const selectedVariant = getServiceVariant(
+    values.serviceStyle,
+    values.serviceVariant,
   );
-  const basePerGuest = variant?.basePerGuest ?? 0;
+  const serviceOption = getServiceOption(values.serviceStyle);
+  const basePerGuest =
+    selectedVariant?.basePerGuest ?? serviceOption?.basePerGuest ?? 0;
+  const minimumGuests =
+    selectedVariant?.minimumGuests ?? serviceOption?.minimumGuests ?? 0;
+
+  const effectiveGuests = Math.max(guestCount, minimumGuests);
   const basePackageSubtotal = basePerGuest * effectiveGuests;
 
   const extraNibbles = sumExtraSelections(
@@ -202,6 +199,7 @@ function buildNibblesEstimate(values: InquiryFormValues): InquiryEstimate {
   const guestCount = Number(values.guestCount || 0);
   const selectedTotal = values.selectedNibbles.reduce((total, itemName) => {
     const itemPrice = getPricingItem("nibbles", itemName)?.largePackPrice ?? 0;
+
     return total + itemPrice * guestCount;
   }, 0);
 
@@ -285,14 +283,25 @@ function buildAbulaEstimate(values: InquiryFormValues): InquiryEstimate {
 export function buildInquiryEstimate(
   values: InquiryFormValues,
 ): InquiryEstimate {
-  if (!values.serviceStyle || !values.guestCount) {
+  if (!values.serviceStyle) {
     return {
       subtotal: 0,
       minimumApplied: false,
       lineItems: [],
-      assumptions: [
-        "Select a service style and guest count to see the estimate.",
-      ],
+      assumptions: ["Select a service style to see the estimate."],
+    };
+  }
+
+  if (values.serviceStyle === "pickup") {
+    return buildPickupEstimate(values);
+  }
+
+  if (!values.guestCount) {
+    return {
+      subtotal: 0,
+      minimumApplied: false,
+      lineItems: [],
+      assumptions: ["Set a guest count to calculate this service estimate."],
     };
   }
 
@@ -304,8 +313,8 @@ export function buildInquiryEstimate(
     return buildPackageEstimate(values);
   }
 
-  if (values.serviceStyle === "pickup") {
-    return buildPickupEstimate(values);
+  if (values.serviceStyle === "abula-on-the-spot") {
+    return buildAbulaEstimate(values);
   }
 
   return {

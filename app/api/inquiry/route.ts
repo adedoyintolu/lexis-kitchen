@@ -169,9 +169,18 @@ export async function POST(request: Request) {
         <p><strong>Phone:</strong> ${values.phone}</p>
         <p><strong>Event type:</strong> ${values.eventType}</p>
         <p><strong>Date:</strong> ${values.eventDate}</p>
+        <p><strong>Start time:</strong> ${values.startTime}</p>
+        <p><strong>End time:</strong> ${values.endTime}</p>
+        <p><strong>Budget:</strong> ${formatCurrency(values.budget || 0)}</p>
         <p><strong>Guest count:</strong> ${values.guestCount}</p>
         <p><strong>Venue:</strong> ${values.venue}</p>
         <p><strong>City:</strong> ${values.city}</p>
+        <p><strong>Address:</strong> ${values.address}</p>
+        <p><strong>Has stairs:</strong> ${values.hasStairs}</p>
+        ${values.hasStairs === "yes" ? `<p><strong>Stairs details:</strong> ${values.stairsDetails}</p>` : ""}
+        <p><strong>Has parking restrictions:</strong> ${values.hasParkingRestrictions}</p>
+        ${values.hasParkingRestrictions === "yes" ? `<p><strong>Parking restrictions:</strong> ${values.parkingRestrictions}</p>` : ""}
+        <p><strong>Venue instructions:</strong> ${values.venueInstructions || "N/A"}</p>
         <p><strong>Service style:</strong> ${values.serviceStyle}</p>
         <p><strong>Service variant:</strong> ${values.serviceVariant || "N/A"}</p>
         ${buildSelectionsHtml("Nibbles", values.selectedNibbles)}
@@ -225,7 +234,7 @@ export async function POST(request: Request) {
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
-
+    console.log(error);
     return NextResponse.json(
       { error: "Unable to process the inquiry request." },
       { status: 400 },

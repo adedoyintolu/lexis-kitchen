@@ -7,6 +7,7 @@ const requiredEnvKeys = [
   "SMTP_PASS",
   "INQUIRY_TO_EMAIL",
   "INQUIRY_FROM_EMAIL",
+  "INQUIRY_FROM_NAME",
 ] as const;
 
 export function getMissingMailerEnv() {

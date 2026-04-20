@@ -86,9 +86,9 @@ export function SummaryCard({ values }: { values: InquiryFormValues }) {
         </div>
         {estimate.lineItems.length > 0 ? (
           <div className="grid gap-3">
-            {estimate.lineItems.map((item) => (
+            {estimate.lineItems.map((item, index) => (
               <div
-                key={item.label}
+                key={`${item.label}-${item.detail || "no-detail"}-${index}`}
                 className="grid gap-1 rounded-[1rem] border border-white/8 bg-white/6 px-4 py-3"
               >
                 <div className="flex items-start justify-between gap-4">

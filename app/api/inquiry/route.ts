@@ -9,45 +9,6 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-function buildSelectionsHtml(title: string, values: string[]) {
-  if (!values.length) {
-    return `<p><strong>${title}:</strong> None selected</p>`;
-  }
-
-  return `
-    <div>
-      <strong>${title}</strong>
-      <ul>
-        ${values.map((value) => `<li>${value}</li>`).join("")}
-      </ul>
-    </div>
-  `;
-}
-
-function buildPickupHtml(quantities: Record<string, number>) {
-  const entries = Object.entries(quantities).filter(
-    ([, quantity]) => quantity > 0,
-  );
-
-  if (!entries.length) {
-    return "<p><strong>Pickup items:</strong> None selected</p>";
-  }
-
-  return `
-    <div>
-      <strong>Pickup items</strong>
-      <ul>
-        ${entries
-          .map(([key, quantity]) => {
-            const [, ...itemParts] = key.split(":");
-            return `<li>${itemParts.join(":")} x ${quantity}</li>`;
-          })
-          .join("")}
-      </ul>
-    </div>
-  `;
-}
-
 function buildEstimateHtml(estimate: InquiryEstimate) {
   return `
     <div>
@@ -81,6 +42,51 @@ function buildEstimateText(estimate: InquiryEstimate) {
     "Assumptions:",
     ...estimate.assumptions.map((assumption) => `- ${assumption}`),
   ].join("\n");
+}
+
+function escapeHtml(value: unknown) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function infoRow(label: string, value: string) {
+  return `
+    <tr>
+      <td style="padding: 10px 0; width: 42%; color: #6b7280; font-size: 13px; border-bottom: 1px solid #edf0f3;">
+        ${escapeHtml(label)}
+      </td>
+      <td style="padding: 10px 0; color: #0f172a; font-size: 14px; font-weight: 600; border-bottom: 1px solid #edf0f3;">
+        ${escapeHtml(value)}
+      </td>
+    </tr>
+  `;
+}
+
+function sectionWrapper(title: string, content: string) {
+  return `
+    <section style="margin-top: 18px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px 18px;">
+      <h3 style="margin: 0 0 12px; color: #111827; font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em;">
+        ${escapeHtml(title)}
+      </h3>
+      ${content}
+    </section>
+  `;
+}
+
+function buildListHtml(items: string[]) {
+  if (!items.length) {
+    return `<p style="margin: 0; color: #6b7280; font-size: 14px;">None selected</p>`;
+  }
+
+  return `
+    <ul style="margin: 0; padding-left: 18px; color: #1f2937; font-size: 14px; line-height: 1.6; text-transform: capitalize;">
+      ${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+    </ul>
+  `;
 }
 
 function normalizeInquiryValues(value: unknown): InquiryFormValues {
@@ -154,43 +160,111 @@ export async function POST(request: Request) {
 
     const validatedPayload = await inquiryValidationSchema.validate(payload, {
       abortEarly: false,
-      stripUnknown: true,
     });
     const values = normalizeInquiryValues(validatedPayload);
 
     const estimate = payload.estimate ?? buildInquiryEstimate(values);
     const transporter = createInquiryTransporter();
+    const pickupItems = Object.entries(values.pickupQuantities)
+      .filter(([, quantity]) => quantity > 0)
+      .map(([key, quantity]) => {
+        const [, ...itemParts] = key.split(":");
+        return `${itemParts.join(":")} x ${quantity}`;
+      });
+    const serviceLabel =
+      values.serviceVariant && values.serviceVariant.trim().length > 0
+        ? `${values.serviceStyle} (${values.serviceVariant})`
+        : values.serviceStyle;
+    const stairsDetails =
+      values.hasStairs === "yes"
+        ? values.stairsDetails || "Yes - details not provided"
+        : "No";
+    const parkingDetails =
+      values.hasParkingRestrictions === "yes"
+        ? values.parkingRestrictions || "Yes - details not provided"
+        : "No";
 
     const html = `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1e1a17;">
-        <h2>New Lexi's Kitchen inquiry</h2>
-        <p><strong>Name:</strong> ${values.fullName}</p>
-        <p><strong>Email:</strong> ${values.email}</p>
-        <p><strong>Phone:</strong> ${values.phone}</p>
-        <p><strong>Event type:</strong> ${values.eventType}</p>
-        <p><strong>Date:</strong> ${values.eventDate}</p>
-        <p><strong>Start time:</strong> ${values.startTime}</p>
-        <p><strong>End time:</strong> ${values.endTime}</p>
-        <p><strong>Budget:</strong> ${formatCurrency(values.budget || 0)}</p>
-        <p><strong>Guest count:</strong> ${values.guestCount}</p>
-        <p><strong>Venue:</strong> ${values.venue}</p>
-        <p><strong>City:</strong> ${values.city}</p>
-        <p><strong>Address:</strong> ${values.address}</p>
-        <p><strong>Has stairs:</strong> ${values.hasStairs}</p>
-        ${values.hasStairs === "yes" ? `<p><strong>Stairs details:</strong> ${values.stairsDetails}</p>` : ""}
-        <p><strong>Has parking restrictions:</strong> ${values.hasParkingRestrictions}</p>
-        ${values.hasParkingRestrictions === "yes" ? `<p><strong>Parking restrictions:</strong> ${values.parkingRestrictions}</p>` : ""}
-        <p><strong>Venue instructions:</strong> ${values.venueInstructions || "N/A"}</p>
-        <p><strong>Service style:</strong> ${values.serviceStyle}</p>
-        <p><strong>Service variant:</strong> ${values.serviceVariant || "N/A"}</p>
-        ${buildSelectionsHtml("Nibbles", values.selectedNibbles)}
-        ${buildSelectionsHtml("Regular mains", values.selectedRegularMains)}
-        ${buildSelectionsHtml("Premium mains", values.selectedPremiumMains)}
-        ${buildSelectionsHtml("Proteins", values.selectedProteins)}
-        ${buildSelectionsHtml("Sides", values.selectedSides)}
-        ${buildPickupHtml(values.pickupQuantities)}
-        <p><strong>Notes:</strong> ${values.notes || "No additional notes."}</p>
-        ${buildEstimateHtml(estimate)}
+      <div style="background: #f3f4f6; padding: 24px; font-family: 'Segoe UI', Arial, sans-serif; color: #111827;">
+        <div style="max-width: 880px; margin: 0 auto; background: #f8fafc; border: 1px solid #d1d5db; border-radius: 14px; overflow: hidden;">
+          <header style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); color: #f9fafb; padding: 22px 24px;">
+            <p style="margin: 0; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.8;">Lexi's Kitchen Inquiry</p>
+            <h2 style="margin: 10px 0 0; font-size: 24px; line-height: 1.2;">New Event Inquiry Submission</h2>
+            <p style="margin: 10px 0 0; font-size: 13px; color: #d1d5db;">
+              Submitted by ${escapeHtml(values.fullName)} • ${escapeHtml(values.email)}
+            </p>
+          </header>
+          <main style="padding: 18px 20px 22px;">
+            ${sectionWrapper(
+              "Client Contact",
+              `<table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                ${infoRow("Full Name", values.fullName)}
+                ${infoRow("Email", values.email)}
+                ${infoRow("Phone", values.phone)}
+              </table>`,
+            )}
+            ${sectionWrapper(
+              "Event Details",
+              `<table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                ${infoRow("Event Type", values.eventType)}
+                ${infoRow("Event Date", values.eventDate)}
+                ${infoRow("Start Time", values.startTime)}
+                ${infoRow("End Time", values.endTime)}
+                ${infoRow("Guest Count", String(values.guestCount || "N/A"))}
+                ${infoRow("Budget", formatCurrency(values.budget || 0))}
+                ${infoRow("Service Selection", serviceLabel || "N/A")}
+              </table>`,
+            )}
+            ${sectionWrapper(
+              "Venue and Logistics",
+              `<table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                ${infoRow("Venue", values.venue)}
+                ${infoRow("Address", values.address)}
+                ${infoRow("City", values.city)}
+                ${infoRow("State", values.state)}
+                ${infoRow("Venue Instructions", values.venueInstructions || "N/A")}
+                ${infoRow("Stairs / Obstacles", stairsDetails)}
+                ${infoRow("Parking Restrictions", parkingDetails)}
+              </table>`,
+            )}
+            ${sectionWrapper(
+              "Menu Selections",
+              `
+              <div style="display: grid; gap: 12px;">
+                <div>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Nibbles</p>
+                  ${buildListHtml(values.selectedNibbles)}
+                </div>
+                <div>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Regular Mains</p>
+                  ${buildListHtml(values.selectedRegularMains)}
+                </div>
+                <div>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Premium Mains</p>
+                  ${buildListHtml(values.selectedPremiumMains)}
+                </div>
+                <div>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Proteins</p>
+                  ${buildListHtml(values.selectedProteins)}
+                </div>
+                <div>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Sides</p>
+                  ${buildListHtml(values.selectedSides)}
+                </div>
+                <div>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Pickup Items</p>
+                  ${buildListHtml(pickupItems)}
+                </div>
+              </div>
+              `,
+            )}
+            ${sectionWrapper(
+              "Additional Notes",
+              `<p style="margin: 0; color: #1f2937; font-size: 14px; line-height: 1.7;">${escapeHtml(values.notes || "No additional notes provided.")}</p>`,
+            )}
+            ${sectionWrapper("Estimate Summary", buildEstimateHtml(estimate))}
+          </main>
+        </div>
       </div>
     `;
 
@@ -201,16 +275,25 @@ export async function POST(request: Request) {
       `Phone: ${values.phone}`,
       `Event type: ${values.eventType}`,
       `Date: ${values.eventDate}`,
+      `Start time: ${values.startTime}`,
+      `End time: ${values.endTime}`,
       `Guest count: ${values.guestCount}`,
+      `Budget: ${formatCurrency(values.budget || 0)}`,
       `Venue: ${values.venue}`,
+      `Address: ${values.address}`,
+      `State: ${values.state}`,
       `City: ${values.city}`,
       `Service style: ${values.serviceStyle}`,
       `Service variant: ${values.serviceVariant || "N/A"}`,
+      `Venue instructions: ${values.venueInstructions || "N/A"}`,
+      `Stairs or obstacles: ${stairsDetails}`,
+      `Parking restrictions: ${parkingDetails}`,
       `Nibbles: ${values.selectedNibbles.join(", ") || "None"}`,
       `Regular mains: ${values.selectedRegularMains.join(", ") || "None"}`,
       `Premium mains: ${values.selectedPremiumMains.join(", ") || "None"}`,
       `Proteins: ${values.selectedProteins.join(", ") || "None"}`,
       `Sides: ${values.selectedSides.join(", ") || "None"}`,
+      `Pickup items: ${pickupItems.join(", ") || "None"}`,
       `Notes: ${values.notes || "No additional notes."}`,
       "",
       buildEstimateText(estimate),

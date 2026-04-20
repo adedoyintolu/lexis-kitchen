@@ -14,12 +14,25 @@ import type {
 
 const PACKAGE_STYLES = new Set(["plated-dinner", "buffet-setup-only"]);
 
+function normalizeLookupPart(value: string) {
+  return value.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+function buildLookupKey(categorySlug: string, itemName: string) {
+  return `${normalizeLookupPart(categorySlug)}:${normalizeLookupPart(itemName)}`;
+}
+
 function getPriceMap() {
-  return new Map(
-    pricingCategories.flatMap((category) =>
-      category.items.map((item) => [`${category.slug}:${item.name}`, item]),
-    ),
-  );
+  const map = new Map<string, PricingItem>();
+
+  pricingCategories.forEach((category) => {
+    category.items.forEach((item) => {
+      map.set(`${category.slug}:${item.name}`, item);
+      map.set(buildLookupKey(category.slug, item.name), item);
+    });
+  });
+
+  return map;
 }
 
 const priceMap = getPriceMap();
@@ -34,7 +47,10 @@ function getPricingItem(
   categorySlug: string,
   itemName: string,
 ): PricingItem | undefined {
-  return priceMap.get(`${categorySlug}:${itemName}`);
+  return (
+    priceMap.get(`${categorySlug}:${itemName}`) ??
+    priceMap.get(buildLookupKey(categorySlug, itemName))
+  );
 }
 
 function getServiceOption(serviceStyle: string) {
@@ -236,10 +252,9 @@ function buildPickupEstimate(values: InquiryFormValues): InquiryEstimate {
     .filter(([, quantity]) => quantity > 0)
     .map(([key, quantity]) => {
       const [categorySlug, ...itemParts] = key.split(":");
-      const itemName = itemParts.join(":");
+      const itemName = itemParts.join(":").split(" - ")[0].trim();
       const item = getPricingItem(categorySlug, itemName);
       const itemPrice = item?.largePackPrice ?? 0;
-
       return {
         label: itemName,
         amount: itemPrice * quantity,

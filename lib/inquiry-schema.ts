@@ -228,7 +228,6 @@ export const inquiryValidationSchema = Yup.object({
         if (this.parent.serviceStyle !== "pickup") {
           return true;
         }
-
         const quantities = Object.values(value ?? {});
         const totalItems = quantities.reduce<number>(
           (sum, q) => sum + Number(q || 0),

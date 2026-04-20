@@ -13,8 +13,11 @@ export function ReviewList({
       </p>
       {items.length ? (
         <ul className="m-0 mt-3 list-none p-0 grid gap-2">
-          {items.map((item) => (
-            <li key={item} className="text-sm text-text-soft">
+          {items.map((item, index) => (
+            <li
+              key={`${title}-${item}-${index}`}
+              className="text-sm text-text-soft"
+            >
               {item}
             </li>
           ))}

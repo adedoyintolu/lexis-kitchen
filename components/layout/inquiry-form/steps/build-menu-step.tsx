@@ -12,6 +12,15 @@ const BuildMenuStep = ({
 }: {
   formik: FormikProps<InquiryFormValues>;
 }) => {
+  const updatePickupQuantity = (key: string, quantity: number) => {
+    const nextPickupQuantities = {
+      ...formik.values.pickupQuantities,
+      [key]: quantity,
+    };
+
+    formik.setFieldValue("pickupQuantities", nextPickupQuantities, true);
+  };
+
   const toggleSelection = (
     field:
       | "selectedNibbles"
@@ -111,12 +120,7 @@ const BuildMenuStep = ({
                   key={category.slug}
                   category={category}
                   quantities={formik.values.pickupQuantities}
-                  onChange={(key, quantity) =>
-                    formik.setFieldValue("pickupQuantities", {
-                      ...formik.values.pickupQuantities,
-                      [key]: quantity,
-                    })
-                  }
+                  onChange={updatePickupQuantity}
                 />
               ))}
               <FieldError

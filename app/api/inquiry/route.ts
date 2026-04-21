@@ -13,7 +13,7 @@ function buildEstimateHtml(estimate: InquiryEstimate) {
   return `
     <div>
       <h3>Estimate summary</h3>
-      <p><strong>Total:</strong> ${formatCurrency(estimate.subtotal)}</p>
+      <p><strong>Estimated Total:</strong> ${formatCurrency(estimate.subtotal)}</p>
       <ul>
         ${estimate.lineItems
           .map(

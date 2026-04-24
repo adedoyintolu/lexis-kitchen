@@ -55,11 +55,16 @@ export default function MenuPage() {
             </FadeIn>
           ))}
         </div>
-        <Link href={routes.inquiry}>
-          <Button variant="primary" className="w-full! mt-10">
-            Start Event Inquiry
-          </Button>
-        </Link>
+        <div className="flex items-center flex-wrap gap-5 md:flex-nowrap w-full! mt-10">
+          <Link href={routes.home} className="w-full!">
+            <Button className="w-full!">Go to homepage</Button>
+          </Link>
+          <Link href={routes.inquiry} className="w-full!">
+            <Button variant="primary" className="w-full!">
+              Start Event Inquiry
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );

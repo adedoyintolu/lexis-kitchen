@@ -127,12 +127,14 @@ export const inquiryServiceOptions: InquiryServiceOption[] = [
     description: "Setup only with no staff service during the event.",
     summary:
       "Pricing follows the buffet package structure with a setup fee applied separately.",
-    badge: "$35 / guest",
+    baseMinimumFoodSpend: 1050,
+    badge: "From $1,050",
     minimumGuests: 30,
     basePerGuest: 35,
     basePricingLabel: "$35 per guest",
     leadNote:
       "Includes 4 nibbles, 2 non-premium mains, 2 proteins, and 2 sides. Minimum 30 guests.",
+    setupFee: 450,
   },
 
   {
@@ -142,13 +144,15 @@ export const inquiryServiceOptions: InquiryServiceOption[] = [
       "A formal dinner service with a structured guest minimum and a set menu.",
     summary:
       "Plated dinner starts at $55 per guest with a minimum of 20 guests.",
-    badge: "$55 / guest",
+    badge: "From $1,100",
+    baseMinimumFoodSpend: 1100,
     minimumGuests: 20,
     maximumGuests: 200,
     basePerGuest: 55,
     basePricingLabel: "$55 per guest",
     leadNote:
       "Includes 4 nibbles, 2 non-premium mains, 2 proteins, and 2 sides. Minimum 20 guests.",
+    setupFee: 450,
   },
   {
     slug: "nibbles-only",
@@ -159,7 +163,6 @@ export const inquiryServiceOptions: InquiryServiceOption[] = [
       "Food spend minimum applies. Setup or passed service begins from $1,001.",
     badge: "From $1,001",
     baseMinimumFoodSpend: 1001,
-    basePerGuest: 1001,
     basePricingLabel: "Food spend minimum from $1,001",
     leadNote:
       "Select the nibbles you want and we will apply the minimum food spend if the estimate falls below it.",
@@ -168,15 +171,14 @@ export const inquiryServiceOptions: InquiryServiceOption[] = [
         slug: "setup",
         title: "Setup",
         description: "Food is delivered and set up for service.",
-        priceLabel: "Quoted from menu selections",
         pricingSummary: "Setup fee applies and is finalized after review.",
+        setupFee: 450,
       },
       {
         slug: "passed",
         title: "Passed",
         description:
           "Waitstaff pass the selected nibbles throughout the event.",
-        priceLabel: "Quoted from menu selections",
         pricingSummary: "Staffing adjustments are finalized after review.",
       },
     ],
@@ -189,6 +191,7 @@ export const inquiryServiceOptions: InquiryServiceOption[] = [
       "Choose your menu by pan and collect it with no setup or service charge.",
     summary: "Pickup ordering is available Fridays through Sundays only.",
     badge: "Pan pricing",
+    baseMinimumFoodSpend: 1050,
     basePricingLabel: "Priced per large pan",
     leadNote:
       "Pickup orders are calculated from selected large-pan quantities only.",
@@ -211,23 +214,13 @@ export const inquirySelectionBuckets: InquirySelectionBucket[] = [
   {
     key: "regularMains",
     title: "Main dishes",
-    description: "Select non-premium mains included in the base package.",
+    description:
+      "Select mains for the package. Premium mains are marked on each card.",
     categorySlug: "mains-regular",
     pricingModel: "per-pan",
     includedCount: 2,
     helperText:
       "Base package includes 2 regular mains. Additional mains are charged using large-pan pricing.",
-  },
-  {
-    key: "premiumMains",
-    title: "Premium mains",
-    description:
-      "Optional premium upgrades for clients who want more elevated mains.",
-    categorySlug: "mains-premium",
-    pricingModel: "per-pan",
-    optional: true,
-    helperText:
-      "Premium mains are always treated as add-ons and charged using large-pan pricing.",
   },
   {
     key: "proteins",
@@ -249,11 +242,28 @@ export const inquirySelectionBuckets: InquirySelectionBucket[] = [
     helperText:
       "Base package includes 2 sides. Extra side selections are charged per guest.",
   },
+  {
+    key: "soups",
+    title: "Soups",
+    description: "Optional soup additions to complement the main spread.",
+    categorySlug: "soups",
+    pricingModel: "per-pan",
+    optional: true,
+    helperText: "Soups are optional add-ons priced per large pan.",
+  },
+  {
+    key: "stews",
+    title: "Stews",
+    description: "Optional stew additions for a richer, heartier spread.",
+    categorySlug: "stews",
+    pricingModel: "per-pan",
+    optional: true,
+    helperText: "Stews are optional add-ons priced per large pan.",
+  },
 ];
 
 export const pickupCategoryOrder = [
   "mains-regular",
-  "mains-premium",
   "pasta",
   "soups",
   "stews",

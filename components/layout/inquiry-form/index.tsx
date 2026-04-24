@@ -5,7 +5,7 @@ import Button from "@/components/common/button";
 import { ErrorState } from "@/components/layout/error-state";
 import { LoadingState } from "@/components/layout/loading-state";
 import { inquiryServiceOptions } from "@/data/inquiry";
-import { buildInquiryEstimate } from "@/lib/inquiry-estimate";
+import { buildInquiryEstimate, formatCurrency } from "@/lib/inquiry-estimate";
 import {
   getInitialInquiryValues,
   inquiryStepFields,
@@ -316,7 +316,28 @@ export function InquiryForm() {
             />
           ) : null}
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
+          {formik.values.budget &&
+            buildInquiryEstimate(formik.values).subtotal >
+              formik.values.budget && (
+              <div className="mt-5">
+                <div className="rounded-[1rem] border border-danger/30 bg-danger/10 px-4 py-3">
+                  <p className="m-0 text-sm font-semibold text-danger">
+                    Over budget warning
+                  </p>
+                  <p className="m-0 mt-1 text-sm text-text">
+                    Your estimated total of{" "}
+                    {formatCurrency(
+                      buildInquiryEstimate(formik.values).subtotal,
+                    )}{" "}
+                    exceeds your specified budget of{" "}
+                    {formatCurrency(formik.values.budget)}. You can still submit
+                    your inquiry — we&#39;ll work with you to find options
+                    within your budget.
+                  </p>
+                </div>
+              </div>
+            )}
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
             <Button
               type="button"
               onClick={handlePreviousStep}
@@ -340,6 +361,7 @@ export function InquiryForm() {
               <Button
                 variant="primary"
                 type="submit"
+                className="min-w-fit"
                 disabled={formik.isSubmitting || hasCurrentStepErrors()}
               >
                 Send inquiry

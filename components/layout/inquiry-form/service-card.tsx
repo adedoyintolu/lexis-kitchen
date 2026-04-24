@@ -9,7 +9,7 @@ export function ServiceCard({
 }: {
   title: string;
   description: string;
-  priceLabel: string;
+  priceLabel?: string;
   selected: boolean;
   onClick: () => void;
 }) {
@@ -36,16 +36,18 @@ export function ServiceCard({
             {description}
           </p>
         </div>
-        <span
-          className={classNames(
-            "rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap",
-            selected
-              ? "bg-white/15 text-white"
-              : "bg-surface-muted text-text-soft",
-          )}
-        >
-          {priceLabel}
-        </span>
+        {priceLabel && (
+          <span
+            className={classNames(
+              "rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap",
+              selected
+                ? "bg-white/15 text-white"
+                : "bg-surface-muted text-text-soft",
+            )}
+          >
+            {priceLabel}
+          </span>
+        )}
       </div>
       <span
         className={classNames(

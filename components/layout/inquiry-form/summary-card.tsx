@@ -36,15 +36,67 @@ export function SummaryCard({ values }: { values: InquiryFormValues }) {
           A quick planning estimate based on the current selections and pricing
           variables.
         </p>
-        {estimate.minimumApplied ? (
-          <div className="mt-4 rounded-[1rem] border border-white/10 bg-white/8 px-4 py-3">
-            <p className="m-0 text-xs uppercase tracking-[0.16em] text-white/55">
-              Minimum applied
+        {values.budget && estimate.subtotal > values.budget ? (
+          <div className="mt-4 rounded-2xl border border-danger/30 bg-danger/40 px-4 py-3">
+            <p className="m-0 text-xs uppercase tracking-[0.16em] text-red-300">
+              Over budget
             </p>
             <p className="m-0 mt-2 text-sm leading-6 text-white/80">
-              Service minimums increased this estimate based on the current
-              selection.
+              This estimate exceeds your specified budget of{" "}
+              {formatCurrency(values.budget)}.
             </p>
+          </div>
+        ) : null}
+        {estimate.minimumApplied && values.serviceStyle !== "nibbles-only" ? (
+          <div className="mt-4 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 grid gap-2">
+            <p className="m-0 text-xs uppercase tracking-[0.16em] text-white/55">
+              Package minimums
+            </p>
+            {(
+              [
+                {
+                  label: "Nibbles",
+                  selected: values.selectedNibbles?.length ?? 0,
+                  required: 4,
+                },
+                {
+                  label: "Mains",
+                  selected: values.selectedRegularMains?.length ?? 0,
+                  required: 2,
+                },
+                {
+                  label: "Proteins",
+                  selected: values.selectedProteins?.length ?? 0,
+                  required: 2,
+                },
+                {
+                  label: "Sides",
+                  selected: values.selectedSides?.length ?? 0,
+                  required: 2,
+                },
+              ] as const
+            ).map(({ label, selected, required }) => (
+              <div key={label}>
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <span className="text-xs text-white/60">{label}</span>
+                  <span className="text-xs font-semibold text-white/70">
+                    {selected} / {required}
+                  </span>
+                </div>
+                <div className="h-1 w-full overflow-hidden rounded-full bg-white/10">
+                  <div
+                    className="h-full rounded-full transition-all duration-300"
+                    style={{
+                      width: `${Math.min((selected / required) * 100, 100)}%`,
+                      backgroundColor:
+                        selected >= required
+                          ? "rgba(255,255,255,0.5)"
+                          : "rgba(255,255,255,0.25)",
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         ) : null}
       </div>
@@ -54,10 +106,22 @@ export function SummaryCard({ values }: { values: InquiryFormValues }) {
           label="Service"
           value={
             selectedVariant
-              ? selectedVariant.title
+              ? `${selectedService?.title} - ${selectedVariant.title}`
               : selectedService?.title || "Select one"
           }
         />
+        {(selectedVariant?.setupFee || selectedService?.setupFee) && (
+          <SummaryRow
+            label="Setup Fee"
+            value={
+              selectedVariant?.setupFee
+                ? formatCurrency(selectedVariant.setupFee)
+                : selectedService?.setupFee
+                  ? formatCurrency(selectedService.setupFee)
+                  : ""
+            }
+          />
+        )}
         <SummaryRow
           label="Guests"
           value={values.guestCount ? `${values.guestCount} guests` : "Not set"}
@@ -71,6 +135,10 @@ export function SummaryCard({ values }: { values: InquiryFormValues }) {
         <SummaryRow
           label="Budget"
           value={formatCurrency(values.budget || 0) || "Not set"}
+        />
+        <SummaryRow
+          label="Service charge"
+          value={formatCurrency(estimate.serviceCharge || 0) || "Not set"}
         />
       </div>
 

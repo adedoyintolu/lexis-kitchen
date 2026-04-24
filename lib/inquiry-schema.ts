@@ -1,3 +1,4 @@
+import { inquiryServiceOptions } from "@/data/inquiry";
 import type { InquiryFormValues } from "@/types/inquiry";
 import * as Yup from "yup";
 
@@ -69,6 +70,7 @@ export const inquiryValidationSchema = Yup.object({
     ),
   address: Yup.string().trim().required("Please enter the street address."),
   state: Yup.string().trim().required("Please enter the state."),
+  zipCode: Yup.string().trim().required("Please enter the zip code."),
   budget: Yup.number()
     .transform((value, originalValue) =>
       originalValue === "" ? undefined : value,
@@ -76,7 +78,31 @@ export const inquiryValidationSchema = Yup.object({
     .required("Please enter a budget.")
     .min(0, "Budget cannot be negative.")
     .typeError("Please enter a valid number for the budget.")
-    .min(1100, "The minimum budget for our services is $1,100."),
+    .test(
+      "budget-minimum-by-service",
+      "The minimum budget for our services is $1,100.",
+      function (value) {
+        const { serviceStyle } = this.parent;
+
+        const selectedService = inquiryServiceOptions.find(
+          (opt: { slug: string }) => opt.slug === serviceStyle,
+        );
+
+        if (!selectedService) {
+          return true; // No service selected yet, skip this validation
+        }
+
+        const minimum = selectedService?.baseMinimumFoodSpend || 1100;
+
+        if (value !== undefined && value < minimum) {
+          return this.createError({
+            message: `The minimum budget for ${selectedService.title} is ${minimum.toLocaleString("en-US", { style: "currency", currency: "USD" })}.`,
+          });
+        }
+
+        return true;
+      },
+    ),
   guestCount: Yup.number()
     .transform((value, originalValue) =>
       originalValue === "" ? undefined : value,
@@ -198,6 +224,8 @@ export const inquiryValidationSchema = Yup.object({
     },
   ),
   selectedPremiumMains: Yup.array(Yup.string()),
+  selectedSoups: Yup.array(Yup.string()),
+  selectedStews: Yup.array(Yup.string()),
   selectedProteins: Yup.array(Yup.string()).test(
     "proteins-required",
     "Select at least 2 proteins for this package.",
@@ -297,9 +325,10 @@ export const inquiryStepFields = [
   [
     "selectedNibbles",
     "selectedRegularMains",
-    "selectedPremiumMains",
     "selectedProteins",
     "selectedSides",
+    "selectedSoups",
+    "selectedStews",
     "pickupQuantities",
   ],
   ["fullName", "email", "phone", "notes"],
@@ -326,6 +355,8 @@ export function getInitialInquiryValues(): InquiryFormValues {
     selectedPremiumMains: [],
     selectedProteins: [],
     selectedSides: [],
+    selectedSoups: [],
+    selectedStews: [],
     pickupQuantities: {},
     notes: "",
     budget: "",
@@ -333,5 +364,6 @@ export function getInitialInquiryValues(): InquiryFormValues {
     stairsDetails: "",
     hasParkingRestrictions: "no",
     parkingRestrictions: "",
+    zipCode: "",
   };
 }

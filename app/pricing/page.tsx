@@ -1,3 +1,4 @@
+import Button from "@/components/common/button";
 import { FadeIn } from "@/components/common/fade-in";
 import { PricingBreakdown } from "@/components/layout/pricing-breakdown";
 import { SectionHeading } from "@/components/layout/section-heading";
@@ -13,7 +14,9 @@ import {
   whyWeUseMinimums,
 } from "@/data/pricing-page";
 import { buildMetadata } from "@/lib/metadata";
+import { routes } from "@/routes";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = buildMetadata({
   title: "Pricing",
@@ -372,6 +375,12 @@ export default function PricingPage() {
             </p>
           </FadeIn>
         </section>
+
+        <Link href={routes.inquiry}>
+          <Button className="w-full!" variant="primary">
+            Start Event Inquiry
+          </Button>
+        </Link>
 
         {/* Menu Pricing (not in use now) */}
         {/* <section>

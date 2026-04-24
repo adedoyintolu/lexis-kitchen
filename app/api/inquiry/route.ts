@@ -1,4 +1,9 @@
-import { buildInquiryEstimate, formatCurrency } from "@/lib/inquiry-estimate";
+import {
+  buildInquiryEstimate,
+  formatCurrency,
+  getServiceOption,
+  getServiceVariant,
+} from "@/lib/inquiry-estimate";
 import {
   getInitialInquiryValues,
   inquiryValidationSchema,
@@ -162,6 +167,17 @@ export async function POST(request: Request) {
       abortEarly: false,
     });
     const values = normalizeInquiryValues(validatedPayload);
+    const selectedVariant = getServiceVariant(
+      values.serviceStyle,
+      values.serviceVariant,
+    );
+    const serviceOption = getServiceOption(values.serviceStyle);
+
+    const setupFee = selectedVariant?.setupFee
+      ? formatCurrency(selectedVariant.setupFee)
+      : serviceOption?.setupFee
+        ? formatCurrency(serviceOption.setupFee)
+        : "";
 
     const estimate = payload.estimate ?? buildInquiryEstimate(values);
     const transporter = createInquiryTransporter();
@@ -212,6 +228,8 @@ export async function POST(request: Request) {
                 ${infoRow("End Time", values.endTime)}
                 ${infoRow("Guest Count", String(values.guestCount || "N/A"))}
                 ${infoRow("Budget", formatCurrency(values.budget || 0))}
+                ${infoRow("Setup fee", setupFee)}
+                ${infoRow("Service charge", formatCurrency(estimate.serviceCharge || 0))}
                 ${infoRow("Service Selection", serviceLabel || "N/A")}
               </table>`,
             )}
@@ -220,8 +238,9 @@ export async function POST(request: Request) {
               `<table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                 ${infoRow("Venue", values.venue)}
                 ${infoRow("Address", values.address)}
-                ${infoRow("City", values.city)}
                 ${infoRow("State", values.state)}
+                ${infoRow("City", values.city)}
+                ${infoRow("Postal code", values.zipCode)}
                 ${infoRow("Venue Instructions", values.venueInstructions || "N/A")}
                 ${infoRow("Stairs / Obstacles", stairsDetails)}
                 ${infoRow("Parking Restrictions", parkingDetails)}
@@ -279,10 +298,13 @@ export async function POST(request: Request) {
       `End time: ${values.endTime}`,
       `Guest count: ${values.guestCount}`,
       `Budget: ${formatCurrency(values.budget || 0)}`,
+      `Setup fee: ${setupFee}`,
+      `Service charge: ${formatCurrency(estimate.serviceCharge || 0)}`,
       `Venue: ${values.venue}`,
       `Address: ${values.address}`,
       `State: ${values.state}`,
       `City: ${values.city}`,
+      `Postal code: ${values.zipCode}`,
       `Service style: ${values.serviceStyle}`,
       `Service variant: ${values.serviceVariant || "N/A"}`,
       `Venue instructions: ${values.venueInstructions || "N/A"}`,

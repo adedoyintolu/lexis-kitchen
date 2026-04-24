@@ -21,6 +21,7 @@ export type PricingItem = {
   largePackPrice?: number;
   smallPackPrice?: number;
   note?: string;
+  premium?: boolean;
 };
 
 export type PricingCategory = {
@@ -50,7 +51,9 @@ export type InquirySelectionBucketKey =
   | "regularMains"
   | "premiumMains"
   | "proteins"
-  | "sides";
+  | "sides"
+  | "soups"
+  | "stews";
 
 export type InquirySelectionBucket = {
   key: InquirySelectionBucketKey;
@@ -67,10 +70,11 @@ export type InquiryServiceVariant = {
   slug: string;
   title: string;
   description: string;
-  priceLabel: string;
+  priceLabel?: string;
   basePerGuest?: number;
   minimumGuests?: number;
   pricingSummary: string;
+  setupFee?: number;
 };
 
 export type InquiryServiceOption = {
@@ -87,6 +91,7 @@ export type InquiryServiceOption = {
   leadNote: string;
   variants?: InquiryServiceVariant[];
   availabilityNote?: string;
+  setupFee?: number;
 };
 
 export type InquiryFormValues = {
@@ -107,6 +112,8 @@ export type InquiryFormValues = {
   selectedPremiumMains: string[];
   selectedProteins: string[];
   selectedSides: string[];
+  selectedSoups: string[];
+  selectedStews: string[];
   pickupQuantities: Record<string, number>;
   notes: string;
   address: string;
@@ -117,6 +124,7 @@ export type InquiryFormValues = {
   stairsDetails?: string;
   hasParkingRestrictions: "yes" | "no";
   parkingRestrictions?: string;
+  zipCode: string;
 };
 
 export type InquiryEstimateLineItem = {
@@ -127,6 +135,7 @@ export type InquiryEstimateLineItem = {
 
 export type InquiryEstimate = {
   subtotal: number;
+  serviceCharge: number;
   effectiveGuests?: number;
   minimumApplied: boolean;
   lineItems: InquiryEstimateLineItem[];

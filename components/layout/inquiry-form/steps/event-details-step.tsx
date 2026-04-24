@@ -1,8 +1,11 @@
+import { US_STATES } from "@/data";
 import { eventTypeOptions, inquiryServiceOptions } from "@/data/inquiry";
 import { formatCurrency, getTodaysDate } from "@/lib/inquiry-estimate";
 import { InquiryFormValues, InquiryServiceOption } from "@/types/inquiry";
 import type { FormikProps } from "formik";
 import { getIn } from "formik";
+import { FormikSelect } from "../../../common/formik-select";
+import { FormikTimeSelect } from "../../../common/formik-time-select";
 import { SectionCard } from "../section-card";
 import { ServiceCard } from "../service-card";
 import { FieldError, inputClass } from "../utils";
@@ -24,6 +27,8 @@ const EventDetailsStep = ({
       selectedPremiumMains: [],
       selectedProteins: [],
       selectedSides: [],
+      selectedSoups: [],
+      selectedStews: [],
       pickupQuantities: {},
     });
   };
@@ -99,31 +104,17 @@ const EventDetailsStep = ({
 
           {/* Event Form */}
           <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                Event type
-              </label>
-              <select
-                className={inputClass}
-                {...formik.getFieldProps("eventType")}
-              >
-                <option value="" disabled>
-                  Select one
-                </option>
-                {eventTypeOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              <FieldError
-                error={
-                  getIn(formik.touched, "eventType")
-                    ? getIn(formik.errors, "eventType")
-                    : undefined
-                }
-              />
-            </div>
+            <FormikSelect
+              name="eventType"
+              formik={formik}
+              label="Event type"
+              options={eventTypeOptions.map((opt) => ({
+                value: opt.value,
+                label: opt.label,
+              }))}
+              placeholder="Select event type"
+              required
+            />
 
             <div>
               <label className="mb-2 block text-sm font-semibold text-accent-soft">
@@ -143,40 +134,20 @@ const EventDetailsStep = ({
                 }
               />
             </div>
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                Start Time
-              </label>
-              <input
-                type="time"
-                className={inputClass}
-                {...formik.getFieldProps("startTime")}
-              />
-              <FieldError
-                error={
-                  getIn(formik.touched, "startTime")
-                    ? getIn(formik.errors, "startTime")
-                    : undefined
-                }
-              />
-            </div>
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                End Time
-              </label>
-              <input
-                type="time"
-                className={inputClass}
-                {...formik.getFieldProps("endTime")}
-              />
-              <FieldError
-                error={
-                  getIn(formik.touched, "endTime")
-                    ? getIn(formik.errors, "endTime")
-                    : undefined
-                }
-              />
-            </div>
+            <FormikTimeSelect
+              name="startTime"
+              formik={formik}
+              label="Start Time"
+              required
+              minuteInterval={60}
+            />
+            <FormikTimeSelect
+              name="endTime"
+              formik={formik}
+              label="End Time"
+              required
+              minuteInterval={60}
+            />
 
             <div>
               <label className="mb-2 block text-sm font-semibold text-accent-soft">
@@ -236,34 +207,53 @@ const EventDetailsStep = ({
                 }
               />
             </div>
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                State
-              </label>
-              <input
-                className={inputClass}
-                {...formik.getFieldProps("state")}
-              />
-              <FieldError
-                error={
-                  getIn(formik.touched, "state")
-                    ? getIn(formik.errors, "state")
-                    : undefined
-                }
-              />
-            </div>
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                City or area
-              </label>
-              <input className={inputClass} {...formik.getFieldProps("city")} />
-              <FieldError
-                error={
-                  getIn(formik.touched, "city")
-                    ? getIn(formik.errors, "city")
-                    : undefined
-                }
-              />
+            <div className="md:col-span-2 col-span-1 w-full grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <FormikSelect
+                  name="state"
+                  formik={formik}
+                  label="State"
+                  options={US_STATES.map((s) => ({
+                    value: s.label,
+                    label: s.label,
+                  }))}
+                  placeholder="Select state"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-accent-soft">
+                  City or area
+                </label>
+                <input
+                  className={inputClass}
+                  {...formik.getFieldProps("city")}
+                />
+                <FieldError
+                  error={
+                    getIn(formik.touched, "city")
+                      ? getIn(formik.errors, "city")
+                      : undefined
+                  }
+                />
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-accent-soft">
+                  Postal code
+                </label>
+                <input
+                  className={inputClass}
+                  {...formik.getFieldProps("zipCode")}
+                />
+                <FieldError
+                  error={
+                    getIn(formik.touched, "zipCode")
+                      ? getIn(formik.errors, "zipCode")
+                      : undefined
+                  }
+                />
+              </div>
             </div>
             <div className="md:col-span-2">
               <label className="mb-2 block text-sm font-semibold text-accent-soft">
@@ -289,14 +279,14 @@ const EventDetailsStep = ({
               <input
                 type="number"
                 className={inputClass}
-                min={selectedService?.baseMinimumFoodSpend || 1100}
+                min={selectedService?.baseMinimumFoodSpend || 1050}
                 {...formik.getFieldProps("budget")}
               />
               <p className="mt-1 text-xs text-text-soft">
                 Food spend minimum:{" "}
                 {formatCurrency(
-                  selectedService?.baseMinimumFoodSpend || 1100,
-                ) || "$1,100"}
+                  selectedService?.baseMinimumFoodSpend || 1050,
+                ) || "$1,050"}
                 . Your budget must meet or exceed this amount.
               </p>
               <FieldError
@@ -308,31 +298,17 @@ const EventDetailsStep = ({
               />
             </div>
 
-            <div className="md:col-span-2">
-              <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                Stairs or obstacles?
-              </label>
-              <select
-                className={inputClass + " capitalize!"}
-                {...formik.getFieldProps("hasStairs")}
-              >
-                <option value="" disabled className="capitalize">
-                  Select one
-                </option>
-                {["yes", "no"].map((option) => (
-                  <option key={option} value={option} className="capitalize">
-                    {option}
-                  </option>
-                ))}
-              </select>
-              <FieldError
-                error={
-                  getIn(formik.touched, "hasStairs")
-                    ? getIn(formik.errors, "hasStairs")
-                    : undefined
-                }
-              />
-            </div>
+            <FormikSelect
+              name="hasStairs"
+              formik={formik}
+              label="Stairs or obstacles?"
+              options={[
+                { value: "yes", label: "Yes" },
+                { value: "no", label: "No" },
+              ]}
+              placeholder="Select one"
+              required
+            />
             {formik.values.hasStairs === "yes" && (
               <div className="md:col-span-2">
                 <label className="mb-2 block text-sm font-semibold text-accent-soft">
@@ -352,31 +328,17 @@ const EventDetailsStep = ({
                 />
               </div>
             )}
-            <div className="md:col-span-2">
-              <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                Parking restrictions?
-              </label>
-              <select
-                className={inputClass + " capitalize!"}
-                {...formik.getFieldProps("hasParkingRestrictions")}
-              >
-                <option value="" disabled className="capitalize">
-                  Select one
-                </option>
-                {["yes", "no"].map((option) => (
-                  <option key={option} value={option} className="capitalize">
-                    {option}
-                  </option>
-                ))}
-              </select>
-              <FieldError
-                error={
-                  getIn(formik.touched, "hasParkingRestrictions")
-                    ? getIn(formik.errors, "hasParkingRestrictions")
-                    : undefined
-                }
-              />
-            </div>
+            <FormikSelect
+              name="hasParkingRestrictions"
+              formik={formik}
+              label="Parking restrictions?"
+              options={[
+                { value: "yes", label: "Yes" },
+                { value: "no", label: "No" },
+              ]}
+              placeholder="Select one"
+              required
+            />
             {formik.values.hasParkingRestrictions === "yes" && (
               <div className="md:col-span-2">
                 <label className="mb-2 block text-sm font-semibold text-accent-soft">

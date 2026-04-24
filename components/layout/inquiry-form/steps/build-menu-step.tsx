@@ -25,9 +25,10 @@ const BuildMenuStep = ({
     field:
       | "selectedNibbles"
       | "selectedRegularMains"
-      | "selectedPremiumMains"
       | "selectedProteins"
-      | "selectedSides",
+      | "selectedSides"
+      | "selectedSoups"
+      | "selectedStews",
     itemName: string,
   ) => {
     const currentSelections = formik.values[field];
@@ -76,9 +77,11 @@ const BuildMenuStep = ({
                 > = {
                   nibbles: "selectedNibbles",
                   regularMains: "selectedRegularMains",
-                  premiumMains: "selectedPremiumMains",
+                  premiumMains: "selectedRegularMains",
                   proteins: "selectedProteins",
                   sides: "selectedSides",
+                  soups: "selectedSoups",
+                  stews: "selectedStews",
                 };
 
                 const field = fieldMap[bucket.key];
@@ -95,9 +98,10 @@ const BuildMenuStep = ({
                         field as
                           | "selectedNibbles"
                           | "selectedRegularMains"
-                          | "selectedPremiumMains"
                           | "selectedProteins"
-                          | "selectedSides",
+                          | "selectedSides"
+                          | "selectedSoups"
+                          | "selectedStews",
                         itemName,
                       )
                     }

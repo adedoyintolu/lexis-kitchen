@@ -100,53 +100,10 @@ export const pricingCategories: PricingCategory[] = [
     ],
   },
   {
-    slug: "mains-premium",
-    label: "Mains (Premium)",
-    title: "Premium Mains selections",
-    description: "Large pan and small pan pricing for premium mains offerings.",
-    items: [
-      {
-        name: "Lexi's Special Fried Rice",
-        largePackPrice: 165,
-        smallPackPrice: 75,
-      },
-      {
-        name: "Salmon",
-        largePackPrice: 12,
-        smallPackPrice: 0,
-      },
-      {
-        name: "Lamb chops",
-        largePackPrice: 20,
-        smallPackPrice: 0,
-      },
-      {
-        name: "Steamed  coconut Basmati Rice",
-        largePackPrice: 150,
-        smallPackPrice: 0,
-      },
-      {
-        name: "Creamy Catfish nugget",
-        largePackPrice: 0,
-        smallPackPrice: 0,
-      },
-      { name: "King prawn", largePackPrice: 8, smallPackPrice: 0 },
-      { name: "Seafood fried rice", largePackPrice: 180, smallPackPrice: 0 },
-      { name: "Lobster", largePackPrice: 180, smallPackPrice: 0 },
-      { name: "kajun pasta", largePackPrice: 150, smallPackPrice: 0 },
-      { name: "Creamy Alfredo pasta", largePackPrice: 150, smallPackPrice: 0 },
-      {
-        name: "Tomato basil sauce pasta",
-        largePackPrice: 110,
-        smallPackPrice: 0,
-      },
-    ],
-  },
-  {
     slug: "mains-regular",
-    label: "Mains (Regular)",
-    title: "Regular Mains selections",
-    description: "Large pan and small pan pricing for regular mains offerings.",
+    label: "Mains",
+    title: "Mains selections",
+    description: "Large pan pricing for mains offerings.",
     items: [
       {
         name: "Lexi's Special Fried Rice",
@@ -157,6 +114,42 @@ export const pricingCategories: PricingCategory[] = [
       { name: "Fried Rice", largePackPrice: 100, smallPackPrice: 0 },
       { name: "Coconut Rice", largePackPrice: 100, smallPackPrice: 0 },
       { name: "White Rice", largePackPrice: 65, smallPackPrice: 0 },
+      {
+        name: "Lexi's Special Fried Rice (Premium)",
+        largePackPrice: 165,
+        smallPackPrice: 75,
+        premium: true,
+      },
+      {
+        name: "Steamed Coconut Basmati Rice",
+        largePackPrice: 150,
+        smallPackPrice: 0,
+        premium: true,
+      },
+      {
+        name: "Seafood Fried Rice",
+        largePackPrice: 180,
+        smallPackPrice: 0,
+        premium: true,
+      },
+      {
+        name: "Kajun Pasta",
+        largePackPrice: 150,
+        smallPackPrice: 0,
+        premium: true,
+      },
+      {
+        name: "Creamy Alfredo Pasta",
+        largePackPrice: 150,
+        smallPackPrice: 0,
+        premium: true,
+      },
+      {
+        name: "Tomato Basil Sauce Pasta",
+        largePackPrice: 110,
+        smallPackPrice: 0,
+        premium: true,
+      },
     ],
   },
   {
@@ -232,16 +225,8 @@ export const pricingCategories: PricingCategory[] = [
     description:
       "Peppered and stewed proteins with large and small pan pricing.",
     items: [
-      {
-        name: "Peppered or Stewed Beef",
-        largePackPrice: 4,
-        smallPackPrice: 0,
-      },
-      {
-        name: "Peppered or Stewed Fish",
-        largePackPrice: 4,
-        smallPackPrice: 0,
-      },
+      { name: "Peppered or Stewed Beef", largePackPrice: 4, smallPackPrice: 0 },
+      { name: "Peppered or Stewed Fish", largePackPrice: 4, smallPackPrice: 0 },
       {
         name: "Peppered or Stewed Chicken",
         largePackPrice: 4,
@@ -257,11 +242,31 @@ export const pricingCategories: PricingCategory[] = [
         largePackPrice: 4,
         smallPackPrice: 0,
       },
+      { name: "Salmon", largePackPrice: 12, smallPackPrice: 0, premium: true },
+      {
+        name: "Lamb Chops",
+        largePackPrice: 20,
+        smallPackPrice: 0,
+        premium: true,
+      },
+      {
+        name: "King Prawn",
+        largePackPrice: 8,
+        smallPackPrice: 0,
+        premium: true,
+      },
+      { name: "Lobster", largePackPrice: 15, smallPackPrice: 0, premium: true },
+      {
+        name: "Creamy Catfish Nugget",
+        largePackPrice: 10,
+        smallPackPrice: 0,
+        premium: true,
+      },
     ],
   },
   {
     slug: "others",
-    label: "Others",
+    label: "Extras and sides",
     title: "Extras and sides",
     description: "Supporting items often added to complete event packages.",
     items: [

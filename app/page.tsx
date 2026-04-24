@@ -47,7 +47,7 @@ export default function HomePage() {
           );
 
           const className =
-            "relative w-full h-48 md:h-48 3xl:h-66 flex rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow";
+            "relative w-full h-48 md:h-[30vh] flex rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow";
 
           return nav.isExternal ? (
             <a

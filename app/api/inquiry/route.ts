@@ -8,7 +8,7 @@ import {
   getInitialInquiryValues,
   inquiryValidationSchema,
 } from "@/lib/inquiry-schema";
-import { createInquiryTransporter, getMissingMailerEnv } from "@/lib/mailer";
+import { getMissingMailerEnv, sendInquiryEmail } from "@/lib/mailer";
 import type { InquiryEstimate, InquiryFormValues } from "@/types/inquiry";
 import { NextResponse } from "next/server";
 
@@ -98,49 +98,53 @@ function normalizeInquiryValues(value: unknown): InquiryFormValues {
   const initialValues = getInitialInquiryValues();
   const payload = typeof value === "object" && value !== null ? value : {};
 
+  const p = payload as InquiryFormValues;
+
   return {
     ...initialValues,
-    ...(payload as Partial<InquiryFormValues>),
-    selectedNibbles: Array.isArray(
-      (payload as InquiryFormValues).selectedNibbles,
-    )
-      ? (payload as InquiryFormValues).selectedNibbles.filter(
+    ...p,
+    selectedNibbles: Array.isArray(p.selectedNibbles)
+      ? p.selectedNibbles.filter(
           (item): item is string => typeof item === "string",
         )
       : [],
-    selectedRegularMains: Array.isArray(
-      (payload as InquiryFormValues).selectedRegularMains,
-    )
-      ? (payload as InquiryFormValues).selectedRegularMains.filter(
+    selectedRegularMains: Array.isArray(p.selectedRegularMains)
+      ? p.selectedRegularMains.filter(
           (item): item is string => typeof item === "string",
         )
       : [],
-    selectedPremiumMains: Array.isArray(
-      (payload as InquiryFormValues).selectedPremiumMains,
-    )
-      ? (payload as InquiryFormValues).selectedPremiumMains.filter(
+    selectedPremiumMains: Array.isArray(p.selectedPremiumMains)
+      ? p.selectedPremiumMains.filter(
           (item): item is string => typeof item === "string",
         )
       : [],
-    selectedProteins: Array.isArray(
-      (payload as InquiryFormValues).selectedProteins,
-    )
-      ? (payload as InquiryFormValues).selectedProteins.filter(
+    selectedProteins: Array.isArray(p.selectedProteins)
+      ? p.selectedProteins.filter(
           (item): item is string => typeof item === "string",
         )
       : [],
-    selectedSides: Array.isArray((payload as InquiryFormValues).selectedSides)
-      ? (payload as InquiryFormValues).selectedSides.filter(
+    selectedSides: Array.isArray(p.selectedSides)
+      ? p.selectedSides.filter(
+          (item): item is string => typeof item === "string",
+        )
+      : [],
+    selectedSoups: Array.isArray(p.selectedSoups)
+      ? p.selectedSoups.filter(
+          (item): item is string => typeof item === "string",
+        )
+      : [],
+    selectedStews: Array.isArray(p.selectedStews)
+      ? p.selectedStews.filter(
           (item): item is string => typeof item === "string",
         )
       : [],
     pickupQuantities:
-      typeof (payload as InquiryFormValues).pickupQuantities === "object" &&
-      (payload as InquiryFormValues).pickupQuantities !== null
+      typeof p.pickupQuantities === "object" && p.pickupQuantities !== null
         ? Object.fromEntries(
-            Object.entries((payload as InquiryFormValues).pickupQuantities).map(
-              ([key, quantity]) => [key, Number(quantity) || 0],
-            ),
+            Object.entries(p.pickupQuantities).map(([key, quantity]) => [
+              key,
+              Number(quantity) || 0,
+            ]),
           )
         : {},
   };
@@ -151,9 +155,7 @@ export async function POST(request: Request) {
 
   if (missingEnv.length) {
     return NextResponse.json(
-      {
-        error: `Missing mail configuration: ${missingEnv.join(", ")}.`,
-      },
+      { error: `Missing mail configuration: ${missingEnv.join(", ")}.` },
       { status: 500 },
     );
   }
@@ -167,6 +169,7 @@ export async function POST(request: Request) {
       abortEarly: false,
     });
     const values = normalizeInquiryValues(validatedPayload);
+
     const selectedVariant = getServiceVariant(
       values.serviceStyle,
       values.serviceVariant,
@@ -180,21 +183,24 @@ export async function POST(request: Request) {
         : "";
 
     const estimate = payload.estimate ?? buildInquiryEstimate(values);
-    const transporter = createInquiryTransporter();
+
     const pickupItems = Object.entries(values.pickupQuantities)
       .filter(([, quantity]) => quantity > 0)
       .map(([key, quantity]) => {
         const [, ...itemParts] = key.split(":");
         return `${itemParts.join(":")} x ${quantity}`;
       });
+
     const serviceLabel =
       values.serviceVariant && values.serviceVariant.trim().length > 0
         ? `${values.serviceStyle} (${values.serviceVariant})`
         : values.serviceStyle;
+
     const stairsDetails =
       values.hasStairs === "yes"
         ? values.stairsDetails || "Yes - details not provided"
         : "No";
+
     const parkingDetails =
       values.hasParkingRestrictions === "yes"
         ? values.parkingRestrictions || "Yes - details not provided"
@@ -248,19 +254,14 @@ export async function POST(request: Request) {
             )}
             ${sectionWrapper(
               "Menu Selections",
-              `
-              <div style="display: grid; gap: 12px;">
+              `<div style="display: grid; gap: 12px;">
                 <div>
                   <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Nibbles</p>
                   ${buildListHtml(values.selectedNibbles)}
                 </div>
                 <div>
-                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Regular Mains</p>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Mains</p>
                   ${buildListHtml(values.selectedRegularMains)}
-                </div>
-                <div>
-                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Premium Mains</p>
-                  ${buildListHtml(values.selectedPremiumMains)}
                 </div>
                 <div>
                   <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Proteins</p>
@@ -271,11 +272,18 @@ export async function POST(request: Request) {
                   ${buildListHtml(values.selectedSides)}
                 </div>
                 <div>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Soups</p>
+                  ${buildListHtml(values.selectedSoups ?? [])}
+                </div>
+                <div>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Stews</p>
+                  ${buildListHtml(values.selectedStews ?? [])}
+                </div>
+                <div>
                   <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Pickup Items</p>
                   ${buildListHtml(pickupItems)}
                 </div>
-              </div>
-              `,
+              </div>`,
             )}
             ${sectionWrapper(
               "Additional Notes",
@@ -311,21 +319,21 @@ export async function POST(request: Request) {
       `Stairs or obstacles: ${stairsDetails}`,
       `Parking restrictions: ${parkingDetails}`,
       `Nibbles: ${values.selectedNibbles.join(", ") || "None"}`,
-      `Regular mains: ${values.selectedRegularMains.join(", ") || "None"}`,
-      `Premium mains: ${values.selectedPremiumMains.join(", ") || "None"}`,
+      `Mains: ${values.selectedRegularMains.join(", ") || "None"}`,
       `Proteins: ${values.selectedProteins.join(", ") || "None"}`,
       `Sides: ${values.selectedSides.join(", ") || "None"}`,
+      `Soups: ${(values.selectedSoups ?? []).join(", ") || "None"}`,
+      `Stews: ${(values.selectedStews ?? []).join(", ") || "None"}`,
       `Pickup items: ${pickupItems.join(", ") || "None"}`,
       `Notes: ${values.notes || "No additional notes."}`,
       "",
       buildEstimateText(estimate),
     ].join("\n");
 
-    const info = await transporter.sendMail({
-      from: process.env.INQUIRY_FROM_NAME
-        ? `"${process.env.INQUIRY_FROM_NAME}" <${process.env.INQUIRY_FROM_EMAIL}>`
-        : process.env.INQUIRY_FROM_EMAIL,
-      to: process.env.INQUIRY_TO_EMAIL,
+    await sendInquiryEmail({
+      from: process.env.INQUIRY_FROM_EMAIL!,
+      fromName: process.env.INQUIRY_FROM_NAME ?? "Lexi's Kitchen",
+      to: process.env.INQUIRY_TO_EMAIL!,
       replyTo: values.email,
       subject: `New inquiry from ${values.fullName}`,
       html,
@@ -333,13 +341,13 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({
-      message: `Inquiry delivered successfully. Message ID: ${info.messageId}`,
+      message: "Inquiry delivered successfully.",
     });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
-    console.log(error);
+    console.error(error);
     return NextResponse.json(
       { error: "Unable to process the inquiry request." },
       { status: 400 },

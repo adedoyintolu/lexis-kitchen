@@ -70,7 +70,7 @@ export const inquiryValidationSchema = Yup.object({
     ),
   address: Yup.string().trim().required("Please enter the street address."),
   state: Yup.string().trim().required("Please enter the state."),
-  zipCode: Yup.string().trim().required("Please enter the zip code."),
+  zipCode: Yup.string().trim().notRequired(),
   budget: Yup.number()
     .transform((value, originalValue) =>
       originalValue === "" ? undefined : value,
@@ -107,8 +107,14 @@ export const inquiryValidationSchema = Yup.object({
     .transform((value, originalValue) =>
       originalValue === "" ? undefined : value,
     )
-    .required("Enter the expected guest count.")
-    .min(1, "Guest count must be at least 1.")
+    .when("serviceStyle", {
+      is: "pickup",
+      then: (schema) => schema.notRequired(),
+      otherwise: (schema) =>
+        schema
+          .required("Enter the expected guest count.")
+          .min(1, "Guest count must be at least 1."),
+    })
     .test(
       "guest-count-by-service",
       "", // We leave the default message empty because we generate it dynamically below
@@ -280,7 +286,8 @@ export const inquiryValidationSchema = Yup.object({
       },
     )
     .required(),
-  notes: Yup.string().trim().default("").defined(),
+  hasStairs: Yup.string().oneOf(["yes", "no"]).default("no"),
+  hasParkingRestrictions: Yup.string().oneOf(["yes", "no"]).default("no"),
   stairsDetails: Yup.string()
     .trim()
     .when("hasStairs", {

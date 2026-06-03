@@ -32,7 +32,13 @@ export function PickupCategoryBlock({
               <div className="mb-4 md:mb-0">
                 <p className="m-0 font-semibold capitalize">{item.name}</p>
                 <p className="m-0 mt-2 text-sm text-text-soft">
-                  {formatCurrency(item.largePackPrice ?? 0)} per large pan
+                  {item.perPiecePrice
+                    ? `${formatCurrency(item.perPiecePrice)} per piece`
+                    : item.largePackPrice
+                      ? `${formatCurrency(item.largePackPrice)} per large pan`
+                      : item.smallPackPrice
+                        ? `${formatCurrency(item.smallPackPrice)} per small pan (small pan only)`
+                        : "Price on request"}
                 </p>
               </div>
               <div className="flex items-center gap-3">

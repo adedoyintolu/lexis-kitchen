@@ -110,9 +110,9 @@ export const inquiryValidationSchema = Yup.object({
           return true; // No service selected yet, skip this validation
         }
 
-        const minimum = selectedService?.baseMinimumFoodSpend || 1100;
+        const minimum = selectedService?.baseMinimumFoodSpend ?? 0;
 
-        if (value !== undefined && value < minimum) {
+        if (minimum > 0 && value !== undefined && value < minimum) {
           return this.createError({
             message: `The minimum budget for ${selectedService.title} is ${minimum.toLocaleString("en-US", { style: "currency", currency: "USD" })}.`,
           });

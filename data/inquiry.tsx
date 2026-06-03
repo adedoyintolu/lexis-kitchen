@@ -192,9 +192,8 @@ export const inquiryServiceOptions: InquiryServiceOption[] = [
     summary: "Pickup ordering is available Fridays through Sundays only.",
     badge: "Pan pricing",
     baseMinimumFoodSpend: 1050,
-    basePricingLabel: "Priced per large pan",
-    leadNote:
-      "Pickup orders are calculated from selected large-pan quantities only.",
+    basePricingLabel: "Priced per item",
+    leadNote: "Pickup orders are calculated from selected quantities only.",
     availabilityNote: "Pickup is available Fridays through Sundays.",
   },
 ];

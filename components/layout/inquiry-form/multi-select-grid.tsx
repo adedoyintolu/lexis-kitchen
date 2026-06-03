@@ -14,11 +14,17 @@ export function MultiSelectGrid({
 }: {
   title: string;
   description: string;
-  items: { name: string; largePackPrice?: number; premium?: boolean }[];
+  items: {
+    name: string;
+    largePackPrice?: number;
+    smallPackPrice?: number;
+    perPiecePrice?: number;
+    premium?: boolean;
+  }[];
   selected: string[];
   onToggle: (itemName: string) => void;
   error?: string;
-  pricingModel?: "per-guest" | "per-pan";
+  pricingModel?: "per-guest" | "per-pan" | "per-piece";
   includedCount?: number;
 }) {
   const extraCount =
@@ -107,11 +113,13 @@ export function MultiSelectGrid({
                         isSelected ? "text-white/80" : "text-text-soft",
                       )}
                     >
-                      {item.largePackPrice
-                        ? pricingModel === "per-guest"
-                          ? `${formatCurrency(item.largePackPrice)} per guest when added`
-                          : `${formatCurrency(item.largePackPrice)} per large pan when added`
-                        : "Price on request"}
+                      {item.perPiecePrice
+                        ? `${formatCurrency(item.perPiecePrice)} per person`
+                        : item.largePackPrice
+                          ? `${formatCurrency(item.largePackPrice)} per large pan`
+                          : item.smallPackPrice
+                            ? `${formatCurrency(item.smallPackPrice)} per small pan (small pan only)`
+                            : "Price on request"}
                     </p>
                   ) : null}
                 </div>

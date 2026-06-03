@@ -90,7 +90,8 @@ function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
     (total, itemName) => {
       return (
         total +
-        (getPricingItem("nibbles", itemName)?.largePackPrice ?? 0) * guestCount
+        (getPricingItem("nibbles", itemName)?.perPiecePrice ?? 0) *
+          effectiveGuests
       );
     },
     0,
@@ -100,8 +101,8 @@ function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
     const item = getPricingItem("mains-regular", itemName);
     const largePrice = item?.largePackPrice ?? 0;
     const smallPrice = item?.smallPackPrice ?? 0;
-    const largePans = Math.floor(guestCount / 40);
-    const remainder = guestCount % 40;
+    const largePans = Math.floor(effectiveGuests / 40);
+    const remainder = effectiveGuests % 40;
     const useSmallPan = remainder > 0 && remainder <= 20 && smallPrice > 0;
     const extraLargePan =
       remainder > 20 || (remainder > 0 && smallPrice === 0) ? 1 : 0;
@@ -109,17 +110,15 @@ function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
     const totalSmallPans = useSmallPan ? 1 : 0;
 
     const parts: string[] = [];
-    if (totalLargePans > 0) {
+    if (totalLargePans > 0)
       parts.push(`${totalLargePans} large pan${totalLargePans > 1 ? "s" : ""}`);
-    }
-    if (totalSmallPans > 0) {
+    if (totalSmallPans > 0)
       parts.push(`${totalSmallPans} small pan${totalSmallPans > 1 ? "s" : ""}`);
-    }
 
     const priceDescription =
       totalSmallPans > 0
-        ? `${formatCurrency(largePrice)} per large pan & ${formatCurrency(smallPrice)} per small pan`
-        : `${formatCurrency(largePrice)} large`;
+        ? `${formatCurrency(largePrice)} large & ${formatCurrency(smallPrice)} small`
+        : `${formatCurrency(largePrice)} per large pan`;
 
     return {
       amount: totalLargePans * largePrice + totalSmallPans * smallPrice,
@@ -141,7 +140,8 @@ function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
     (total, itemName) => {
       return (
         total +
-        (getPricingItem("proteins", itemName)?.largePackPrice ?? 0) * guestCount
+        (getPricingItem("proteins", itemName)?.perPiecePrice ?? 0) *
+          effectiveGuests
       );
     },
     0,
@@ -150,12 +150,13 @@ function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
   const sidesTotal = (values.selectedSides ?? []).reduce((total, itemName) => {
     return (
       total +
-      (getPricingItem("others", itemName)?.largePackPrice ?? 0) * guestCount
+      (getPricingItem("others", itemName)?.perPiecePrice ?? 0) * effectiveGuests
     );
   }, 0);
 
   const addOnSoups = (values.selectedSoups ?? []).reduce((total, itemName) => {
-    return total + (getPricingItem("soups", itemName)?.largePackPrice ?? 0);
+    const item = getPricingItem("soups", itemName);
+    return total + (item?.largePackPrice ?? item?.smallPackPrice ?? 0);
   }, 0);
 
   const addOnStews = (values.selectedStews ?? []).reduce((total, itemName) => {
@@ -188,28 +189,30 @@ function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
       ? {
           label: `Nibbles (${(values.selectedNibbles ?? []).length} selections)`,
           amount: nibblesTotal,
-          detail: `${(values.selectedNibbles ?? []).length} x ${guestCount} guests`,
+          detail: `${(values.selectedNibbles ?? []).length} selections x ${effectiveGuests} guests`,
         }
       : null,
     ...(mains.length > 0
-      ? mains.map((m) => ({
-          label: m.itemName,
-          amount: m.amount,
-          detail: m.detail,
-        }))
+      ? mains
+          .filter((m) => m.amount > 0)
+          .map((m) => ({
+            label: m.itemName,
+            amount: m.amount,
+            detail: m.detail,
+          }))
       : []),
     proteinsTotal > 0
       ? {
           label: `Proteins (${(values.selectedProteins ?? []).length} selections)`,
           amount: proteinsTotal,
-          detail: `${(values.selectedProteins ?? []).length} x ${guestCount} guests`,
+          detail: `${(values.selectedProteins ?? []).length} selections x ${effectiveGuests} guests`,
         }
       : null,
     sidesTotal > 0
       ? {
           label: `Sides (${(values.selectedSides ?? []).length} selections)`,
           amount: sidesTotal,
-          detail: `${(values.selectedSides ?? []).length} x ${guestCount} guests`,
+          detail: `${(values.selectedSides ?? []).length} selections x ${effectiveGuests} guests`,
         }
       : null,
     addOnSoups > 0
@@ -243,9 +246,12 @@ function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
     minimumApplied: !meetsMinimums,
     lineItems,
     assumptions: [
-      "Mains are priced using large and small pan counts based on guest count.",
-      "Nibbles, proteins, and sides are priced per guest.",
+      "Mains are priced per large pan based on guest count (1 pan per 40 guests).",
+      "Nibbles, proteins, and sides are priced per person.",
       "The base package requires at least 4 nibbles, 2 mains, 2 proteins, and 2 sides.",
+      ...(effectiveGuests > guestCount
+        ? [`Guest count adjusted to service minimum of ${effectiveGuests}.`]
+        : []),
     ],
   };
 }
@@ -257,7 +263,7 @@ function buildNibblesEstimate(values: InquiryFormValues): InquiryEstimate {
   const selectedTotal = hasGuestCount
     ? values.selectedNibbles.reduce((total, itemName) => {
         const itemPrice =
-          getPricingItem("nibbles", itemName)?.largePackPrice ?? 0;
+          getPricingItem("nibbles", itemName)?.perPiecePrice ?? 0;
         return total + itemPrice * guestCount;
       }, 0)
     : 0;
@@ -296,7 +302,7 @@ function buildNibblesEstimate(values: InquiryFormValues): InquiryEstimate {
     lineItems,
     assumptions: [
       "Setup or passed staffing adjustments are confirmed after review.",
-      "Nibbles are priced per guest based on the large-pan rate per item.",
+      "Nibbles are priced per person.",
       ...(!hasGuestCount
         ? [
             "Set a guest count on the event details step to calculate the full nibbles estimate.",
@@ -313,7 +319,11 @@ function buildPickupEstimate(values: InquiryFormValues): InquiryEstimate {
       const [categorySlug, ...itemParts] = key.split(":");
       const itemName = itemParts.join(":").split(" - ")[0].trim();
       const item = getPricingItem(categorySlug, itemName);
-      const itemPrice = item?.largePackPrice ?? 0;
+      const itemPrice =
+        item?.perPiecePrice ??
+        item?.largePackPrice ??
+        item?.smallPackPrice ??
+        0;
       return {
         label: itemName,
         amount: itemPrice * quantity,
@@ -329,9 +339,9 @@ function buildPickupEstimate(values: InquiryFormValues): InquiryEstimate {
     minimumApplied: false,
     lineItems,
     assumptions: [
-      "Pickup estimates use large-pan pricing only.",
       "Pickup is available Fridays through Sundays.",
       "No setup fee or service charge applies to pickup orders.",
+      "Per-piece items (proteins, sides, nibbles) are priced per piece. Mains and soups are priced per pan.",
     ],
   };
 }

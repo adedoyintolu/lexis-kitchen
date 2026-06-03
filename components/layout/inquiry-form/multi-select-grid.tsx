@@ -21,7 +21,10 @@ export function MultiSelectGrid({
   pricingModel?: "per-guest" | "per-pan";
   includedCount?: number;
 }) {
-  const extraCount = Math.max(selected.length - (includedCount ?? 0), 0);
+  const extraCount =
+    typeof includedCount === "number"
+      ? Math.max(selected.length - includedCount, 0)
+      : 0;
   const [tooltip, setTooltip] = useState<string | null>(null);
 
   return (

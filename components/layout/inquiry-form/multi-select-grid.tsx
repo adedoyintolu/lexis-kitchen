@@ -14,14 +14,23 @@ export function MultiSelectGrid({
 }: {
   title: string;
   description: string;
-  items: { name: string; largePackPrice?: number; premium?: boolean }[];
+  items: {
+    name: string;
+    largePackPrice?: number;
+    smallPackPrice?: number;
+    perPiecePrice?: number;
+    premium?: boolean;
+  }[];
   selected: string[];
   onToggle: (itemName: string) => void;
   error?: string;
-  pricingModel: "per-guest" | "per-pan";
+  pricingModel?: "per-guest" | "per-pan" | "per-piece";
   includedCount?: number;
 }) {
-  const extraCount = Math.max(selected.length - (includedCount ?? 0), 0);
+  const extraCount =
+    typeof includedCount === "number"
+      ? Math.max(selected.length - includedCount, 0)
+      : 0;
   const [tooltip, setTooltip] = useState<string | null>(null);
 
   return (
@@ -97,18 +106,22 @@ export function MultiSelectGrid({
                       </div>
                     ) : null}
                   </div>
-                  <p
-                    className={classNames(
-                      "m-0 mt-2 text-sm",
-                      isSelected ? "text-white/80" : "text-text-soft",
-                    )}
-                  >
-                    {item.largePackPrice
-                      ? pricingModel === "per-guest"
-                        ? `${formatCurrency(item.largePackPrice)} per guest when added`
-                        : `${formatCurrency(item.largePackPrice)} per large pan when added`
-                      : "Price on request"}
-                  </p>
+                  {pricingModel ? (
+                    <p
+                      className={classNames(
+                        "m-0 mt-2 text-sm",
+                        isSelected ? "text-white/80" : "text-text-soft",
+                      )}
+                    >
+                      {item.perPiecePrice
+                        ? `${formatCurrency(item.perPiecePrice)} per person`
+                        : item.largePackPrice
+                          ? `${formatCurrency(item.largePackPrice)} per large pan`
+                          : item.smallPackPrice
+                            ? `${formatCurrency(item.smallPackPrice)} per small pan (small pan only)`
+                            : "Price on request"}
+                    </p>
+                  ) : null}
                 </div>
                 <span
                   className={classNames(

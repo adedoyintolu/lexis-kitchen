@@ -65,7 +65,7 @@ const ContactDetailsStep = ({
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                Full name
+                Full name <span className="text-danger">*</span>
               </label>
               <input
                 className={inputClass}
@@ -81,7 +81,7 @@ const ContactDetailsStep = ({
             </div>
             <div>
               <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                Email
+                Email <span className="text-danger">*</span>
               </label>
               <input
                 type="email"
@@ -98,7 +98,7 @@ const ContactDetailsStep = ({
             </div>
             <div className="md:col-span-2">
               <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                Phone
+                Phone <span className="text-danger">*</span>
               </label>
               <input
                 className={inputClass}

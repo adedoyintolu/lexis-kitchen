@@ -20,6 +20,7 @@ export type PricingItem = {
   name: string;
   largePackPrice?: number;
   smallPackPrice?: number;
+  perPiecePrice?: number;
   note?: string;
   premium?: boolean;
 };

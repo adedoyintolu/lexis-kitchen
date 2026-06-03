@@ -110,7 +110,11 @@ const BuildMenuStep = ({
                         ? getIn(formik.errors, field)
                         : undefined
                     }
-                    pricingModel={bucket.pricingModel}
+                    pricingModel={
+                      bucket.key === "nibbles" || bucket.key === "sides"
+                        ? bucket.pricingModel
+                        : undefined
+                    }
                     includedCount={bucket.includedCount}
                   />
                 );

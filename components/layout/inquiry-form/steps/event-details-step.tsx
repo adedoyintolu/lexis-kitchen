@@ -1,6 +1,6 @@
 import { US_STATES } from "@/data";
 import { eventTypeOptions, inquiryServiceOptions } from "@/data/inquiry";
-import { formatCurrency, getTodaysDate } from "@/lib/inquiry-estimate";
+import { formatCurrency, getTomorrowDate } from "@/lib/inquiry-estimate";
 import { InquiryFormValues, InquiryServiceOption } from "@/types/inquiry";
 import type { FormikProps } from "formik";
 import { getIn } from "formik";
@@ -122,7 +122,7 @@ const EventDetailsStep = ({
               </label>
               <input
                 type="date"
-                min={getTodaysDate()} // This restricts the picker to today onwards
+                min={getTomorrowDate()} // This restricts the picker to tomorrow onwards
                 className={inputClass}
                 {...formik.getFieldProps("eventDate")}
               />

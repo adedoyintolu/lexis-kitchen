@@ -178,11 +178,11 @@ function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
   const serviceCharge = 0.25 * subtotal;
 
   const lineItems = compactLineItems([
-    {
-      label: `Base package minimum`,
-      amount: baseMinimum,
-      detail: `${formatCurrency(basePerGuest)} x ${effectiveGuests} guests`,
-    },
+    // {
+    //   label: `Base package minimum`,
+    //   amount: baseMinimum,
+    //   detail: `${formatCurrency(basePerGuest)} x ${effectiveGuests} guests`,
+    // },
     nibblesTotal > 0
       ? {
           label: `Nibbles (${(values.selectedNibbles ?? []).length} selections)`,
@@ -427,4 +427,11 @@ export function getTodaysDate() {
   const today = new Date().toISOString().split("T")[0];
 
   return today;
+}
+
+export function getTomorrowDate() {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  return tomorrow.toISOString().split("T")[0];
 }

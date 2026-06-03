@@ -18,7 +18,7 @@ export function MultiSelectGrid({
   selected: string[];
   onToggle: (itemName: string) => void;
   error?: string;
-  pricingModel: "per-guest" | "per-pan";
+  pricingModel?: "per-guest" | "per-pan";
   includedCount?: number;
 }) {
   const extraCount = Math.max(selected.length - (includedCount ?? 0), 0);
@@ -97,18 +97,20 @@ export function MultiSelectGrid({
                       </div>
                     ) : null}
                   </div>
-                  <p
-                    className={classNames(
-                      "m-0 mt-2 text-sm",
-                      isSelected ? "text-white/80" : "text-text-soft",
-                    )}
-                  >
-                    {item.largePackPrice
-                      ? pricingModel === "per-guest"
-                        ? `${formatCurrency(item.largePackPrice)} per guest when added`
-                        : `${formatCurrency(item.largePackPrice)} per large pan when added`
-                      : "Price on request"}
-                  </p>
+                  {pricingModel ? (
+                    <p
+                      className={classNames(
+                        "m-0 mt-2 text-sm",
+                        isSelected ? "text-white/80" : "text-text-soft",
+                      )}
+                    >
+                      {item.largePackPrice
+                        ? pricingModel === "per-guest"
+                          ? `${formatCurrency(item.largePackPrice)} per guest when added`
+                          : `${formatCurrency(item.largePackPrice)} per large pan when added`
+                        : "Price on request"}
+                    </p>
+                  ) : null}
                 </div>
                 <span
                   className={classNames(

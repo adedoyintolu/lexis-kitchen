@@ -13,7 +13,7 @@ export function SummaryCard({ values }: { values: InquiryFormValues }) {
   );
 
   return (
-    <aside className="overflow-hidden rounded-[1.75rem] border border-line bg-accent text-white shadow-[0_24px_70px_rgba(49,40,33,0.2)] md:sticky md:top-24">
+    <aside className="overflow-hidden rounded-[1.75rem] border border-line bg-accent text-white shadow-[0_24px_70px_rgba(49,40,33,0.2)] md:sticky md:top-24 md:max-h-[calc(100vh-7rem)] md:overflow-y-auto">
       <div className="border-b border-white/10 bg-[rgba(255,255,255,0.04)] px-5 py-4">
         <div className="flex items-center justify-between gap-3">
           <p className="m-0 text-xs uppercase tracking-[0.18em] text-white/60">
@@ -157,7 +157,7 @@ export function SummaryCard({ values }: { values: InquiryFormValues }) {
             {estimate.lineItems.map((item, index) => (
               <div
                 key={`${item.label}-${item.detail || "no-detail"}-${index}`}
-                className="grid gap-1 rounded-[1rem] border border-white/8 bg-white/6 px-4 py-3"
+                className="grid gap-1 rounded-2xl border border-white/8 bg-white/6 px-4 py-3"
               >
                 <div className="flex items-start justify-between gap-4">
                   <span className="text-sm text-white/75">{item.label}</span>

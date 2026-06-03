@@ -13,7 +13,7 @@ import {
 } from "@/lib/inquiry-schema";
 import type { InquiryFormValues } from "@/types/inquiry";
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ValidationError } from "yup";
 import BuildMenuStep from "./steps/build-menu-step";
 import ContactDetailsStep from "./steps/contact-details-step";
@@ -28,6 +28,7 @@ export function InquiryForm() {
     "idle" | "loading" | "success" | "error"
   >("idle");
   const [submissionMessage, setSubmissionMessage] = useState("");
+  const formRef = useRef<HTMLDivElement | null>(null);
 
   const formik = useFormik<InquiryFormValues>({
     initialValues: getInitialInquiryValues(),
@@ -112,6 +113,17 @@ export function InquiryForm() {
     formik.setTouched(nextTouched as typeof formik.touched, false);
   }, [currentStep]);
 
+  useEffect(() => {
+    if (!formRef.current) {
+      return;
+    }
+
+    window.scrollTo({
+      top: formRef.current.offsetTop,
+      behavior: "smooth",
+    });
+  }, [currentStep]);
+
   const validateCurrentStep = async () => {
     const fields = inquiryStepFields[currentStep] as readonly string[];
 
@@ -174,6 +186,7 @@ export function InquiryForm() {
       setCurrentStep(1);
       return;
     }
+
     touchCurrentStepFields();
     const hasStepErrors = await validateCurrentStep();
 
@@ -271,7 +284,7 @@ export function InquiryForm() {
         (currentStep > 0 ? " lg:grid-cols-[minmax(0,1.1fr)_24rem]" : "")
       }
     >
-      <div className="grid gap-6">
+      <div className="grid gap-6" ref={formRef}>
         <div className="rounded-3xl border border-line bg-white p-5 shadow-[0_20px_60px_rgba(49,40,33,0.08)]">
           <div className="flex items-center justify-between gap-4">
             <div>
@@ -320,7 +333,7 @@ export function InquiryForm() {
             buildInquiryEstimate(formik.values).subtotal >
               formik.values.budget && (
               <div className="mt-5">
-                <div className="rounded-[1rem] border border-danger/30 bg-danger/10 px-4 py-3">
+                <div className="rounded-2xl border border-danger/30 bg-danger/10 px-4 py-3">
                   <p className="m-0 text-sm font-semibold text-danger">
                     Over budget warning
                   </p>

@@ -17,6 +17,8 @@ const EventDetailsStep = ({
   formik: FormikProps<InquiryFormValues>;
   selectedService: InquiryServiceOption | undefined;
 }) => {
+  const isPickup = formik.values.serviceStyle === "pickup";
+
   const handleServiceStyleChange = (serviceStyle: string) => {
     formik.setValues({
       ...formik.values,
@@ -104,21 +106,23 @@ const EventDetailsStep = ({
 
           {/* Event Form */}
           <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-            <FormikSelect
-              name="eventType"
-              formik={formik}
-              label="Event type"
-              options={eventTypeOptions.map((opt) => ({
-                value: opt.value,
-                label: opt.label,
-              }))}
-              placeholder="Select event type"
-              required
-            />
+            {!isPickup && (
+              <FormikSelect
+                name="eventType"
+                formik={formik}
+                label="Event type"
+                options={eventTypeOptions.map((opt) => ({
+                  value: opt.value,
+                  label: opt.label,
+                }))}
+                placeholder="Select event type"
+                required
+              />
+            )}
 
             <div>
               <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                Event date
+                Event date <span className="text-danger">*</span>
               </label>
               <input
                 type="date"
@@ -134,24 +138,28 @@ const EventDetailsStep = ({
                 }
               />
             </div>
-            <FormikTimeSelect
-              name="startTime"
-              formik={formik}
-              label="Start Time"
-              required
-              minuteInterval={60}
-            />
-            <FormikTimeSelect
-              name="endTime"
-              formik={formik}
-              label="End Time"
-              required
-              minuteInterval={60}
-            />
+            {!isPickup && (
+              <FormikTimeSelect
+                name="startTime"
+                formik={formik}
+                label="Start Time"
+                required
+                minuteInterval={60}
+              />
+            )}
+            {!isPickup && (
+              <FormikTimeSelect
+                name="endTime"
+                formik={formik}
+                label="End Time"
+                required
+                minuteInterval={60}
+              />
+            )}
 
             <div>
               <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                Guest count
+                Guest count <span className="text-danger">*</span>
               </label>
               <input
                 type="number"
@@ -175,9 +183,9 @@ const EventDetailsStep = ({
               />
             </div>
 
-            <div>
+            <div className={isPickup ? "md:col-span-2" : ""}>
               <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                Event center / venue name
+                Event center / venue name <span className="text-danger">*</span>
               </label>
               <input
                 className={inputClass}
@@ -193,7 +201,7 @@ const EventDetailsStep = ({
             </div>
             <div className="md:col-span-2">
               <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                Street Address
+                Street Address <span className="text-danger">*</span>
               </label>
               <input
                 className={inputClass}
@@ -224,7 +232,7 @@ const EventDetailsStep = ({
 
               <div>
                 <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                  City or area
+                  City or area <span className="text-danger">*</span>
                 </label>
                 <input
                   className={inputClass}
@@ -274,7 +282,7 @@ const EventDetailsStep = ({
             </div>
             <div className="md:col-span-2">
               <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                Food Budget
+                Food Budget <span className="text-danger">*</span>
               </label>
               <input
                 type="number"
@@ -298,65 +306,69 @@ const EventDetailsStep = ({
               />
             </div>
 
-            <FormikSelect
-              name="hasStairs"
-              formik={formik}
-              label="Stairs or obstacles?"
-              options={[
-                { value: "yes", label: "Yes" },
-                { value: "no", label: "No" },
-              ]}
-              placeholder="Select one"
-              required
-            />
-            {formik.values.hasStairs === "yes" && (
-              <div className="md:col-span-2">
-                <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                  Describe any obstacles
-                </label>
-                <textarea
-                  rows={3}
-                  className={inputClass}
-                  {...formik.getFieldProps("stairsDetails")}
+            {!isPickup && (
+              <>
+                <FormikSelect
+                  name="hasStairs"
+                  formik={formik}
+                  label="Stairs or obstacles?"
+                  options={[
+                    { value: "yes", label: "Yes" },
+                    { value: "no", label: "No" },
+                  ]}
+                  placeholder="Select one"
+                  required
                 />
-                <FieldError
-                  error={
-                    getIn(formik.touched, "stairsDetails")
-                      ? getIn(formik.errors, "stairsDetails")
-                      : undefined
-                  }
+                {formik.values.hasStairs === "yes" && (
+                  <div className="md:col-span-2">
+                    <label className="mb-2 block text-sm font-semibold text-accent-soft">
+                      Describe any obstacles
+                    </label>
+                    <textarea
+                      rows={3}
+                      className={inputClass}
+                      {...formik.getFieldProps("stairsDetails")}
+                    />
+                    <FieldError
+                      error={
+                        getIn(formik.touched, "stairsDetails")
+                          ? getIn(formik.errors, "stairsDetails")
+                          : undefined
+                      }
+                    />
+                  </div>
+                )}
+                <FormikSelect
+                  name="hasParkingRestrictions"
+                  formik={formik}
+                  label="Parking restrictions?"
+                  options={[
+                    { value: "yes", label: "Yes" },
+                    { value: "no", label: "No" },
+                  ]}
+                  placeholder="Select one"
+                  required
                 />
-              </div>
-            )}
-            <FormikSelect
-              name="hasParkingRestrictions"
-              formik={formik}
-              label="Parking restrictions?"
-              options={[
-                { value: "yes", label: "Yes" },
-                { value: "no", label: "No" },
-              ]}
-              placeholder="Select one"
-              required
-            />
-            {formik.values.hasParkingRestrictions === "yes" && (
-              <div className="md:col-span-2">
-                <label className="mb-2 block text-sm font-semibold text-accent-soft">
-                  Describe the parking restrictions
-                </label>
-                <textarea
-                  rows={3}
-                  className={inputClass}
-                  {...formik.getFieldProps("parkingRestrictions")}
-                />
-                <FieldError
-                  error={
-                    getIn(formik.touched, "parkingRestrictions")
-                      ? getIn(formik.errors, "parkingRestrictions")
-                      : undefined
-                  }
-                />
-              </div>
+                {formik.values.hasParkingRestrictions === "yes" && (
+                  <div className="md:col-span-2">
+                    <label className="mb-2 block text-sm font-semibold text-accent-soft">
+                      Describe the parking restrictions
+                    </label>
+                    <textarea
+                      rows={3}
+                      className={inputClass}
+                      {...formik.getFieldProps("parkingRestrictions")}
+                    />
+                    <FieldError
+                      error={
+                        getIn(formik.touched, "parkingRestrictions")
+                          ? getIn(formik.errors, "parkingRestrictions")
+                          : undefined
+                      }
+                    />
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

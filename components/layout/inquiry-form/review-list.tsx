@@ -12,7 +12,7 @@ export function ReviewList({
         {items.length} item{items.length === 1 ? "" : "s"}
       </p>
       {items.length ? (
-        <ul className="m-0 mt-3 list-none p-0 grid gap-2">
+        <ul className="m-0 mt-3 list-none p-0 grid gap-2 capitalize">
           {items.map((item, index) => (
             <li
               key={`${title}-${item}-${index}`}

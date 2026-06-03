@@ -74,33 +74,6 @@ export function formatCurrency(amount: number) {
   }).format(amount);
 }
 
-function countExtraSelections(selected: string[], includedCount = 0) {
-  return Math.max(selected.length - includedCount, 0);
-}
-
-function sumExtraSelections(
-  categorySlug: string,
-  selected: string[],
-  includedCount: number,
-  guestCount: number,
-  pricingModel: "per-guest" | "per-pan",
-) {
-  if (selected.length <= includedCount) {
-    return 0;
-  }
-
-  return selected.slice(includedCount).reduce((total, itemName) => {
-    const itemPrice =
-      getPricingItem(categorySlug, itemName)?.largePackPrice ?? 0;
-
-    if (pricingModel === "per-guest") {
-      return total + itemPrice * guestCount;
-    }
-
-    return total + itemPrice;
-  }, 0);
-}
-
 function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
   const guestCount = Number(values.guestCount || 0);
   const selectedVariant = getServiceVariant(
@@ -108,13 +81,9 @@ function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
     values.serviceVariant,
   );
   const serviceOption = getServiceOption(values.serviceStyle);
-  const basePerGuest =
-    selectedVariant?.basePerGuest ?? serviceOption?.basePerGuest ?? 0;
   const minimumGuests =
     selectedVariant?.minimumGuests ?? serviceOption?.minimumGuests ?? 0;
-
   const effectiveGuests = Math.max(guestCount, minimumGuests);
-  const baseMinimum = basePerGuest * effectiveGuests;
 
   // Price every selected item individually
   const nibblesTotal = (values.selectedNibbles ?? []).reduce(
@@ -127,12 +96,44 @@ function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
     0,
   );
 
-  const mainsTotal = (values.selectedRegularMains ?? []).reduce(
-    (total, itemName) => {
-      return (
-        total + (getPricingItem("mains-regular", itemName)?.largePackPrice ?? 0)
-      );
-    },
+  function getPanPricing(itemName: string) {
+    const item = getPricingItem("mains-regular", itemName);
+    const largePrice = item?.largePackPrice ?? 0;
+    const smallPrice = item?.smallPackPrice ?? 0;
+    const largePans = Math.floor(guestCount / 40);
+    const remainder = guestCount % 40;
+    const useSmallPan = remainder > 0 && remainder <= 20 && smallPrice > 0;
+    const extraLargePan =
+      remainder > 20 || (remainder > 0 && smallPrice === 0) ? 1 : 0;
+    const totalLargePans = largePans + extraLargePan;
+    const totalSmallPans = useSmallPan ? 1 : 0;
+
+    const parts: string[] = [];
+    if (totalLargePans > 0) {
+      parts.push(`${totalLargePans} large pan${totalLargePans > 1 ? "s" : ""}`);
+    }
+    if (totalSmallPans > 0) {
+      parts.push(`${totalSmallPans} small pan${totalSmallPans > 1 ? "s" : ""}`);
+    }
+
+    const priceDescription =
+      totalSmallPans > 0
+        ? `${formatCurrency(largePrice)} per large pan & ${formatCurrency(smallPrice)} per small pan`
+        : `${formatCurrency(largePrice)} large`;
+
+    return {
+      amount: totalLargePans * largePrice + totalSmallPans * smallPrice,
+      detail: `${parts.join(" + ")} @ ${priceDescription}`,
+    };
+  }
+
+  const mains = (values.selectedRegularMains ?? []).map((itemName) => ({
+    itemName,
+    ...getPanPricing(itemName),
+  }));
+
+  const mainsTotal = mains.reduce(
+    (total, pricing) => total + pricing.amount,
     0,
   );
 
@@ -190,13 +191,13 @@ function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
           detail: `${(values.selectedNibbles ?? []).length} x ${guestCount} guests`,
         }
       : null,
-    mainsTotal > 0
-      ? {
-          label: `Mains (${(values.selectedRegularMains ?? []).length} selections)`,
-          amount: mainsTotal,
-          detail: `Per large pan`,
-        }
-      : null,
+    ...(mains.length > 0
+      ? mains.map((m) => ({
+          label: m.itemName,
+          amount: m.amount,
+          detail: m.detail,
+        }))
+      : []),
     proteinsTotal > 0
       ? {
           label: `Proteins (${(values.selectedProteins ?? []).length} selections)`,
@@ -242,7 +243,8 @@ function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
     minimumApplied: !meetsMinimums,
     lineItems,
     assumptions: [
-      "Mains are priced per large pan. Nibbles, proteins, and sides are priced per guest.",
+      "Mains are priced using large and small pan counts based on guest count.",
+      "Nibbles, proteins, and sides are priced per guest.",
       "The base package requires at least 4 nibbles, 2 mains, 2 proteins, and 2 sides.",
     ],
   };

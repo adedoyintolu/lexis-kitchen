@@ -22,7 +22,11 @@ export const inquiryValidationSchema = Yup.object({
     .email("Enter a valid email address.")
     .required("Please enter an email address."),
   phone: Yup.string().trim().required("Please enter a phone number."),
-  eventType: Yup.string().required("Select an event type."),
+  eventType: Yup.string().when("serviceStyle", {
+    is: "pickup",
+    then: (schema) => schema.notRequired(),
+    otherwise: (schema) => schema.required("Select an event type."),
+  }),
   eventDate: Yup.string()
     .required("Please choose the event date.")
     .test(
@@ -53,13 +57,27 @@ export const inquiryValidationSchema = Yup.object({
         return eventDate >= today;
       },
     ),
-  startTime: Yup.string().required("Please enter the event start time."),
+  startTime: Yup.string().when("serviceStyle", {
+    is: "pickup",
+    then: (schema) => schema.notRequired(),
+    otherwise: (schema) =>
+      schema.required("Please enter the event start time."),
+  }),
   endTime: Yup.string()
-    .required("Please enter the event end time.")
+    .when("serviceStyle", {
+      is: "pickup",
+      then: (schema) => schema.notRequired(),
+      otherwise: (schema) =>
+        schema.required("Please enter the event end time."),
+    })
     .test(
       "end-after-start",
       "End time must be after start time.",
       function validateEndTime(value) {
+        if (this.parent.serviceStyle === "pickup") {
+          return true;
+        }
+
         const { startTime } = this.parent;
         if (!value || !startTime) {
           return false;

@@ -107,47 +107,47 @@ export const pricingCategories: PricingCategory[] = [
     items: [
       {
         name: "Lexi's Special Fried Rice",
-        largePackPrice: 110,
-        smallPackPrice: 55,
+        largePackPrice: 165,
+        smallPackPrice: 75,
       },
-      { name: "Jollof Rice", largePackPrice: 100, smallPackPrice: 50 },
-      { name: "Fried Rice", largePackPrice: 100, smallPackPrice: 50 },
-      { name: "Coconut Rice", largePackPrice: 100, smallPackPrice: 50 },
+      { name: "Jollof Rice", largePackPrice: 80, smallPackPrice: 45 },
+      { name: "Fried Rice", largePackPrice: 90, smallPackPrice: 50 },
+      { name: "Coconut Rice", largePackPrice: 95, smallPackPrice: 55 },
       { name: "White Rice", largePackPrice: 65, smallPackPrice: 32.5 },
       {
         name: "Lexi's Special Fried Rice (Premium)",
         largePackPrice: 165,
-        smallPackPrice: 75,
+        smallPackPrice: 0,
         premium: true,
       },
       {
         name: "Steamed Coconut Basmati Rice",
         largePackPrice: 150,
-        smallPackPrice: 75,
+        smallPackPrice: 0,
         premium: true,
       },
       {
         name: "Seafood Fried Rice",
         largePackPrice: 180,
-        smallPackPrice: 90,
+        smallPackPrice: 0,
         premium: true,
       },
       {
         name: "Kajun Pasta",
         largePackPrice: 150,
-        smallPackPrice: 75,
+        smallPackPrice: 0,
         premium: true,
       },
       {
         name: "Creamy Alfredo Pasta",
         largePackPrice: 150,
-        smallPackPrice: 75,
+        smallPackPrice: 0,
         premium: true,
       },
       {
         name: "Tomato Basil Sauce Pasta",
         largePackPrice: 110,
-        smallPackPrice: 55,
+        smallPackPrice: 0,
         premium: true,
       },
     ],
@@ -162,10 +162,10 @@ export const pricingCategories: PricingCategory[] = [
       {
         name: "Creamy Alfredo Pasta",
         largePackPrice: 150,
-        smallPackPrice: 80,
+        smallPackPrice: 70,
       },
       { name: "Tomato Basil Pasta", largePackPrice: 110, smallPackPrice: 75 },
-      { name: "Seafood pasta", largePackPrice: 160, smallPackPrice: 0 },
+      { name: "Seafood pasta", largePackPrice: 160, smallPackPrice: 75 },
     ],
   },
   {
@@ -177,19 +177,19 @@ export const pricingCategories: PricingCategory[] = [
     items: [
       {
         name: "Egusi Soup with Assorted",
-        largePackPrice: 250,
+        largePackPrice: 230,
         smallPackPrice: 120,
       },
       { name: "Eforiro", largePackPrice: 250, smallPackPrice: 130 },
       {
         name: "Edikaikong with Assorted or Goat Meat",
-        largePackPrice: 350,
-        smallPackPrice: 160,
+        largePackPrice: 250,
+        smallPackPrice: 130,
       },
       {
         name: "Affang with Assorted or Goat Meat",
-        largePackPrice: 350,
-        smallPackPrice: 150,
+        largePackPrice: 250,
+        smallPackPrice: 130,
       },
       {
         name: "Seafood Okro",
@@ -225,22 +225,30 @@ export const pricingCategories: PricingCategory[] = [
     description:
       "Peppered and stewed proteins with large and small pan pricing.",
     items: [
-      { name: "Peppered or Stewed Beef", largePackPrice: 4, smallPackPrice: 0 },
-      { name: "Peppered or Stewed Fish", largePackPrice: 4, smallPackPrice: 0 },
+      {
+        name: "Peppered or Stewed Beef",
+        largePackPrice: 350,
+        smallPackPrice: 180,
+      },
+      {
+        name: "Peppered or Stewed Fish",
+        largePackPrice: 250,
+        smallPackPrice: 100,
+      },
       {
         name: "Peppered or Stewed Chicken",
-        largePackPrice: 4,
-        smallPackPrice: 0,
+        largePackPrice: 200,
+        smallPackPrice: 85,
       },
       {
         name: "Peppered or Stewed Goat Meat",
-        largePackPrice: 4,
-        smallPackPrice: 0,
+        largePackPrice: 400,
+        smallPackPrice: 220,
       },
       {
         name: "Peppered or Stewed Turkey",
-        largePackPrice: 4,
-        smallPackPrice: 0,
+        largePackPrice: 220,
+        smallPackPrice: 90,
       },
       { name: "Salmon", largePackPrice: 12, smallPackPrice: 0, premium: true },
       {
@@ -270,9 +278,9 @@ export const pricingCategories: PricingCategory[] = [
     title: "Extras and sides",
     description: "Supporting items often added to complete event packages.",
     items: [
-      { name: "Gizdodo", largePackPrice: 2.5, smallPackPrice: 0 },
-      { name: "Vegetable salad", largePackPrice: 2.5, smallPackPrice: 0 },
-      { name: "Fried plantain", largePackPrice: 2.5, smallPackPrice: 0 },
+      { name: "Gizdodo", largePackPrice: 150, smallPackPrice: 80 },
+      { name: "Vegetable salad", largePackPrice: 150, smallPackPrice: 75 },
+      { name: "Fried plantain", largePackPrice: 140, smallPackPrice: 70 },
       { name: "Moi moi ", largePackPrice: 3.5, smallPackPrice: 0 },
       { name: "Leaf moi moi ", largePackPrice: 4.5, smallPackPrice: 0 },
     ],

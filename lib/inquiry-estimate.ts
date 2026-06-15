@@ -246,7 +246,7 @@ function buildPackageEstimate(values: InquiryFormValues): InquiryEstimate {
     minimumApplied: !meetsMinimums,
     lineItems,
     assumptions: [
-      "Mains are priced per large pan based on guest count (1 pan per 40 guests).",
+      // "Mains are priced per large pan based on guest count (1 pan per 40 guests).",
       "Nibbles, proteins, and sides are priced per person.",
       "The base package requires at least 4 nibbles, 2 mains, 2 proteins, and 2 sides.",
       ...(effectiveGuests > guestCount

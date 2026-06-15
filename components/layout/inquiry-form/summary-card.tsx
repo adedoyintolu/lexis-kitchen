@@ -165,11 +165,11 @@ export function SummaryCard({ values }: { values: InquiryFormValues }) {
                     {formatCurrency(item.amount)}
                   </span>
                 </div>
-                {item.detail ? (
+                {/* {item.detail ? (
                   <p className="m-0 text-xs leading-5 text-white/45">
                     {item.detail}
                   </p>
-                ) : null}
+                ) : null} */}
               </div>
             ))}
           </div>

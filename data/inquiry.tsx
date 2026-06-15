@@ -16,8 +16,8 @@ export const businessInfo = {
   serviceArea:
     "Serving private events, corporate gatherings, and social tables.",
   phone: "(555) 123-4567",
-  email: "hello@lexiskitchen.com",
-  calendlyLink: "https://calendly.com/lexiskitchen/food-tasting",
+  email: "lexxiskitchen@gmail.com",
+  calendlyLink: "https://calendly.com/lexxiskitchen/book-food-tasting",
   whatsAppLink: "https://wa.me/15551234567",
 };
 

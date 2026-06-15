@@ -9,6 +9,7 @@ import {
   inquiryValidationSchema,
 } from "@/lib/inquiry-schema";
 import { getMissingMailerEnv, sendInquiryEmail } from "@/lib/mailer";
+import { formatDate, formatList, formatTime, toTitleCase } from "@/lib/utils";
 import type { InquiryEstimate, InquiryFormValues } from "@/types/inquiry";
 import { NextResponse } from "next/server";
 
@@ -88,8 +89,8 @@ function buildListHtml(items: string[]) {
   }
 
   return `
-    <ul style="margin: 0; padding-left: 18px; color: #1f2937; font-size: 14px; line-height: 1.6; text-transform: capitalize;">
-      ${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+    <ul style="margin: 0; padding-left: 18px; color: #1f2937; font-size: 14px; line-height: 1.6;">
+      ${items.map((item) => `<li>${escapeHtml(toTitleCase(item))}</li>`).join("")}
     </ul>
   `;
 }
@@ -188,23 +189,27 @@ export async function POST(request: Request) {
       .filter(([, quantity]) => quantity > 0)
       .map(([key, quantity]) => {
         const [, ...itemParts] = key.split(":");
-        return `${itemParts.join(":")} x ${quantity}`;
+        return `${toTitleCase(itemParts.join(":"))} x ${quantity}`;
       });
 
     const serviceLabel =
       values.serviceVariant && values.serviceVariant.trim().length > 0
-        ? `${values.serviceStyle} (${values.serviceVariant})`
-        : values.serviceStyle;
+        ? `${toTitleCase(values.serviceStyle)} (${toTitleCase(values.serviceVariant)})`
+        : toTitleCase(values.serviceStyle);
 
     const stairsDetails =
       values.hasStairs === "yes"
-        ? values.stairsDetails || "Yes - details not provided"
+        ? values.stairsDetails || "Yes — details not provided"
         : "No";
 
     const parkingDetails =
       values.hasParkingRestrictions === "yes"
-        ? values.parkingRestrictions || "Yes - details not provided"
+        ? values.parkingRestrictions || "Yes — details not provided"
         : "No";
+
+    const formattedEventDate = formatDate(values.eventDate);
+    const formattedStartTime = formatTime(values.startTime);
+    const formattedEndTime = formatTime(values.endTime);
 
     const html = `
       <div style="background: #f3f4f6; padding: 24px; font-family: 'Segoe UI', Arial, sans-serif; color: #111827;">
@@ -228,14 +233,14 @@ export async function POST(request: Request) {
             ${sectionWrapper(
               "Event Details",
               `<table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-                ${infoRow("Event Type", values.eventType)}
-                ${infoRow("Event Date", values.eventDate)}
-                ${infoRow("Start Time", values.startTime)}
-                ${infoRow("End Time", values.endTime)}
+                ${infoRow("Event Type", toTitleCase(values.eventType))}
+                ${infoRow("Event Date", formattedEventDate)}
+                ${infoRow("Start Time", formattedStartTime)}
+                ${infoRow("End Time", formattedEndTime)}
                 ${infoRow("Guest Count", String(values.guestCount || "N/A"))}
                 ${infoRow("Budget", formatCurrency(values.budget || 0))}
-                ${infoRow("Setup fee", setupFee)}
-                ${infoRow("Service charge", formatCurrency(estimate.serviceCharge || 0))}
+                ${infoRow("Setup Fee", setupFee || "N/A")}
+                ${infoRow("Service Charge", formatCurrency(estimate.serviceCharge || 0))}
                 ${infoRow("Service Selection", serviceLabel || "N/A")}
               </table>`,
             )}
@@ -244,9 +249,9 @@ export async function POST(request: Request) {
               `<table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                 ${infoRow("Venue", values.venue)}
                 ${infoRow("Address", values.address)}
-                ${infoRow("State", values.state)}
                 ${infoRow("City", values.city)}
-                ${infoRow("Postal code", values.zipCode)}
+                ${infoRow("State", values.state)}
+                ${infoRow("Postal Code", values.zipCode || "N/A")}
                 ${infoRow("Venue Instructions", values.venueInstructions || "N/A")}
                 ${infoRow("Stairs / Obstacles", stairsDetails)}
                 ${infoRow("Parking Restrictions", parkingDetails)}
@@ -256,31 +261,35 @@ export async function POST(request: Request) {
               "Menu Selections",
               `<div style="display: grid; gap: 12px;">
                 <div>
-                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Nibbles</p>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700;">Nibbles</p>
                   ${buildListHtml(values.selectedNibbles)}
                 </div>
                 <div>
-                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Mains</p>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700;">Mains</p>
                   ${buildListHtml(values.selectedRegularMains)}
                 </div>
                 <div>
-                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Proteins</p>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700;">Premium Mains</p>
+                  ${buildListHtml(values.selectedPremiumMains ?? [])}
+                </div>
+                <div>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700;">Proteins</p>
                   ${buildListHtml(values.selectedProteins)}
                 </div>
                 <div>
-                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Sides</p>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700;">Sides</p>
                   ${buildListHtml(values.selectedSides)}
                 </div>
                 <div>
-                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Soups</p>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700;">Soups</p>
                   ${buildListHtml(values.selectedSoups ?? [])}
                 </div>
                 <div>
-                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Stews</p>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700;">Stews</p>
                   ${buildListHtml(values.selectedStews ?? [])}
                 </div>
                 <div>
-                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700; text-transform: capitalize;">Pickup Items</p>
+                  <p style="margin: 0 0 6px; font-size: 13px; color: #374151; font-weight: 700;">Pickup Items</p>
                   ${buildListHtml(pickupItems)}
                 </div>
               </div>`,
@@ -300,30 +309,31 @@ export async function POST(request: Request) {
       `Name: ${values.fullName}`,
       `Email: ${values.email}`,
       `Phone: ${values.phone}`,
-      `Event type: ${values.eventType}`,
-      `Date: ${values.eventDate}`,
-      `Start time: ${values.startTime}`,
-      `End time: ${values.endTime}`,
+      `Event type: ${toTitleCase(values.eventType)}`,
+      `Date: ${formattedEventDate}`,
+      `Start time: ${formattedStartTime}`,
+      `End time: ${formattedEndTime}`,
       `Guest count: ${values.guestCount}`,
       `Budget: ${formatCurrency(values.budget || 0)}`,
-      `Setup fee: ${setupFee}`,
+      `Setup fee: ${setupFee || "N/A"}`,
       `Service charge: ${formatCurrency(estimate.serviceCharge || 0)}`,
       `Venue: ${values.venue}`,
       `Address: ${values.address}`,
-      `State: ${values.state}`,
       `City: ${values.city}`,
-      `Postal code: ${values.zipCode}`,
-      `Service style: ${values.serviceStyle}`,
-      `Service variant: ${values.serviceVariant || "N/A"}`,
+      `State: ${values.state}`,
+      `Postal code: ${values.zipCode || "N/A"}`,
+      `Service style: ${toTitleCase(values.serviceStyle)}`,
+      `Service variant: ${values.serviceVariant ? toTitleCase(values.serviceVariant) : "N/A"}`,
       `Venue instructions: ${values.venueInstructions || "N/A"}`,
       `Stairs or obstacles: ${stairsDetails}`,
       `Parking restrictions: ${parkingDetails}`,
-      `Nibbles: ${values.selectedNibbles.join(", ") || "None"}`,
-      `Mains: ${values.selectedRegularMains.join(", ") || "None"}`,
-      `Proteins: ${values.selectedProteins.join(", ") || "None"}`,
-      `Sides: ${values.selectedSides.join(", ") || "None"}`,
-      `Soups: ${(values.selectedSoups ?? []).join(", ") || "None"}`,
-      `Stews: ${(values.selectedStews ?? []).join(", ") || "None"}`,
+      `Nibbles: ${formatList(values.selectedNibbles).join(", ") || "None"}`,
+      `Mains: ${formatList(values.selectedRegularMains).join(", ") || "None"}`,
+      `Premium mains: ${formatList(values.selectedPremiumMains ?? []).join(", ") || "None"}`,
+      `Proteins: ${formatList(values.selectedProteins).join(", ") || "None"}`,
+      `Sides: ${formatList(values.selectedSides).join(", ") || "None"}`,
+      `Soups: ${formatList(values.selectedSoups ?? []).join(", ") || "None"}`,
+      `Stews: ${formatList(values.selectedStews ?? []).join(", ") || "None"}`,
       `Pickup items: ${pickupItems.join(", ") || "None"}`,
       `Notes: ${values.notes || "No additional notes."}`,
       "",

@@ -90,6 +90,41 @@ export const basePackagesTable = [
   },
 ];
 
+export const venueBasePackagesTable = [
+  {
+    serviceStyle: "Buffet (Setup Only)",
+    foodSpendMinimum: "$900",
+    guestRequirement: "30 guests",
+    packageIncludes: "4 nibbles, 2 mains/carbs, 2 proteins, 2 sides",
+    setupFee: "Yes",
+    serviceCharge: "Yes",
+  },
+  {
+    serviceStyle: "Plated Dinner",
+    foodSpendMinimum: "$1,000",
+    guestRequirement: "20 guests",
+    packageIncludes: "4 nibbles, 2 mains/carbs, 2 proteins, 2 sides",
+    setupFee: "Yes",
+    serviceCharge: "Yes",
+  },
+  {
+    serviceStyle: "Nibbles Only",
+    foodSpendMinimum: "Varies: Setup, Passed, Pickup",
+    guestRequirement: "No guest minimum",
+    packageIncludes: "Minimum of 4 nibbles",
+    setupFee: "Depends on option selected",
+    serviceCharge: "Yes",
+  },
+  {
+    serviceStyle: "Pickup",
+    foodSpendMinimum: "Lower minimum",
+    guestRequirement: "None",
+    packageIncludes: "Menu dependent",
+    setupFee: "No",
+    serviceCharge: "No",
+  },
+];
+
 export const servicePricingDetails = [
   {
     title: "Buffet & Plated Dinner",
@@ -111,6 +146,70 @@ export const servicePricingDetails = [
       {
         title: "Plated dinner pricing",
         body: "Formal plated service that starts at $55 per guest in a coordinated dining experience. Base package 20 guests. Minimum food spend: $1,100. 1 Professional waitstaff included (this may increase depending on your guest count or menu selections and will be determined by our team to be added to your invoice.). Additional menu selections beyond the base package will increase the food spend. Service charge and staffing fees apply.",
+      },
+      {
+        title: "Add-on rules",
+        body: "Additional menu selections beyond the base package will increase the food spend. A setup fee applies. Service charge and staffing fees do not apply.",
+      },
+    ],
+  },
+  {
+    title: "Nibbles Only",
+    summary:
+      "Nibbles service is ideal for cocktail hours, receptions, and casual events.",
+    sections: [
+      {
+        title: "Minimum selection",
+        body: "At least 4 nibble variations",
+      },
+      {
+        title: "Pricing structure",
+        body: "Nibbles range between $3-$5 per item. No guest minimum, but a minimum food spend applies.",
+      },
+      {
+        title: "Service options",
+        body: "Setup, waitstaff passed, or pickup. Each service option has its own minimum food spend. Setup and passed options may include setup fees and service charges. Pickup does not include setup or service charges.",
+      },
+    ],
+  },
+  {
+    title: "Pickup Service",
+    summary:
+      "Pickup is designed for clients who want professionally prepared food without on-site service.",
+    sections: [
+      {
+        title: "Key details",
+        body: "All menus available. No setup or service charges. Lower minimum food spend compared to setup services.",
+      },
+      {
+        title: "Minimum requirements",
+        body: "Minimum food spend and menu requirements still apply and must be met before submission.",
+      },
+    ],
+  },
+];
+
+export const venueServicePricingDetails = [
+  {
+    title: "Buffet & Plated Dinner",
+    summary:
+      "Both buffet and plated dinner services use the same base menu structure and allow add-ons beyond the included package.",
+    sections: [
+      {
+        title: "What’s included in the base package",
+        body: "4 nibbles, 2 mains/carbs, 2 proteins, and 2 sides. You may add more items at any time. Additional menu items are priced individually per pan",
+      },
+      {
+        title: "Buffet Service",
+        body: "Buffet service with professional setup. Equipment included. No waitstaff service",
+      },
+      {
+        title: "Pricing",
+        body: "Starts at $30 per guest. Base package 30 guests. Minimum food spend: $900.",
+      },
+      {
+        title: "Plated dinner pricing",
+        body: "Formal plated service that starts at $50 per guest in a coordinated dining experience. Base package 20 guests. Minimum food spend: $1,000. 1 Professional waitstaff included (this may increase depending on your guest count or menu selections and will be determined by our team to be added to your invoice.). Additional menu selections beyond the base package will increase the food spend. Service charge and staffing fees apply.",
       },
       {
         title: "Add-on rules",

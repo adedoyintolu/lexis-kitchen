@@ -1,6 +1,7 @@
-import { basePackagesTable } from "@/data/pricing-page";
+import { basePackagesTable, venueBasePackagesTable } from "@/data/pricing-page";
 
-export const PricingBreakdown = () => {
+export const PricingBreakdown = ({ venue }: { venue?: boolean }) => {
+  const basePackages = venue ? venueBasePackagesTable : basePackagesTable;
   return (
     <table className="min-w-full border-collapse">
       <thead>
@@ -26,7 +27,7 @@ export const PricingBreakdown = () => {
         </tr>
       </thead>
       <tbody>
-        {basePackagesTable.map((item) => (
+        {basePackages.map((item) => (
           <tr key={item.serviceStyle}>
             <td className="border-b border-line px-4 py-4 align-top font-medium">
               {item.serviceStyle}

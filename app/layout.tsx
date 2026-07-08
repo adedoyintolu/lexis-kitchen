@@ -5,20 +5,20 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://inquiry.lexkitchen.com"),
   title: {
-    default: "Lexi's Kitchen | Event Catering Inquiry",
-    template: "%s | Lexi's Kitchen",
+    default: "SavorByLexi | Event Catering Inquiry",
+    template: "%s | SavorByLexi",
   },
   description:
-    "A premium inquiry experience for Lexi's Kitchen catering, pricing, food tasting requests, and menu previews.",
+    "A premium inquiry experience for SavorByLexi catering, pricing, food tasting requests, and menu previews.",
   openGraph: {
-    title: "Lexi's Kitchen",
+    title: "SavorByLexi",
     description:
       "Event catering inquiries, pricing, menu previews, and food tasting bookings.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lexi's Kitchen",
+    title: "SavorByLexi",
     description:
       "Event catering inquiries, pricing, menu previews, and food tasting bookings.",
   },

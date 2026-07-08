@@ -10,7 +10,7 @@ import Link from "next/link";
 export const metadata: Metadata = buildMetadata({
   title: "Menu",
   description:
-    "Explore Lexi's Kitchen menu collections and request the full menu through WhatsApp.",
+    "Explore SavorByLexi menu collections and request the full menu through WhatsApp.",
   path: "/menu",
 });
 

@@ -19,7 +19,7 @@ export default function HomePage() {
       <SectionHeading
         eyebrow="Inquiry"
         title="Select an option below to get started"
-        description="Whether you want to book a food tasting, explore our menu, or review our pricing, we have you covered. Click on any of the options below to learn more and take the next step towards an unforgettable catering experience with Lexi's Kitchen."
+        description="Whether you want to book a food tasting, explore our menu, or review our pricing, we have you covered. Click on any of the options below to learn more and take the next step towards an unforgettable catering experience with SavorByLexi."
       />
       <FadeIn className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
         {mainNav.map((nav) => {

@@ -22,7 +22,7 @@ import Link from "next/link";
 export const metadata: Metadata = buildMetadata({
   title: "Venue Client Pricing",
   description:
-    "Review Lexi's Kitchen venue client pricing with service breakdowns, base packages, additional charge rules, and detailed menu pricing.",
+    "Review SavorByLexi's venue client pricing with service breakdowns, base packages, additional charge rules, and detailed menu pricing.",
   path: "/venue-client-pricing",
 });
 
@@ -319,18 +319,18 @@ export default function VenueClientPricingPage() {
               <br />
               Visit our website:{" "}
               <a
-                href="https://lexkitchen.com/"
+                href="https://savorbylexi.com/"
                 className="text-blue-800!"
                 target="_blank"
                 rel="noreferrer"
               >
-                Lexis Kitchen Website
+                SavorByLexi Website
               </a>
             </p>
           </FadeIn>
         </section>
 
-        <Link href="https://lexkitchen.com/contact-us/">
+        <Link href="https://savorbylexi.com/contact-us/">
           <Button className="w-full!" variant="primary">
             Contact Us
           </Button>

@@ -10,13 +10,13 @@ import type {
 } from "@/types/inquiry";
 
 export const businessInfo = {
-  name: "Lexi's Kitchen",
-  legalName: "Lexi's Kitchen Catering",
+  name: "SavorByLexi",
+  legalName: "SavorByLexi Catering",
   shortAddress: "Houston, Texas",
   serviceArea:
     "Serving private events, corporate gatherings, and social tables.",
-  phone: "(555) 123-4567",
-  email: "lexxiskitchen@gmail.com",
+  phone: "(1) 346-243-7976",
+  email: "info@savorbylexi.com",
   calendlyLink: "https://calendly.com/lexxiskitchen/book-food-tasting",
   whatsAppLink: "https://wa.me/15551234567",
 };
@@ -24,7 +24,7 @@ export const businessInfo = {
 export const homepageSeo = {
   title: "Luxury Catering Inquiry",
   description:
-    "Start an event inquiry, book a food tasting, review pricing, and preview menu collections for Lexi's Kitchen.",
+    "Start an event inquiry, book a food tasting, review pricing, and preview menu collections for SavorByLexi.",
 };
 
 export const inquiryActions: InquiryAction[] = [

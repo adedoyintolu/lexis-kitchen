@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = buildMetadata({
   title: "Inquiry",
   description:
-    "Build an inquiry for Lexi's Kitchen by selecting the service style, menu structure, and event details in one guided flow.",
+    "Build an inquiry for SavorByLexi by selecting the service style, menu structure, and event details in one guided flow.",
   path: "/inquiry",
 });
 

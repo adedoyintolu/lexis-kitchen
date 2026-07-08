@@ -21,7 +21,7 @@ import Link from "next/link";
 export const metadata: Metadata = buildMetadata({
   title: "Pricing",
   description:
-    "Review Lexi's Kitchen pricing with service breakdowns, base packages, additional charge rules, and detailed menu pricing.",
+    "Review SavorByLexi pricing with service breakdowns, base packages, additional charge rules, and detailed menu pricing.",
   path: "/pricing",
 });
 
@@ -365,12 +365,12 @@ export default function PricingPage() {
               <br />
               Visit our website:{" "}
               <a
-                href="https://lexkitchen.com/"
+                href="https://savorbylexi.com/"
                 className="text-blue-800!"
                 target="_blank"
                 rel="noreferrer"
               >
-                Lexis Kitchen Website
+                SavorByLexi Website
               </a>
             </p>
           </FadeIn>

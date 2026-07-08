@@ -1,4 +1,4 @@
-import Logo from "@/assets/brand.png";
+import Logo from "@/assets/SavorByLexiLogo.png";
 import { mainNav } from "@/data/main-nav";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,15 +11,15 @@ const Navbar = () => {
         <Link
           href="/"
           className="grid gap-[0.2rem]"
-          aria-label="Lexi's Kitchen home"
+          aria-label="SavorByLexi home"
         >
           <div className="flex items-center gap-3">
             <Image
               src={Logo}
-              alt="Lexi's Kitchen logo"
-              width={60}
-              height={60}
-              className="w-15 h-15 object-contain"
+              alt="SavorByLexi logo"
+              width={100}
+              height={100}
+              className="w-25 h-20 object-contain"
             />
           </div>
         </Link>

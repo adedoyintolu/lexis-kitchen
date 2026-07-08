@@ -215,7 +215,7 @@ export async function POST(request: Request) {
       <div style="background: #f3f4f6; padding: 24px; font-family: 'Segoe UI', Arial, sans-serif; color: #111827;">
         <div style="max-width: 880px; margin: 0 auto; background: #f8fafc; border: 1px solid #d1d5db; border-radius: 14px; overflow: hidden;">
           <header style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); color: #f9fafb; padding: 22px 24px;">
-            <p style="margin: 0; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.8;">Lexi's Kitchen Inquiry</p>
+            <p style="margin: 0; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.8;">SavorByLexi Inquiry</p>
             <h2 style="margin: 10px 0 0; font-size: 24px; line-height: 1.2;">New Event Inquiry Submission</h2>
             <p style="margin: 10px 0 0; font-size: 13px; color: #d1d5db;">
               Submitted by ${escapeHtml(values.fullName)} • ${escapeHtml(values.email)}
@@ -305,7 +305,7 @@ export async function POST(request: Request) {
     `;
 
     const text = [
-      "New Lexi's Kitchen inquiry",
+      "New SavorByLexi inquiry",
       `Name: ${values.fullName}`,
       `Email: ${values.email}`,
       `Phone: ${values.phone}`,
@@ -342,7 +342,7 @@ export async function POST(request: Request) {
 
     await sendInquiryEmail({
       from: process.env.INQUIRY_FROM_EMAIL!,
-      fromName: process.env.INQUIRY_FROM_NAME ?? "Lexi's Kitchen",
+      fromName: process.env.INQUIRY_FROM_NAME ?? "SavorByLexi",
       to: process.env.INQUIRY_TO_EMAIL!,
       replyTo: values.email,
       subject: `New inquiry from ${values.fullName}`,

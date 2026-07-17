@@ -278,7 +278,20 @@ export const importantThingsToKnow = [
   "Submitting an inquiry does not obligate you to book.",
   "Estimates update in real time as you build your menu.",
   "A team member will review your inquiry after submission.",
+  "An 80% down payment is required to secure your event date. The remaining 20% balance is due 4–2 weeks before the event.",
+  "Full payment (100%) may be made at the time of the first payment.",
+  "Cancellations are subject to a 20% charge of the total event amount.",
 ];
+
+export const paymentPolicy = {
+  title: "Payment & Cancellation Policy",
+  items: [
+    "An 80% down payment is required to secure your event date.",
+    "The remaining 20% balance is due 4–2 weeks before the event day.",
+    "Alternatively, 100% of the total may be paid at the time of the first payment.",
+    "Cancellations are subject to a 20% charge of the total event amount.",
+  ],
+};
 
 export const whyWeUseMinimums = [
   "Maintain food quality",

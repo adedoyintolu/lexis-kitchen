@@ -299,6 +299,15 @@ export async function POST(request: Request) {
               `<p style="margin: 0; color: #1f2937; font-size: 14px; line-height: 1.7;">${escapeHtml(values.notes || "No additional notes provided.")}</p>`,
             )}
             ${sectionWrapper("Estimate Summary", buildEstimateHtml(estimate))}
+            ${sectionWrapper(
+              "Payment & Cancellation Policy",
+              `<ul style="margin: 0; padding-left: 18px; color: #1f2937; font-size: 14px; line-height: 1.8;">
+                <li>An 80% down payment is required to secure the event date.</li>
+                <li>The remaining 20% balance is due 4&ndash;2 weeks before the event day.</li>
+                <li>Alternatively, 100% of the total may be paid at the time of the first payment.</li>
+                <li>Cancellations are subject to a 20% charge of the total event amount.</li>
+              </ul>`,
+            )}
           </main>
         </div>
       </div>
@@ -338,6 +347,12 @@ export async function POST(request: Request) {
       `Notes: ${values.notes || "No additional notes."}`,
       "",
       buildEstimateText(estimate),
+      "",
+      "Payment & Cancellation Policy:",
+      "- 80% down payment required to secure the event date.",
+      "- Remaining 20% balance due 4-2 weeks before the event day.",
+      "- Alternatively, 100% may be paid at the time of the first payment.",
+      "- Cancellations are subject to a 20% charge of the total event amount.",
     ].join("\n");
 
     await sendInquiryEmail({

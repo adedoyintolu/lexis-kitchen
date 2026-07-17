@@ -8,6 +8,7 @@ import {
   basePackageMeaning,
   basePackagesTable,
   importantThingsToKnow,
+  paymentPolicy,
   pricingDefinitions,
   pricingPageIntro,
   servicePricingDetails,
@@ -373,6 +374,19 @@ export default function PricingPage() {
                 SavorByLexi Website
               </a>
             </p>
+          </FadeIn>
+        </section>
+
+        <section className="mb-12">
+          <FadeIn className="rounded-3xl border border-line bg-white p-5 shadow-[0_20px_60px_rgba(49,40,33,0.08)] md:p-7">
+            <p className="m-0 text-[0.72rem] font-bold uppercase tracking-[0.16em] text-accent-soft">
+              {paymentPolicy.title}
+            </p>
+            <ul className="m-0 mt-4 grid gap-2 pl-5 text-sm leading-7 text-text-soft list-disc">
+              {paymentPolicy.items.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
           </FadeIn>
         </section>
 

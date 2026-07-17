@@ -376,6 +376,26 @@ export const informationStepFields: InformationStepField[] = [
     ),
   },
   {
+    title: "Payment & Cancellation Policy",
+    content: (
+      <>
+        <ul className="list-disc list-inside">
+          <li>An 80% down payment is required to secure your event date.</li>
+          <li>
+            The remaining 20% balance is due 4–2 weeks before the event day.
+          </li>
+          <li>
+            Alternatively, 100% of the total may be paid at the time of the
+            first payment.
+          </li>
+          <li>
+            Cancellations are subject to a 20% charge of the total event amount.
+          </li>
+        </ul>
+      </>
+    ),
+  },
+  {
     title: "What happens next",
     content: (
       <>

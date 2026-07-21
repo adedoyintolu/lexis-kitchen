@@ -8,6 +8,7 @@ import type {
   InquiryServiceOption,
   ServiceStyle,
 } from "@/types/inquiry";
+import { bookingLink } from ".";
 
 export const businessInfo = {
   name: "SavorByLexi",
@@ -17,7 +18,7 @@ export const businessInfo = {
     "Serving private events, corporate gatherings, and social tables.",
   phone: "(1) 346-243-7976",
   email: "info@savorbylexi.com",
-  calendlyLink: "https://calendly.com/lexxiskitchen/book-food-tasting",
+  bookingLink: bookingLink,
   whatsAppLink: "https://wa.me/15551234567",
 };
 
@@ -36,7 +37,7 @@ export const inquiryActions: InquiryAction[] = [
   },
   {
     label: "Book Food Tasting",
-    href: businessInfo.calendlyLink,
+    href: businessInfo.bookingLink,
     variant: "secondary",
     external: true,
   },

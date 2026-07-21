@@ -4,6 +4,7 @@ import pricingImage from "@/assets/home-sections/pricing.jpeg";
 import tastingImage from "@/assets/home-sections/tasting.jpeg";
 import { routes } from "@/routes";
 import { NavItem } from "@/types";
+import { bookingLink } from ".";
 
 export const mainNav: NavItem[] = [
   {
@@ -13,7 +14,7 @@ export const mainNav: NavItem[] = [
   },
   {
     title: "Book food tasting",
-    href: "https://calendly.com/lexxiskitchen/book-food-tasting",
+    href: bookingLink,
     isExternal: true,
     background: tastingImage,
   },

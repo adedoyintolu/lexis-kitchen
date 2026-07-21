@@ -50,3 +50,6 @@ export const US_STATES = [
   { label: "Wisconsin", value: "WI" },
   { label: "Wyoming", value: "WY" },
 ];
+
+export const bookingLink: string =
+  "https://doodle.com/bp/lexis1/book-food-tasting";

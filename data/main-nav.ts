@@ -13,7 +13,7 @@ export const mainNav: NavItem[] = [
   },
   {
     title: "Book food tasting",
-    href: "https://calendly.com/lexxiskitchen/book-food-tasting",
+    href: "https://doodle.com/bp/lexis1/book-food-tasting",
     isExternal: true,
     background: tastingImage,
   },

@@ -17,7 +17,7 @@ export const businessInfo = {
     "Serving private events, corporate gatherings, and social tables.",
   phone: "(1) 346-243-7976",
   email: "info@savorbylexi.com",
-  calendlyLink: "https://calendly.com/lexxiskitchen/book-food-tasting",
+  calendlyLink: "https://doodle.com/bp/lexis1/book-food-tasting",
   whatsAppLink: "https://wa.me/15551234567",
 };
 

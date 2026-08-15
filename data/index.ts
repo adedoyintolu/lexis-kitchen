@@ -50,3 +50,6 @@ export const US_STATES = [
   { label: "Wisconsin", value: "WI" },
   { label: "Wyoming", value: "WY" },
 ];
+
+export const bookingLink: string =
+  "https://calendly.com/lexxiskitchen/book-food-tasting-with-savorbylexi";

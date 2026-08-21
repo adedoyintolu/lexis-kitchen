@@ -63,29 +63,27 @@ export const inquiryValidationSchema = Yup.object({
     otherwise: (schema) =>
       schema.required("Please enter the event start time."),
   }),
-  endTime: Yup.string()
-    .when("serviceStyle", {
-      is: "pickup",
-      then: (schema) => schema.notRequired(),
-      otherwise: (schema) =>
-        schema.required("Please enter the event end time."),
-    })
-    .test(
-      "end-after-start",
-      "End time must be after start time.",
-      function validateEndTime(value) {
-        if (this.parent.serviceStyle === "pickup") {
-          return true;
-        }
+  endTime: Yup.string().when("serviceStyle", {
+    is: "pickup",
+    then: (schema) => schema.notRequired(),
+    otherwise: (schema) => schema.required("Please enter the event end time."),
+  }),
+  // .test(
+  //   "end-after-start",
+  //   "End time must be after start time.",
+  //   function validateEndTime(value) {
+  //     if (this.parent.serviceStyle === "pickup") {
+  //       return true;
+  //     }
 
-        const { startTime } = this.parent;
-        if (!value || !startTime) {
-          return false;
-        }
+  //     const { startTime } = this.parent;
+  //     if (!value || !startTime) {
+  //       return false;
+  //     }
 
-        return value > startTime;
-      },
-    ),
+  //     return value > startTime;
+  //   },
+  // ),
   address: Yup.string().trim().required("Please enter the street address."),
   state: Yup.string().trim().required("Please enter the state."),
   zipCode: Yup.string().trim().notRequired(),

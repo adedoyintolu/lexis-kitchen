@@ -309,12 +309,12 @@ export default function VenueClientPricingPage() {
               <br />
               Instagram:{" "}
               <a
-                href="https://www.instagram.com/lexxiskitchen"
+                href="https://www.instagram.com/savorbylexi?igsh=Y2I0N3kyNjV1Y3pr"
                 className="text-blue-800!"
                 target="_blank"
                 rel="noreferrer"
               >
-                @lexxiskitchen
+                @savorbylexi
               </a>
               <br />
               Visit our website:{" "}

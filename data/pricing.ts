@@ -136,10 +136,10 @@ export const pricingCategories: PricingCategory[] = [
     title: "Protein selections",
     description: "Peppered and stewed proteins priced per piece.",
     items: [
-      { name: "Peppered or Stewed Beef", perPiecePrice: 4 },
+      { name: "Peppered or Stewed Beef", perPiecePrice: 4.5 },
       { name: "Peppered or Stewed Fish", perPiecePrice: 4 },
       { name: "Peppered or Stewed Chicken", perPiecePrice: 4 },
-      { name: "Peppered or Stewed Goat Meat", perPiecePrice: 4 },
+      { name: "Peppered or Stewed Goat Meat", perPiecePrice: 4.5 },
       { name: "Peppered or Stewed Turkey", perPiecePrice: 4 },
       { name: "Salmon", perPiecePrice: 12, premium: true },
       { name: "Lamb Chops", perPiecePrice: 20, premium: true },

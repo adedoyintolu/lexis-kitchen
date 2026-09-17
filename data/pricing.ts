@@ -154,7 +154,7 @@ export const pricingCategories: PricingCategory[] = [
     title: "Extras and sides",
     description: "Supporting items priced per piece.",
     items: [
-      { name: "Gizdodo", perPiecePrice: 2.5 },
+      { name: "Gizdodo", perPiecePrice: 3.5 },
       { name: "Vegetable salad", perPiecePrice: 2.5 },
       { name: "Fried plantain", perPiecePrice: 2.5 },
       { name: "Moi moi", perPiecePrice: 3.5 },
